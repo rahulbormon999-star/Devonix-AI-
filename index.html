@@ -3,49 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devonix AI – Signup</title>
+    <title data-key="pageTitle">Devonix AI Sign Up</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 
-<div class="container">
-
-    <h2 id="title">Create Your Account</h2>
-
-    <label id="label-name">Your Name</label>
-    <input type="text" id="name">
-
-    <label id="label-email">Email Address</label>
-    <input type="email" id="email">
-
-    <label id="label-password">Password</label>
-    <div class="password-box">
-        <input type="password" id="password">
-        <span class="toggle" onclick="togglePassword()">👁</span>
+    <div class="language-selector">
+        <select id="languageSelect">
+            <option value="en">English</option>
+            <option value="bn">বাংলা</option>
+            </select>
     </div>
 
-    <label id="label-language">Choose Language</label>
-    <select id="language"></select>
+    <div class="logo">
+        <img src="logo.png" alt="Devonix AI Logo" class="app-logo"> 
+        <h2 data-key="appName">Devonix AI</h2>
+    </div>
 
-    <button id="signupBtn" onclick="signupUser()">Sign Up</button>
+    <div id="signup-section">
+        <h3 data-key="signupTitle">Create Your Devonix AI Account</h3>
+        
+        <input type="text" id="name" data-key="placeholderName" placeholder="Full Name" required>
+        <input type="tel" id="phone" data-key="placeholderPhone" placeholder="Phone Number" required>
+        <input type="date" id="dob" data-key="placeholderDOB" placeholder="Date of Birth">
+        <input type="text" id="country" data-key="placeholderCountry" placeholder="Country">
+        <input type="text" id="district" data-key="placeholderDistrict" placeholder="District">
+        <input type="text" id="thana" data-key="placeholderThana" placeholder="Thana">
 
-</div>
+        <div class="password-container">
+            <input type="password" id="password" data-key="placeholderPassword" placeholder="Password" required>
+            <span class="password-toggle" id="togglePassword">
+                <i class="fa fa-eye" id="eyeIcon"></i>
+            </span>
+        </div>
+        
+        <button id="signupBtn" data-key="signupBtnText">Sign Up</button>
+        <p class="login-text" data-key="loginText">Already have an account? <a href="#">Login</a></p>
+    </div>
 
-<!-- Dashboard -->
-<div id="dashboard" class="hidden">
-    <h2 id="dash-welcome">Welcome!</h2>
-
-    <button class="store-btn">Devonix Store</button>
-
-    <p id="dash-text">Download and Use Your Favorite Apps.</p>
-
-    <button class="store-btn bottom">Devonix Store</button>
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
-
-<script src="app.js"></script>
+    <div id="store-section" style="display:none; text-align: center; padding: 50px;">
+        <h1 data-key="storeWelcome">Welcome to Devonix Store!</h1>
+        <p data-key="storeMessage">Your account has been successfully created. Download your apps below.</p>
+        <button id="storeBtn" data-key="storeBtnText" class="store-button">Devonix Store</button>
+        <div class="app-list" style="margin-top: 20px;">
+            <p data-key="appPlaceholder">No apps uploaded yet. Check back soon!</p>
+        </div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    
+    <script src="script.js"></script>
 </body>
 </html>
