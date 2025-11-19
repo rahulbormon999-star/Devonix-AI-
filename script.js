@@ -1,4 +1,6 @@
-// ========== Firebase Setup ==========
+// --------------------------
+// 1. Firebase Configuration
+// --------------------------
 const firebaseConfig = {// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
@@ -20,117 +22,99 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+    apiKey: "YOUR_FIREBASE_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "XXXXXXXXXXXX",
+    appId: "YOUR_APP_ID"
 };
 
-// উপরের জায়গায় Firebase থেকে পাওয়া কোড বসাতে হবে ↑↑↑
+firebase.initializeApp(firebaseConfig);
 
-// Firebase initialize
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore(app);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-// ========== Signup & Login Logic ==========
-const signupBtn = document.getElementById("signupBtn");
-const loginBtn = document.getElementById("loginBtn");
-const goToLogin = document.getElementById("goToLogin");
-const goToSignup = document.getElementById("goToSignup");
+// ------------------------
+// 2. Language List (50)
+// ------------------------
+const languages = [
+    "Bangla", "English", "Hindi", "Urdu", "Spanish", "Arabic", "French", "German",
+    "Chinese", "Japanese", "Korean", "Russian", "Italian", "Portuguese", "Turkish",
+    "Thai", "Vietnamese", "Indonesian", "Nepali", "Tamil", "Gujarati", "Kannada",
+    "Malayalam", "Sinhala", "Hebrew", "Dutch", "Polish", "Swedish", "Norwegian",
+    "Danish", "Romanian", "Czech", "Greek", "Hungarian", "Filipino", "Bengali India",
+    "Punjabi", "Marathi", "Lao", "Myanmar", "Khmer", "Persian", "Swahili", "Zulu",
+    "Afrikaans", "Finnish", "Ukrainian", "Slovak", "Croatian", "Serbian"
+];
 
-const signupSection = document.getElementById("signup-section");
-const loginSection = document.getElementById("login-section");
-const storeSection = document.getElementById("store-section");
-
-// Change form view
-goToLogin.onclick = () => {
-  signupSection.style.display = "none";
-  loginSection.style.display = "block";
-};
-
-goToSignup.onclick = () => {
-  loginSection.style.display = "none";
-  signupSection.style.display = "block";
-};
-
-// Signup
-signupBtn.onclick = async () => {
-  const user = {
-    name: document.getElementById("name").value,
-    phone: document.getElementById("phone").value,
-    dob: document.getElementById("dob").value,
-    country: document.getElementById("country").value,
-    district: document.getElementById("district").value,
-    thana: document.getElementById("thana").value,
-    password: document.getElementById("password").value
-  };
-
-  if (user.phone && user.password) {
-    await db.collection("users").doc(user.phone).set(user);
-    alert("✅ Account Created Successfully!");
-    signupSection.style.display = "none";
-    loginSection.style.display = "block";
-  } else {
-    alert("❌ Please fill all required fields!");
-  }
-};
-
-// Login
-loginBtn.onclick = async () => {
-  const phone = document.getElementById("loginPhone").value;
-  const pass = document.getElementById("loginPassword").value;
-
-  const doc = await db.collection("users").doc(phone).get();
-
-  if (doc.exists && doc.data().password === pass) {
-    alert("✅ Login Successful!");
-    loginSection.style.display = "none";
-    storeSection.style.display = "block";
-  } else {
-    alert("❌ Invalid Phone or Password!");
-  }
-};
-
-// ========== Multi-Language Support ==========
-const languageData = {
-  en: {
-    signupTitle: "Create Your Devonix AI Account",
-    signupBtn: "Sign Up",
-    loginTitle: "Login to Devonix AI",
-    loginBtn: "Login",
-    loginLink: "Login",
-    signupLink: "Sign Up",
-    storeTitle: "Devonix Store",
-    storeText: "Your uploaded apps will appear here."
-  },
-  bn: {
-    signupTitle: "আপনার Devonix AI একাউন্ট তৈরি করুন",
-    signupBtn: "সাইন আপ করুন",
-    loginTitle: "Devonix AI-এ লগইন করুন",
-    loginBtn: "লগইন করুন",
-    loginLink: "লগইন করুন",
-    signupLink: "সাইন আপ করুন",
-    storeTitle: "ডেবোনিক্স স্টোর",
-    storeText: "আপনার আপলোড করা অ্যাপস এখানে দেখা যাবে।"
-  },
-  hi: {
-    signupTitle: "अपना Devonix AI खाता बनाएं",
-    signupBtn: "साइन अप करें",
-    loginTitle: "Devonix AI में लॉग इन करें",
-    loginBtn: "लॉग इन करें",
-    loginLink: "लॉग इन करें",
-    signupLink: "साइन अप करें",
-    storeTitle: "डेवोनिक्स स्टोर",
-    storeText: "आपके द्वारा अपलोड किए गए ऐप यहाँ दिखाई देंगे।"
-  }
-};
-
-document.getElementById("languageSelect").addEventListener("change", (e) => {
-  const lang = e.target.value;
-  const keys = document.querySelectorAll("[data-key]");
-  keys.forEach((el) => {
-    el.innerText = languageData[lang][el.dataset.key] || el.innerText;
-  });
+// Add to Dropdown
+const langSelect = document.getElementById("language");
+languages.forEach(l => {
+    const opt = document.createElement("option");
+    opt.textContent = l;
+    opt.value = l;
+    langSelect.appendChild(opt);
 });
+
+
+// ------------------------
+// 3. Password Show/Hide
+// ------------------------
+function togglePassword() {
+    const pass = document.getElementById("password");
+    pass.type = pass.type === "password" ? "text" : "password";
+}
+
+
+// ------------------------
+// 4. Multi-language UI text
+// ------------------------
+function updateLanguage(lang) {
+    if (lang === "Bangla") {
+        document.getElementById("title").innerText = "একাউন্ট তৈরি করুন";
+        document.getElementById("label-name").innerText = "আপনার নাম";
+        document.getElementById("label-email").innerText = "ইমেইল অ্যাড্রেস";
+        document.getElementById("label-password").innerText = "পাসওয়ার্ড";
+        document.getElementById("label-language").innerText = "ভাষা নির্বাচন করুন";
+        document.getElementById("signupBtn").innerText = "সাইন আপ";
+    }
+}
+
+langSelect.addEventListener("change", () => {
+    updateLanguage(langSelect.value);
+});
+
+
+// ------------------------
+// 5. Signup Function
+// ------------------------
+function signupUser() {
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const language = document.getElementById("language").value;
+
+    auth.createUserWithEmailAndPassword(email, password)
+        .then(user => {
+            const uid = user.user.uid;
+
+            db.collection("users").doc(uid).set({
+                name: name,
+                email: email,
+                language: language
+            });
+
+            document.querySelector(".container").style.display = "none";
+            document.getElementById("dashboard").style.display = "block";
+
+            document.getElementById("dash-welcome").innerText =
+                language === "Bangla"
+                    ? `স্বাগতম, ${name}!`
+                    : `Welcome, ${name}!`;
+
+        })
+        .catch(err => alert(err.message));
+}
+  
+
