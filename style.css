@@ -1,64 +1,79 @@
-/* ====== Devonix AI - Style ====== */
 body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #2b5876, #4e4376);
-  color: #fff;
-  text-align: center;
-  margin: 0;
-  padding: 0;
+    font-family: Arial;
+    background: #f1f1f1;
 }
 
-.language-select {
-  margin: 15px;
+.container {
+    width: 90%;
+    max-width: 380px;
+    background: white;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 10px;
 }
 
-select {
-  padding: 8px;
-  border-radius: 8px;
-  border: none;
-  font-weight: bold;
+label {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
 }
 
-.logo h2 {
-  margin-top: 10px;
-  font-size: 28px;
-  color: #fff;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-}
-
-input {
-  display: block;
-  width: 80%;
-  margin: 10px auto;
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  font-size: 16px;
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
 }
 
 button {
-  background-color: #ff8c00;
-  border: none;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
+    width: 100%;
+    padding: 12px;
+    background: #0066ff;
+    border: none;
+    color: white;
+    font-size: 18px;
+    margin-top: 20px;
+    border-radius: 8px;
 }
 
-button:hover {
-  background-color: #ffa733;
+.password-box {
+    display: flex;
+    align-items: center;
 }
 
-a {
-  color: #ffb84d;
-  text-decoration: none;
+.password-box input {
+    width: 90%;
 }
 
-#store-section {
-  background-color: rgba(255, 255, 255, 0.1);
-  margin: 20px;
-  padding: 15px;
-  border-radius: 12px;
+.password-box .toggle {
+    width: 10%;
+    text-align: center;
+    cursor: pointer;
 }
+
+.hidden {
+    display: none;
+}
+
+#dashboard {
+    width: 90%;
+    max-width: 380px;
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.store-btn {
+    background: #00bb77;
+    color: white;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 10px;
+}
+
+.bottom {
+    margin-top: 40px;
+}
+
