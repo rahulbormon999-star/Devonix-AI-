@@ -1,88 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Devonix AI</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devonix AI – Signup</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Language Selector -->
-  <div class="language-select">
-    <select id="languageSelect">
-      <option value="en">English</option>
-      <option value="bn">বাংলা</option>
-      <option value="hi">हिन्दी</option>
-      <option value="fr">Français</option>
-      <option value="es">Español</option>
-      <option value="de">Deutsch</option>
-      <option value="ar">العربية</option>
-      <option value="ru">Русский</option>
-      <option value="zh">中文</option>
-      <option value="ja">日本語</option>
-      <option value="ko">한국어</option>
-      <option value="it">Italiano</option>
-      <option value="pt">Português</option>
-      <option value="tr">Türkçe</option>
-      <option value="ur">اردو</option>
-      <option value="ta">தமிழ்</option>
-      <option value="te">తెలుగు</option>
-      <option value="pa">ਪੰਜਾਬੀ</option>
-      <option value="mr">मराठी</option>
-      <option value="gu">ગુજરાતી</option>
-      <option value="ne">नेपाली</option>
-      <option value="si">සිංහල</option>
-      <option value="th">ไทย</option>
-      <option value="vi">Tiếng Việt</option>
-      <option value="id">Bahasa Indonesia</option>
-      <option value="ms">Bahasa Melayu</option>
-      <option value="fa">فارسی</option>
-      <option value="el">Ελληνικά</option>
-      <option value="pl">Polski</option>
-      <option value="uk">Українська</option>
-    </select>
-  </div>
+<div class="container">
 
-  <!-- Logo Section -->
-  <div class="logo">
-   <img src="logo.png"-->
-    <h2>DDevonixAI</hh>
-  </div>
+    <h2 id="title">Create Your Account</h2>
 
-  <!-- Signup Form -->
-  <div id="signup-section">
-    <h3 data-key="signupTitle">Create Your Devonix AI Account</h3>
-    <input type="text" id="name" placeholder="Full Name">
-    <input type="text" id="phone" placeholder="Phone Number">
-    <input type="date" id="dob" placeholder="Date of Birth">
-    <input type="text" id="country" placeholder="Country">
-    <input type="text" id="district" placeholder="District">
-    <input type="text" id="thana" placeholder="Thana">
-    <input type="password" id="password" placeholder="Password">
-    <button id="signupBtn" data-key="signupBtn">Sign Up</button>
-    <p>Already have an account? <a href="#" id="goToLogin" data-key="loginLink">Login</a></p>
-  </div>
+    <label id="label-name">Your Name</label>
+    <input type="text" id="name">
 
-  <!-- Login Form -->
-  <div id="login-section" style="display:none;">
-    <h3 data-key="loginTitle">Login to Devonix AI</h3>
-    <input type="text" id="loginPhone" placeholder="Phone Number">
-    <input type="password" id="loginPassword" placeholder="Password">
-    <button id="loginBtn" data-key="loginBtn">Login</button>
-    <p>Don't have an account? <a href="#" id="goToSignup" data-key="signupLink">Sign Up</a></p>
-  </div>
+    <label id="label-email">Email Address</label>
+    <input type="email" id="email">
 
-  <!-- Devonix Store -->
-  <div id="store-section" style="display:none;">
-    <h2 data-key="storeTitle">Devonix Store</h2>
-    <p data-key="storeText">Your uploaded apps will appear here.</p>
-  </div>
+    <label id="label-password">Password</label>
+    <div class="password-box">
+        <input type="password" id="password">
+        <span class="toggle" onclick="togglePassword()">👁</span>
+    </div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+    <label id="label-language">Choose Language</label>
+    <select id="language"></select>
 
-  <script src="app.js"></script>
+    <button id="signupBtn" onclick="signupUser()">Sign Up</button>
+
+</div>
+
+<!-- Dashboard -->
+<div id="dashboard" class="hidden">
+    <h2 id="dash-welcome">Welcome!</h2>
+
+    <button class="store-btn">Devonix Store</button>
+
+    <p id="dash-text">Download and Use Your Favorite Apps.</p>
+
+    <button class="store-btn bottom">Devonix Store</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+
+<script src="app.js"></script>
 </body>
 </html>
