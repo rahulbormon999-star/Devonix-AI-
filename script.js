@@ -1,4 +1,4 @@
-===============================================
+// ===============================================
 // ১. FIREBASE INITIALIZATION & CONFIG
 // (আপনার Firebase থেকে পাওয়া কনফিগারেশন এখানে বসান)
 // ===============================================
@@ -23,26 +23,31 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-    // ********* গুরুত্বপূর্ণ: আপনার Firebase কনফিগারেশন এখানে আপডেট করুন *********
+    // **গুরুত্বপূর্ণ: এখানে আপনার Firebase থেকে পাওয়া ৬টি (বা ৭টি) আসল মান বসান**
+    // যেমন: "AIzaSyBdL2IGfrsMMKpF5ZaUGw3fAIH-0lp..."
     apiKey: "আপনার_নিজস্ব_API_Key_এখানে_বসবে", 
     authDomain: "আপনার_নিজস্ব_Auth_Domain_এখানে_বসবে",
     projectId: "আপনার_নিজস্ব_Project_ID_এখানে_বসবে",
     storageBucket: "আপনার_নিজস্ব_Storage_Bucket_এখানে_বসবে",
     messagingSenderId: "আপনার_নিজস্ব_Messaging_Sender_Id_এখানে_বসবে",
     appId: "আপনার_নিজস্ব_App_Id_এখানে_বসবে",
+    // measurementId: "আপনার_নিজস্ব_Measurement_ID_এখানে_বসবে", // যদি এটি থাকে তবে রাখুন
 };
 
 let db;
-// নিশ্চিত করুন যে গ্লোবাল ফায়ারবেস SDK লোড হয়েছে এবং তারপর ইনিশিয়ালাইজ করুন
+
+// গ্লোবাল ফায়ারবেস SDK (Version 8) দিয়ে ইনিশিয়ালাইজ করুন
 if (typeof firebase !== 'undefined') {
-    // এখানে কোনো 'import' বা 'initializeApp' ফাংশনের প্রয়োজন নেই (Version 8)
+    // এখানে কোনো 'import' বা মডিউলার initializeApp() ফাংশন লাগবে না।
     firebase.initializeApp(firebaseConfig);
-    db = firebase.firestore();
+    db = firebase.firestore(); // Firestore সেটআপ
     console.log("Firebase initialized.");
 } else {
-    console.error("Firebase SDK not loaded. Check script imports in index.html."
+    console.error("Firebase SDK not loaded. Check script imports in index.html.");
+}
+
 // ===============================================
-// ২. LANGUAGE TRANSLATION DATA (৫০টি ভাষার ডেটা)
+// ২. LANGUAGE TRANSLATION DATA 
 // ===============================================
 const translations = {
     // --- ৩টি বাধ্যতামূলক ভাষা ---
