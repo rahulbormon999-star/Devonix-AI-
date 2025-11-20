@@ -1,0 +1,235 @@
+/* ################## গ্লোবাল স্টাইল ################## */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a2e; /* গাঢ় বেগুনি পটভূমি */
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 90%;
+    max-width: 500px;
+    background-color: #272343; /* গাঢ় নীল পটভূমি */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ################## নেভিগেশন বার (Navbar) স্টাইল ################## */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #5a5a8e;
+}
+
+.logo {
+    color: #ff9900; /* লোগো টেক্সটের রং */
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.left-controls, .right-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-button {
+    background-color: #ff9900;
+    color: #272343;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+    background-color: #e68a00;
+}
+
+/* ################## স্ক্রিন স্টাইল ################## */
+.screen {
+    padding: 20px 0;
+    flex-grow: 1;
+}
+
+.hidden {
+    display: none !important;
+}
+
+h2 {
+    color: #ff9900;
+    border-bottom: 2px solid #ff9900;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* ################## ফর্ম স্টাইল ################## */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input, select, form button[type="submit"] {
+    padding: 12px;
+    border: 1px solid #5a5a8e;
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: #3b3a5d;
+    color: #fff;
+}
+
+select {
+    appearance: none; /* ডিফল্ট ড্রপডাউন আইকন লুকানো */
+    cursor: pointer;
+}
+
+form button[type="submit"] {
+    background-color: #5a5a8e;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button[type="submit"]:hover {
+    background-color: #4b4a7d;
+}
+
+.error-message {
+    color: #ff4d4d;
+    background-color: #3b3a5d;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* ################## পাসওয়ার্ড টগল স্টাইল ################## */
+.password-container {
+    position: relative;
+}
+
+.password-container input {
+    padding-right: 40px; /* আইকনের জন্য জায়গা */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #ff9900;
+}
+
+/* ################## ভাষা স্ক্রিন স্টাইল ################## */
+.language-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.language-button {
+    background-color: #5a5a8e;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.language-button:hover {
+    background-color: #ff9900;
+}
+
+.language-button.active {
+    background-color: #ff9900;
+    color: #272343;
+    font-weight: bold;
+}
+
+/* ################## অ্যাপ স্টোর স্টাইল ################## */
+#appListContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.app-card {
+    background-color: #3b3a5d;
+    padding: 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.app-info h4 {
+    margin: 0;
+    color: #fff;
+}
+
+.app-info p {
+    margin: 5px 0 0;
+    color: #ccc;
+    font-size: 0.9rem;
+}
+
+.download-btn {
+    background-color: #ff9900;
+    color: #272343;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.download-btn:hover {
+    background-color: #e68a00;
+}
+
+/* ################## সাফল্য বার্তা ওভারলে স্টাইল ################## */
+.success-message-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.success-box {
+    background-color: #272343;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(255, 153, 0, 0.5);
+}
+
+.success-box h3 {
+    color: #00ff7f; /* সবুজ রং */
+    margin-top: 0;
+  }
