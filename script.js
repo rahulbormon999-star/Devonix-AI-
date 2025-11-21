@@ -1,44 +1,25 @@
-=======================================
-// ১. FIREBASE INITIALIZATION & CONFIG
-// (আপনার Firebase থেকে পাওয়া কনফিগারেশন এখানে বসান)
 // ===============================================
-const firebaseConfig = {// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+// ১. FIREBASE INITIALIZATION & CONFIG
+// (আপনার দেওয়া কনফিগারেশন ব্যবহার করে তৈরি)
+// ===============================================
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBdL2IGfrsMMKpF5ZaCUgW3fAlH-0lpht4",
-  authDomain: "devonix-ai.firebaseapp.com",
-  projectId: "devonix-ai",
-  storageBucket: "devonix-ai.firebasestorage.app",
-  messagingSenderId: "67398450167",
-  appId: "1:67398450167:web:12ed985fcb4aa53a0f4cf2",
-  measurementId: "G-89899WL00E"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-    // **গুরুত্বপূর্ণ: এখানে আপনার Firebase থেকে পাওয়া ৬টি (বা ৭টি) আসল মান বসান**
-    // যেমন: "AIzaSyBdL2IGfrsMMKpF5ZaUGw3fAIH-0lp..."
-    apiKey: "আপনার_নিজস্ব_API_Key_এখানে_বসবে", 
-    authDomain: "আপনার_নিজস্ব_Auth_Domain_এখানে_বসবে",
-    projectId: "আপনার_নিজস্ব_Project_ID_এখানে_বসবে",
-    storageBucket: "আপনার_নিজস্ব_Storage_Bucket_এখানে_বসবে",
-    messagingSenderId: "আপনার_নিজস্ব_Messaging_Sender_Id_এখানে_বসবে",
-    appId: "আপনার_নিজস্ব_App_Id_এখানে_বসবে",
-    // measurementId: "আপনার_নিজস্ব_Measurement_ID_এখানে_বসবে", // যদি এটি থাকে তবে রাখুন
+    // এটি আপনার আসল Firebase কনফিগারেশন
+    apiKey: "AIzaSyBdL2IGfrsMMKpF5ZaCUgW3fAlH-0lpht4", 
+    authDomain: "devonix-ai.firebaseapp.com", 
+    projectId: "devonix-ai", 
+    storageBucket: "devonix-ai.firebasestorage.app", 
+    messagingSenderId: "67398450167", 
+    appId: "1:67398450167:web:12ed985fcb4aa53a0f4cf2", 
+    measurementId: "G-89899WL00E", 
 };
 
 let db;
 
 // গ্লোবাল ফায়ারবেস SDK (Version 8) দিয়ে ইনিশিয়ালাইজ করুন
+// নিশ্চিত করুন যে index.html এ firebase-app.js এবং firebase-firestore.js লোড করা আছে।
 if (typeof firebase !== 'undefined') {
-    // এখানে কোনো 'import' বা মডিউলার initializeApp() ফাংশন লাগবে না।
+    // এখানে কোনো 'import', initializeApp(firebaseConfig) বা getAnalytics(app) লাগবে না।
     firebase.initializeApp(firebaseConfig);
     db = firebase.firestore(); // Firestore সেটআপ
     console.log("Firebase initialized.");
@@ -46,10 +27,10 @@ if (typeof firebase !== 'undefined') {
     console.error("Firebase SDK not loaded. Check script imports in index.html.");
 }
 
-// ===============================================
 // ২. LANGUAGE TRANSLATION DATA 
-// ==============================================
-const translations = {
+// (৫০টির বেশি ভাষা)
+// ===============================================
+// ... এখান থেকে আপনার const translations = { শুরু হবে
     // --- ৩টি বাধ্যতামূলক ভাষা ---
     'bn': {
         pageTitle: 'ডেভোনিক্স এআই সাইন আপ',
