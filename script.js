@@ -10,27 +10,7 @@ import { getAnalytics } from "firebase/analytics";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyBdL2IGfrsMMKpF5ZaCUgW3fAlH-0lpht4",
-  authDomain: "devonix-ai.firebaseapp.com",
-  projectId: "devonix-ai",
-  storageBucket: "devonix-ai.firebasestorage.app",
-  messagingSenderId: "67398450167",
-  appId: "1:67398450167:web:12ed985fcb4aa53a0f4cf2",
-  measurementId: "G-89899WL00E"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
   apiKey: "AIzaSyBdL2IGfrsMMKpF5ZaCUgW3fAlH-0lpht4",
   authDomain: "devonix-ai.firebaseapp.com",
   projectId: "devonix-ai",
