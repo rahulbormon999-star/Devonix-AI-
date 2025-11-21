@@ -1,106 +1,11 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devonix AI</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
-</head>
-<body>
-    <div class="container">
-        
-        <header class="navbar">
-            <div class="left-controls">
-                <button id="storeBtn" class="nav-button" data-key="storeBtnText">Devonix Store</button>
-            </div>
-            
-            <h1 class="logo" data-key="appName">Devonix AI</h1>
-            
-            <div class="right-controls">
-                <button id="languageBtn" class="nav-button"><i class="fas fa-globe"></i></button>
-                
-                <button id="authBtn" class="nav-button" data-key="loginBtnText">Login</button>
-                
-                <button id="logoutBtn" class="nav-button hidden" data-key="logoutBtnText">Logout</button>
-            </div>
-        </header>
-
-        <section id="home-section" class="screen">
-            <h2 data-key="welcomeMessage">Welcome to Devonix AI!</h2>
-            <p data-key="homeInstructions">Please login or sign up to access the full features.</p>
-        </section>
-
-        <section id="signup-section" class="screen hidden">
-            <h2 data-key="signupTitle">Create Your Devonix AI Account</h2>
-            <form id="signupForm">
-                <input type="text" id="name" placeholder="Full Name" data-key="placeholderName">
-                <input type="text" id="phone" placeholder="Phone Number" data-key="placeholderPhone">
-                
-                <input type="date" id="dob" placeholder="Date of Birth (Optional)" data-key="placeholderDOB">
-                
-                <select id="country" data-key="placeholderCountry">
-                    <option value="" disabled selected data-key="placeholderCountry">Country</option>
-                    </select>
-                
-                <input type="text" id="district" placeholder="District" data-key="placeholderDistrict">
-                <input type="text" id="thana" placeholder="Thana" data-key="placeholderThana">
-
-                <div class="password-container">
-                    <input type="password" id="password" placeholder="Password" data-key="placeholderPassword">
-                    <span class="toggle-password" id="togglePassword"><i class="fas fa-eye"></i></span>
-                </div>
-                
-                <button type="submit" id="signupBtn" data-key="signupBtnText">Sign Up</button>
-                
-                <p>
-                    <span data-key="loginText">Already have an account?</span> 
-                    <a href="#" id="loginLink" data-key="loginLinkText">Login</a>
-                </p>
-                <p id="signupError" class="error-message"></p>
-            </form>
-        </section>
-
-        <section id="store-section" class="screen hidden">
-            <h2 data-key="storeWelcome">Devonix Store</h2>
-            <div id="appListContainer">
-                <p id="noAppsMessage" data-key="storeAppPlaceholder"></p>
-            </div>
-        </section>
-
-        <section id="language-section" class="screen hidden">
-            <h2 data-key="languageTitle">Select Your Language</h2>
-            <div class="language-grid" id="languageGrid">
-                </div>
-            <button id="closeLanguageBtn" class="nav-button">Close</button>
-        </section>
-
-        <section id="login-section" class="screen hidden">
-            <h2 data-key="loginTitle">Login to Devonix AI</h2>
-            <form id="loginForm">
-                <input type="text" id="loginPhone" placeholder="Phone Number" data-key="placeholderPhone">
-                <div class="password-container">
-                    <input type="password" id="loginPassword" placeholder="Password" data-key="placeholderPassword">
-                    <span class="toggle-password" id="toggleLoginPassword"><i class="fas fa-eye"></i></span>
-                </div>
-                <button type="submit" data-key="loginBtnText">Login</button>
-                <p id="loginError" class="error-message"></p>
-            </form>
-        </section>
-        
-        <div id="successMessage" class="success-message-overlay hidden">
-            <div class="success-box">
-                <h3 data-key="accountCreated">Congratulations!</h3>
-                <p data-key="accountRedirect">You will be redirected to the Home screen shortly...</p>
-            </div>
+ <div id="successMessage" class="success-message-container">
+        <div class="success-box">
+            <h3 data-key="accountCreated">Congratulations!</h3>
+            <p data-key="accountRedirect">You will be redirected shortly.</p>
         </div>
-
     </div>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script> 
+    
+    </div> <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script> 
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     
@@ -109,7 +14,4 @@
     <script src="script.js"></script> 
 
 </body>
-</html>
-    <script src="script.js"></script>
-</body>
-  </html>
+</html>               
