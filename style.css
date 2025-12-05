@@ -9,7 +9,7 @@ body {
 .header {
     /* নীল, আকাশি, সবুজ রঙের গ্র্যাডিয়েন্ট */
     background: linear-gradient(90deg, #007bff, #17a2b8, #20c997); 
-    color: white;
+    color: orange;
     padding: full; 
     display: flex; 
     justify-content: space-between; 
