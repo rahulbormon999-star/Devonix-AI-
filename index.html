@@ -1,17 +1,29 @@
- <div id="successMessage" class="success-message-container">
-        <div class="success-box">
-            <h3 data-key="accountCreated">Congratulations!</h3>
-            <p data-key="accountRedirect">You will be redirected shortly.</p>
+ <!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devonix AI App Store</title>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header">
+        <a href="#" class="nav-button store">Store</a>
+        <div class="header-center">Devonix AI</div>
+        <div class="header-right">
+            <a href="#" class="nav-button signup">সাইন আপ</a>
         </div>
     </div>
-    
-    </div> <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script> 
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script> 
-    
-    <script src="script.js"></script> 
+
+    <div id="app-list-container">
+        <p>অ্যাপের ডেটা লোড হচ্ছে...</p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="script.js"></script>
 
 </body>
- </html>
+</html>
