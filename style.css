@@ -10,7 +10,7 @@ body {
     /* নীল, আকাশি, সবুজ রঙের গ্র্যাডিয়েন্ট */
     background: linear-gradient(90deg, #007bff, #17a2b8, #20c997); 
     color: white;
-    padding: 20px 20px;
+    padding: 10px 20px;
     display: flex; 
     justify-content: space-between; 
     align-items: center;
@@ -28,7 +28,7 @@ body {
     background-color: transparent;
     color: white;
     border: none;
-    padding: 8px 15px;
+    padding: 15px 15px;
     text-decoration: none;
     cursor: pointer;
     border-radius: 5px;
