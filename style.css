@@ -53,6 +53,7 @@ body {
 
 /* অ্যাপ ডেটার জন্য বেসিক ডিজাইন */
 #app-list-container {
+    background: linear-gradient(180deg, #e0f7fa, #00b0ff);
     padding: 20px;
     min-height: 500px;
 }
