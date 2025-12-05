@@ -10,7 +10,7 @@ body {
     /* নীল, আকাশি, সবুজ রঙের গ্র্যাডিয়েন্ট */
     background: linear-gradient(90deg, #007bff, #17a2b8, #20c997); 
     color: white;
-    padding: 10px 20px;
+    padding: full; 
     display: flex; 
     justify-content: space-between; 
     align-items: center;
@@ -53,7 +53,6 @@ body {
 
 /* অ্যাপ ডেটার জন্য বেসিক ডিজাইন */
 #app-list-container {
-    background: linear-gradient(180deg, #e0f7fa, #00b0ff);
     padding: 20px;
     min-height: 500px;
 }
