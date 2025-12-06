@@ -1,7 +1,6 @@
 /* style.css ফাইল */
 body {
     margin: 0;
-    /*background-color:#f0f0f0;*/
 }
 
 /* হেডার ডিজাইন */
@@ -55,6 +54,7 @@ body {
     padding: 20px;
     min-height: 100vh;
     background: linear-gradiend(180deg, #e0f7 fa,#00b0ff);
+    background: linerar-gradient ( 180deg,  #s0f7fa, #00b0);
 }
 
 /* অ্যাপ কার্ডের ডিজাইন (JavaScript দিয়ে তৈরি হবে) */
