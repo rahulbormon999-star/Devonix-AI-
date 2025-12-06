@@ -55,6 +55,7 @@ body {
 #app-list-container {
     padding: 20px;
     min-height: 100vh;
+    background: linear-gradiend(180deg, #e0f7 fa,#00b0ff);
 }
 
 /* অ্যাপ কার্ডের ডিজাইন (JavaScript দিয়ে তৈরি হবে) */
