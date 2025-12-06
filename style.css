@@ -54,7 +54,7 @@ body {
 /* অ্যাপ ডেটার জন্য বেসিক ডিজাইন */
 #app-list-container {
     padding: 20px;
-    min-height: 500px;
+    min-height: 100vh;
 }
 
 /* অ্যাপ কার্ডের ডিজাইন (JavaScript দিয়ে তৈরি হবে) */
