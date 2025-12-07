@@ -1,0 +1,91 @@
+/* style.css ফাইল - সম্পূর্ণ কার্যকরী ও ত্রুটিমুক্ত ভার্সন */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    /* এই বডিতে কোনো ব্যাকগ্রাউন্ড রং সেট করা নেই */
+}
+
+/* --- হেডার ডিজাইন --- */
+.header {
+    /* নীল, আকাশি, সবুজ রঙের গ্র্যাডিয়েন্ট */
+    background: linear-gradient(90deg, #007bff, #17a2b8, #20c997); 
+    color: white;
+    padding: 20px 20px; /* বাটন নামানোর জন্য */
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+}
+
+/* মাঝখানের লেখা (Devonix AI) */
+.header-center {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    flex-grow: 1;
+    color: white; /* লেখাকে সাদার পরিবর্তে 'black' রাখা হয়েছিল, কিন্তু হেডারের জন্য 'white' সবচেয়ে ভালো */
+}
+
+/* বাটন ডিজাইন */
+.nav-button {
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* সাইন আপ বাটন */
+.nav-button.signup {
+    border: 1px solid white; 
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+/* স্টোর বাটন */
+.nav-button.store {
+     font-size: 18px;
+     font-weight: 500;
+}
+
+/* --- অ্যাপ ডেটার জন্য এবং ফুল স্ক্রিন রং --- */
+#app-list-container {
+    padding: 20px;
+    /* হেডার বাদে বাকি স্ক্রিন জুড়ে থাকবে */
+    min-height: 100vh; 
+    
+    /* নীল ও হালকা সবুজ রঙের গ্র্যাডিয়েন্ট ব্যাকগ্রাউন্ড */
+    background: linear-gradient(180deg, #e0f7fa, #00b0ff); 
+}
+
+/* --- অ্যাপ কার্ড ডিজাইন --- */
+.app-card {
+    margin-bottom: 25px; 
+    padding: 20px; 
+    background-color: white; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+}
+
+.app-card h2 {
+    font-size: 1.6em; 
+    color: #333; 
+    margin-top: 0;
+}
+
+.app-card a {
+    display: inline-block; 
+    background: #1a73e8; 
+    color: white; 
+    padding: 10px 18px; 
+    text-decoration: none; 
+    border-radius: 6px;
+}
