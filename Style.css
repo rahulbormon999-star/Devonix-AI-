@@ -35,3 +35,12 @@ body {
     font-size: 14px;
     border-radius: 6px;
 }
+#storeBtn {
+  margin-top: 20px; /* বাটনটিকে নিচে নামাবে */
+  background-color: #fff8a6; /* হালকা হলুদ রঙ */
+  border: 1px solid #e6d96b; /* হালকা বর্ডার */
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
