@@ -28,7 +28,7 @@ body {
 .store {
   position: relative;
   top: 20px; /* যত বেশি করবেন তত নিচে নামবে */
-  background-color: #fff8a6; /* হালকা হলুদ */
+  background-color:#fff8a6! important;
   left: 10px;
 }
 
