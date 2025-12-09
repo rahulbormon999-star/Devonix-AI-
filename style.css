@@ -26,25 +26,28 @@ body {
 
 /* Container for button */
 .center-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-grow: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
 }
 
 /* Get Start Button */
 .start-btn {
-    font-size: 28px;
-    padding: 22px 55px;
+    font-size: 32px;
+    padding: 25px 70px;
     border: none;
-    border-radius: 12px;
-    background: #002A6D;
-    color: white;
+    border-radius: 14px;
+    background: #004aad;
+    color: #fff;
     cursor: pointer;
-    transition: 0.3s ease;
-}
+    box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.25);
+    transition: 0.3s;
 }
 
 .start-btn:hover {
-    background: #0045A5;
+    transform: scale(1.08);
+    background: #002F6C;
 }
