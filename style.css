@@ -1,0 +1,52 @@
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.container {
+    text-align: center;
+}
+
+.logo {
+    font-size: 48px;
+    font-weight: 800;
+    color: #202020;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.logo span {
+    color: #ffffff;
+    text-shadow: 0px 0px 10px rgba(255,255,255,0.7);
+}
+
+.start-btn {
+    background-color: #000000cc;
+    color: #fff;
+    border: none;
+    padding: 14px 32px;
+    font-size: 22px;
+    font-weight: bold;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.4);
+}
