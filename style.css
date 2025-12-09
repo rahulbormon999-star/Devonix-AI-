@@ -17,10 +17,10 @@ body {
 
 /* Devonix AI Title */
 .logo {
-    font-size: 50px;
+    font-size: 40px;
     font-weight: 800;
     color: #000000;
-    margin-top: 40px; /* Top space increased */
+    margin-top: 10px; /* Top space increased */
     text-align: center;
 }
 
