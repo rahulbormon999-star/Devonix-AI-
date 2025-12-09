@@ -17,7 +17,7 @@ body {
 
 /* Devonix AI Title */
 .logo {
-    font-size: 40px;
+    font-size: 50px;
     font-weight: 800;
     color: #000000;
     margin-top: 40px; /* Top space increased */
@@ -26,16 +26,16 @@ body {
 
 /* Container for button */
 .center-box {
-    margin-top: auto;
+    margin-top: 50;
     margin-bottom: 140px;
 }
 
 /* Get Start Button */
 .start-btn {
-    font-size: 24px;
-    padding: 18px 45px; /* Bigger button */
+    font-size: 40px;
+    padding: 25px 55px; /* Bigger button */
     border: none;
-    border-radius: 10px;
+    border-radius: 20px;
     background: #002A6D; /* Dark Blue */
     color: white;
     cursor: pointer;
