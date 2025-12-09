@@ -26,20 +26,23 @@ body {
 
 /* Container for button */
 .center-box {
-    margin-top: 100;
-    margin-bottom: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
 }
 
 /* Get Start Button */
 .start-btn {
-    font-size: 50px;
-    padding: 40px 60px; /* Bigger button */
+    font-size: 28px;
+    padding: 22px 55px;
     border: none;
-    border-radius: 30px;
-    background: #002A6D; /* Dark Blue */
+    border-radius: 12px;
+    background: #002A6D;
     color: white;
     cursor: pointer;
     transition: 0.3s ease;
+}
 }
 
 .start-btn:hover {
