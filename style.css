@@ -26,16 +26,16 @@ body {
 
 /* Container for button */
 .center-box {
-    margin-top: 50;
+    margin-top: 100;
     margin-bottom: 140px;
 }
 
 /* Get Start Button */
 .start-btn {
-    font-size: 40px;
-    padding: 25px 55px; /* Bigger button */
+    font-size: 50px;
+    padding: 40px 60px; /* Bigger button */
     border: none;
-    border-radius: 20px;
+    border-radius: 30px;
     background: #002A6D; /* Dark Blue */
     color: white;
     cursor: pointer;
