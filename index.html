@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devonix AI</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #b3d9ff; /* হালকা নীল */
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            color: #000000; /* কালো */
+            font-size: 40px;
+            margin-bottom: 30px;
+        }
+
+        .start-btn {
+            background-color: #004a99; /* গাঢ় নীল */
+            color: white;
+            padding: 16px 45px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .start-btn:hover {
+            background-color: #003366; /* hover এ আরও ডার্ক নীল */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Devonix AI</h1>
+
+    <button class="start-btn" onclick="nextPage()">Get Start</button>
+
+    <script>
+        function nextPage() {
+            window.location.href = "name.html"; 
+        }
+    </script>
+
+</body>
+</html>
