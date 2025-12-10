@@ -1,0 +1,53 @@
+/* style.css ফাইল - চূড়ান্ত ও সংশোধিত ভার্সন */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh; 
+    background: linear-gradient(180deg, #e0f7fa, #00b0ff); /* ফুল স্ক্রিন রং */
+    
+    /* কন্টেন্ট উপরে রাখার জন্য justify-content: center ব্যবহার করা হয়নি */
+}
+
+/* ল্যান্ডিং স্ক্রিনের কন্টেইনার */
+.screen-container {
+    padding: 20px; 
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center; /* লেখা মাঝখানে আনার জন্য */
+}
+
+/* Devonix AI লেখার ডিজাইন */
+.screen-container h1 {
+    font-size: 40px; 
+    color: #007bff; 
+    margin-top: 50px; /* স্ক্রিনের উপর থেকে কিছুটা দূরত্ব */
+    margin-bottom: 50px; 
+    font-weight: bold;
+}
+
+/* Get Start বাটন ডিজাইন */
+#get-start-btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #1a73e8; 
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+#get-start-btn:hover {
+    background-color: #1664c0;
+}
+
+/* যদি আপনি registration-flow স্ক্রিন যুক্ত করেন, তার জন্য প্রয়োজন হবে */
+.hidden {
+    display: none !important;
+}
+
+/* (অন্যান্য স্ক্রিন যুক্ত করার সময় এই ফাইলে আরো CSS যুক্ত করা হবে) */
