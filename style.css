@@ -28,7 +28,7 @@ body {
 .screen-container h1 {
     font-size: 40px; 
     color: #007bff; /* উজ্জ্বল নীল রং */
-    margin-bottom: 50px; /* বাটন থেকে দূরত্ব */
+    margin-bottom: 20px; /* বাটন থেকে দূরত্ব */
     font-weight: bold;
 }
 
