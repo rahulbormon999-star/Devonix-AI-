@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devonix AI - Registration</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(180deg, #e0f7fa, #00b0ff); /* ফুল স্ক্রিন রং */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- সাধারণ স্টাইল --- */
+        .screen-container {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            box-sizing: border-box;
+            background: linear-gradient(180deg, #e0f7fa, #00b0ff); /* স্ক্রিন ব্যাকগ্রাউন্ড */
+        }
+        
+        /* শুধুমাত্র প্রথম স্ক্রিন দেখানোর জন্য */
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- হেডার/নেভিগেশন বার --- */
+        .header {
+            width: 100%;
+            background: linear-gradient(90deg, #007bff, #17a2b8, #20c997); 
+            color: white;
+            padding: 15px 20px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            box-sizing: border-box;
+        }
+        
+        /* --- ফর্মের উপাদান ডিজাইন --- */
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+            margin: 20px auto;
+        }
+
+        .step-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        input[type="text"], input[type="password"], input[type="tel"], input[type="date"], select {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* --- বাটন ডিজাইন --- */
+        .main-button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background-color: #1a73e8;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
+
+        .main-button:hover {
+            background-color: #1664c0;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .nav-button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .nav-button.back {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .nav-button.next, .nav-button.submit {
+            background-color: #00b0ff;
+            color: white;
+        }
+
+        /* --- প্রধান স্টোর স্ক্রিন ডিজাইন --- */
+        .main-store-header {
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            margin-right: auto; /* লেখাটিকে বাম দিকে ঠেলে দেয় */
+        }
+        
+        .store-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .store-button:hover {
+            background-color: #218838;
+        }
+
+        /* অ্যাপ কার্ড ডিজাইন (পুরোনো অ্যাপ স্টোর থেকে) */
+        .app-card {
+            margin-bottom: 25px; 
+            padding: 20px; 
+            background-color: white; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            width: 100%;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <main id="app-main">
+        
+        <section id="landing-screen" class="screen-container">
+            <h1 style="font-size: 40px; color: #007bff; margin-bottom: 50px;">Devonix AI</h1>
+            <button id="get-start-btn" class="main-button">Get Start</button>
+        </section>
+
+        <section id="registration-flow" class="screen-container hidden">
+            <div class="form-container">
+                <h2 style="color: #007bff; margin-top: 0;">অ্যাকাউন্ট তৈরি করুন</h2>
+                
+                <div id="steps-container">
+                    
+                    <div class="step-content" data-step="1">
+                        <label for="first-name">ফার্স্ট নাম</label>
+                        <input type="text" id="first-name" placeholder="ফার্স্ট নাম">
+                        
+                        <label for="last-name">লাস্ট নাম</label>
+                        <input type="text" id="last-name" placeholder="লাস্ট নাম">
+                    </div>
+
+                    <div class="step-content hidden" data-step="2">
+                        <label for="phone">ফোন নম্বর</label>
+                        <input type="tel" id="phone" placeholder="ফোন নম্বর">
+                    </div>
+
+                    <div class="step-content hidden" data-step="3">
+                        <label for="country">দেশের নাম</label>
+                        <input type="text" id="country" placeholder="দেশের নাম">
+                        
+                        <label for="district">জেলার নাম</label>
+                        <input type="text" id="district" placeholder="জেলার নাম">
+                    </div>
+                    
+                    <div class="step-content hidden" data-step="4">
+                        <label for="dob">জন্ম তারিখ</label>
+                        <input type="date" id="dob">
+                    </div>
+
+                    <div class="step-content hidden" data-step="5">
+                        <label for="gender">লিঙ্গ</label>
+                        <select id="gender">
+                            <option value="">নির্বাচন করুন</option>
+                            <option value="Male">পুরুষ</option>
+                            <option value="Female">মহিলা</option>
+                            <option value="Other">অন্যান্য</option>
+                        </select>
+                    </div>
+
+                    <div class="step-content hidden" data-step="6">
+                        <label for="password">পাসওয়ার্ড</label>
+                        <input type="password" id="password" placeholder="একটি নির্দিষ্ট পাসওয়ার্ড দিন">
+                    </div>
+                </div>
+                
+                <div class="nav-buttons">
+                    <button class="nav-button back hidden" id="back-btn">← Back</button>
+                    <button class="nav-button next" id="next-btn">Next →</button>
+                    <button class="nav-button submit hidden" id="submit-btn">Submit</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="main-store" class="hidden" style="width: 100%;">
+             <div class="header">
+                <span class="main-store-header">Devonix AI</span>
+                <a href="#" class="store-button" id="main-store-link">Store</a>
+            </div>
+            
+            <div id="app-list-container" style="padding: 20px; flex-grow: 1; min-height: calc(100vh - 70px);">
+                <h3 style="color: #007bff; text-align: center;">অ্যাপ্লিকেশন লোড হচ্ছে...</h3>
+                </div>
+        </section>
+        
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="script.js"></script>
+
+</body>
+                          </html>
