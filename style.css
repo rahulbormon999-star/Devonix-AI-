@@ -20,8 +20,8 @@ body {
 
 /* Devonix AI লেখার ডিজাইন */
 .screen-container h1 {
-    font-size: 40px; 
-    color: #007bff; 
+    font-size: 50px; 
+    color: black; 
     margin-top: 50px; /* স্ক্রিনের উপর থেকে কিছুটা দূরত্ব */
     margin-bottom: 50px; 
     font-weight: bold;
