@@ -1,0 +1,56 @@
+/* style.css ফাইল - পুরোনো হেডার ডিজাইন */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    background-color: #f8f8f8; /* হালকা সাদা ব্যাকগ্রাউন্ড */
+}
+
+/* হেডার ডিজাইন */
+.header {
+    background: linear-gradient(90deg, #007bff, #17a2b8, #20c997); /* আপনার পছন্দসই নীল-সবুজ গ্র্যাডিয়েন্ট */
+    color: white;
+    padding: 15px 20px;
+    display: flex; 
+    justify-content: space-between; /* বাটনগুলো কোণায় সরিয়ে দেবে */
+    align-items: center;
+}
+
+/* মাঝের Devonix AI লেখা */
+.header-center {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    flex-grow: 1; /* মাঝের লেখাটিকে পুরো জায়গা জুড়ে প্রসারিত করবে */
+}
+
+/* বাটন ডিজাইন */
+.nav-button {
+    background-color: transparent;
+    color: white; 
+    border: none;
+    padding: 8px 15px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+/* সাইন আপ বাটন */
+.nav-button.signup {
+    border: 1px solid white; /* সাইন আপ বাটনে বর্ডার */
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.nav-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* অ্যাপ কন্টেইনার */
+#app-list-container {
+    padding: 20px;
+}
