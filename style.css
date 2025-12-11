@@ -1,0 +1,72 @@
+/* style.css ফাইল - চূড়ান্ত ও সংশোধিত ভার্সন */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh; 
+    
+    /* ফ্লুইড ব্লার/নরম ঢেউয়ের অ্যানিমেশন */
+    background: linear-gradient(-45deg, #007bff, #17a2b8, #20c997, #e0f7fa);
+    background-size: 400% 400%; 
+    animation: softWave 25s ease infinite; 
+}
+
+/* ল্যান্ডিং স্ক্রিনের কন্টেইনার */
+.screen-container {
+    padding: 20px; 
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Devonix AI লেখার ডিজাইন (আপনার লোগোর মতো ফন্ট এবং রং) */
+.screen-container h1 {
+    font-size: 55px; /* ফন্ট সাইজ বাড়ানো */
+    
+    /* লোগোর কাছাকাছি ফন্ট ব্যবহার */
+    font-family: 'Great Vibes', cursive; 
+    
+    /* লোগোর সবুজ রং এবং হলুদ/সোনালী আভা */
+    color: #4CAF50; /* উজ্জ্বল সবুজ রং */
+    text-shadow: 2px 2px 5px #FFEB3B; /* সোনালী/হলুদ রঙের আভা */
+    
+    margin-top: 50px; 
+    margin-bottom: 150px; /* বাটন নিচে নামানোর জন্য */
+    font-weight: normal; /* ফন্টটি নিজেই কার্সিভ, তাই normal রাখা হলো */
+}
+
+/* Get Start বাটন ডিজাইন */
+#get-start-btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #1a73e8; 
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+#get-start-btn:hover {
+    background-color: #1664c0;
+}
+
+/* অ্যানিমেশন কিফ্রেম */
+@keyframes softWave {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.hidden {
+    display: none !important;
+}
