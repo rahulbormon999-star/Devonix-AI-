@@ -31,9 +31,8 @@ body {
    .screen-container h2 {
        font-size: 45px;
        color:black;
-       margin-button:200;
    }
-    
+{   margin-button: 100;}
 /* Get Start বাটন ডিজাইন */
 #get-start-btn {
     padding: 15px 30px;
