@@ -1,24 +1,23 @@
-/* style.css ফাইল - body ট্যাগ (লেখা উপরে থাকবে) */
+/* style.css ফাইল - body ট্যাগ (সংশোধিত) */
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
     min-height: 100vh; 
     
-    background: linear-gradient(180deg, #e0f7fa, #00b0ff); 
+    /* ৭টি রং যুক্ত করা হলো */
+    background: linear-gradient(135deg, #007bff, #17a2b8, #20c997, #ffc107, #ff9800, #dc3545, #6f42c1);
     
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    /* এখানে পরিবর্তন করা হলো */
+    background-size: 700% 700%; /* ৭টি রঙের জন্য ৭০০% ব্যবহার করা হয়েছে */
+    
+    /* দ্রুত অ্যানিমেশন (৩ সেকেন্ড পর পর রং পরিবর্তন) */
+    animation: waveShift 21s ease infinite; /* 7 রং * 3 সেকেন্ড = 21 সেকেন্ড */
+    
     display: flex;
     flex-direction: column;
-    align-items: center; /* এটি কন্টেন্টকে অনুভূমিকভাবে (ডানে-বামে) মাঝখানে রাখবে */
-    /* justify-content: center; এই লাইনটি মুছে ফেলা হলো, তাই লেখা উপরে চলে যাবে */
-    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    
+    align-items: center; 
     text-align: center;
 }
-
-/* ল্যান্ডিং স্ক্রিনের কন্টেইনার */
 .screen-container {
     padding: 20px; 
     width: 100%;
@@ -52,7 +51,34 @@ body {
 #get-start-btn:hover {
     background-color: #1664c0;
 }
+/* style.css ফাইল - একদম শেষে যোগ করুন */
 
+/* অ্যানিমেশন নিয়ম: রঙের পজিশন পরিবর্তন */
+@keyframes waveShift {
+    0% {
+        background-position: 0% 0%; /* শুরু */
+    }
+    14.28% { /* 100/7 = ~14.28 */
+        background-position: 100% 0%;
+    }
+    28.56% { 
+        background-position: 0% 100%;
+    }
+    42.84% { 
+        background-position: 100% 100%;
+    }
+    57.12% { 
+        background-position: 50% 0%;
+    }
+    71.4% { 
+        background-position: 0% 50%;
+    }
+    85.68% { 
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 0%; /* শেষ */
+    }
+}
 /* অন্য স্ক্রিন লুকিয়ে রাখার জন্য */
-.hidden {
-    display: none !imp
+.h
