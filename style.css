@@ -1,0 +1,56 @@
+/* style.css ফাইল - আগের অবস্থানে ফিরে যাওয়া */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh; 
+    
+    /* অ্যানিমেশন ছাড়া স্থির ব্যাকগ্রাউন্ড */
+    background: linear-gradient(180deg, #e0f7fa, #00b0ff); 
+}
+
+/* ল্যান্ডিং স্ক্রিনের কন্টেইনার */
+.screen-container {
+    padding: 20px; 
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Devonix AI লেখার ডিজাইন (ক্লিন এবং বোল্ড) */
+.screen-container h1 {
+    font-size: 40px; 
+    color: #007bff; /* উজ্জ্বল নীল রং */
+    
+    /* কাস্টম ফন্ট বা শ্যাডো মুছে ফেলা হলো */
+    font-family: Arial, sans-serif; 
+    text-shadow: none; 
+    
+    margin-top: 50px; 
+    margin-bottom: 150px; /* বাটন নিচে নামানোর জন্য */
+    font-weight: bold;
+}
+
+/* Get Start বাটন ডিজাইন */
+#get-start-btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #1a73e8; 
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+#get-start-btn:hover {
+    background-color: #1664c0;
+}
+
+/* অন্যান্য স্ক্রিন যুক্ত করার জন্য */
+.hidden {
+    display: none !important;
+}
