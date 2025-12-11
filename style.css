@@ -32,7 +32,6 @@ body {
        font-size: 45px;
        color:black;
    }
-{   margin-button: 100;}
 /* Get Start বাটন ডিজাইন */
 #get-start-btn {
     padding: 15px 30px;
@@ -45,6 +44,7 @@ body {
     cursor: pointer;
     transition: background-color 0.3s;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-top:200;
 }
 
 #get-start-btn:hover {
