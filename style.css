@@ -1,0 +1,58 @@
+/* style.css ফাইল - আপনার আসল পছন্দ অনুযায়ী চূড়ান্ত ল্যান্ডিং স্ক্রিন */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh; 
+    
+    /* ব্যাকগ্রাউন্ড: নীল ও হালকা সবুজ গ্র্যাডিয়েন্ট (স্থির) */
+    background: linear-gradient(180deg, #e0f7fa, #00b0ff); 
+    
+    /* কন্টেন্টকে উল্লম্বভাবে মাঝখানে আনার জন্য */
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; /* এটি কন্টেন্টকে উল্লম্বভাবে (Vertical) মাঝখানে নিয়ে আসে */
+    text-align: center;
+}
+
+/* ল্যান্ডিং স্ক্রিনের কন্টেইনার */
+.screen-container {
+    padding: 20px; 
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Devonix AI লেখার ডিজাইন */
+.screen-container h1 {
+    font-size: 40px; 
+    color: #007bff; /* উজ্জ্বল নীল রং */
+    
+    /* লেখার দূরত্ব বাড়ানো (যদি প্রয়োজন হয়) */
+    margin-bottom: 50px; 
+    font-weight: bold;
+}
+
+/* Get Start বাটন ডিজাইন */
+#get-start-btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #1a73e8; 
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+#get-start-btn:hover {
+    background-color: #1664c0;
+}
+
+/* অন্য স্ক্রিন লুকিয়ে রাখার জন্য */
+.hidden {
+    display: none !important;
+}
