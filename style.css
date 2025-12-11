@@ -1,19 +1,20 @@
-/* style.css ফাইল - আপনার আসল পছন্দ অনুযায়ী চূড়ান্ত ল্যান্ডিং স্ক্রিন */
-
+/* style.css ফাইল - body ট্যাগ (লেখা উপরে থাকবে) */
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
     min-height: 100vh; 
     
-    /* ব্যাকগ্রাউন্ড: নীল ও হালকা সবুজ গ্র্যাডিয়েন্ট (স্থির) */
     background: linear-gradient(180deg, #e0f7fa, #00b0ff); 
     
-    /* কন্টেন্টকে উল্লম্বভাবে মাঝখানে আনার জন্য */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /* এখানে পরিবর্তন করা হলো */
     display: flex;
     flex-direction: column;
-    align-items: center; 
-    justify-content: center; /* এটি কন্টেন্টকে উল্লম্বভাবে (Vertical) মাঝখানে নিয়ে আসে */
+    align-items: center; /* এটি কন্টেন্টকে অনুভূমিকভাবে (ডানে-বামে) মাঝখানে রাখবে */
+    /* justify-content: center; এই লাইনটি মুছে ফেলা হলো, তাই লেখা উপরে চলে যাবে */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    
     text-align: center;
 }
 
@@ -54,5 +55,4 @@ body {
 
 /* অন্য স্ক্রিন লুকিয়ে রাখার জন্য */
 .hidden {
-    display: none !important;
-}
+    display: none !imp
