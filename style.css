@@ -6,10 +6,10 @@ body {
     min-height: 100vh; 
     
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-    /* ঢেউয়ের মতো প্রবাহিত অ্যানিমেশনের জন্য পরিবর্তন */
-    background: linear-gradient(135deg, #007bff, #17a2b8, #20c997, #00b0ff); /* চারটি রং ব্যবহার করা হয়েছে */
-    background-size: 500% 500%; /* ব্যাকগ্রাউন্ডের আকার বহুগুণ বাড়ানো হয়েছে */
-    animation: waveShift 30s ease infinite; /* 30 সেকেন্ড ধরে ধীরে ধীরে চলতে থাকবে */
+    /* ফ্লুইড ব্লার/নরম ঢেউয়ের অ্যানিমেশনের জন্য */
+    background: linear-gradient(-45deg, #007bff, #17a2b8, #20c997, #e0f7fa); /* -45 ডিগ্রি কোণে চারটি রং */
+    background-size: 400% 400%; /* আকার বাড়িয়ে দেয়া */
+    animation: softWave 25s ease infinite; /* ২৫ সেকেন্ড ধরে মসৃণভাবে চলতে থাকবে */
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 }
 
@@ -48,22 +48,18 @@ body {
     background-color: #1664c0;
 }
 /* style.css ফাইল - একদম শেষে যোগ করুন */
+/* style.css ফাইল - একদম শেষে যোগ করুন */
 
-/* অ্যানিমেশন নিয়ম তৈরি: রঙ পরিবর্তন এবং প্রবাহিত হওয়ার ইফেক্ট */
-@keyframes waveShift {
+/* নরম ঢেউয়ের মতো চলাচলের নিয়ম */
+@keyframes softWave {
     0% {
-        background-position: 0% 0%; /* শুরু: বাম-উপরে */
+        background-position: 0% 50%;
     }
     50% {
-        background-position: 100% 100%; /* মাঝে: ডান-নিচে */
+        background-position: 100% 50%;
     }
     100% {
-        background-position: 0% 0%; /* শেষ: আবার শুরু */
+        background-position: 0% 50%;
     }
 }
-/* যদি আপনি registration-flow স্ক্রিন যুক্ত করেন, তার জন্য প্রয়োজন হবে */
-.hidden {
-    display: none !important;
-}
-
 /* (অন্যান্য স্ক্রিন যুক্ত করার সময় এই ফাইলে আরো CSS যুক্ত করা হবে) */
