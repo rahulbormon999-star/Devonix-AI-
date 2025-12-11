@@ -82,3 +82,78 @@ body {
 }
 /* অন্য স্ক্রিন লুকিয়ে রাখার জন্য */
 .h
+/* style.css ফাইল - রেজিস্ট্রেশন স্টেপ ১ (ফার্স্ট নাম, লাস্ট নাম) এর জন্য */
+
+/* --- ফর্মের কন্টেইনার ডিজাইন --- */
+.form-container {
+    /* ... (এখানে form-container এর ডিজাইন কোড) ... */
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    max-width: 400px; 
+    width: 90%;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.step-content {
+    /* ... (এখানে step-content এর ডিজাইন কোড) ... */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+/* ... এবং বাকি সমস্ত CSS কোড (Label, input, nav-buttons) ... */
+/* Label ডিজাইন */
+.form-container label {
+    text-align: left;
+    width: 100%;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: -10px;
+}
+
+/* ইনপুট ফিল্ড ডিজাইন */
+input[type="text"], input[type="tel"], input[type="date"], select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* --- নেভিগেশন বাটন ডিজাইন (Back, Next) --- */
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    width: 100%;
+}
+
+/* নেভিগেশন বাটনের সাধারণ স্টাইল */
+.nav-button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    border: none;
+    flex: 1;
+    margin: 0 5px;
+}
+
+.nav-button.back {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.nav-button.next {
+    background-color: #00b0ff;
+    color: white;
+}
+
+.nav-button.next:hover {
+    background-color: #0088cc;
+}
