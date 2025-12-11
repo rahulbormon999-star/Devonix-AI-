@@ -1,13 +1,16 @@
-/* style.css ফাইল - চূড়ান্ত ও সংশোধিত ভার্সন */
-
+/* style.css ফাইল - body ট্যাগ */
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
     min-height: 100vh; 
-    background: linear-gradient(180deg, #e0f7fa, #00b0ff); /* ফুল স্ক্রিন রং */
     
-    /* কন্টেন্ট উপরে রাখার জন্য justify-content: center ব্যবহার করা হয়নি */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+    /* ঢেউয়ের মতো প্রবাহিত অ্যানিমেশনের জন্য পরিবর্তন */
+    background: linear-gradient(135deg, #007bff, #17a2b8, #20c997, #00b0ff); /* চারটি রং ব্যবহার করা হয়েছে */
+    background-size: 500% 500%; /* ব্যাকগ্রাউন্ডের আকার বহুগুণ বাড়ানো হয়েছে */
+    animation: waveShift 30s ease infinite; /* 30 সেকেন্ড ধরে ধীরে ধীরে চলতে থাকবে */
+    /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 }
 
 /* ল্যান্ডিং স্ক্রিনের কন্টেইনার */
@@ -44,7 +47,20 @@ body {
 #get-start-btn:hover {
     background-color: #1664c0;
 }
+/* style.css ফাইল - একদম শেষে যোগ করুন */
 
+/* অ্যানিমেশন নিয়ম তৈরি: রঙ পরিবর্তন এবং প্রবাহিত হওয়ার ইফেক্ট */
+@keyframes waveShift {
+    0% {
+        background-position: 0% 0%; /* শুরু: বাম-উপরে */
+    }
+    50% {
+        background-position: 100% 100%; /* মাঝে: ডান-নিচে */
+    }
+    100% {
+        background-position: 0% 0%; /* শেষ: আবার শুরু */
+    }
+}
 /* যদি আপনি registration-flow স্ক্রিন যুক্ত করেন, তার জন্য প্রয়োজন হবে */
 .hidden {
     display: none !important;
