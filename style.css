@@ -27,11 +27,11 @@ body {
 
 /* Devonix AI লেখার ডিজাইন */
 .screen-container h1 {
-    font-size: 40px; 
+    font-size: 50px; 
     color: black; /* উজ্জ্বল কালো রং */
     
     /* লেখার দূরত্ব বাড়ানো (যদি প্রয়োজন হয়) */
-    margin-bottom: 500px; 
+    margin-bottom: 300px; 
     font-weight: bold;
 }
 
