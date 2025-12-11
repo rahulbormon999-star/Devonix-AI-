@@ -9,26 +9,59 @@
 </head>
 <body>
 </div>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devonix AI - Registration Flow</title>
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
     <section id="landing-screen" class="screen-container">
-        <h1>Devonix Ai</h1>
+        <h1>Devonix AI</h1>
         <button id="get-start-btn">Get Start</button>
     </section>
+
     <section id="reg-step-1" class="screen-container hidden">
-    <div class="form-container">
-        <h2 style="color: #007bff; margin-top: 0;">অ্যাকাউন্ট তৈরি করুন (১/৬)</h2>
-        
-        <div class="step-content">
-            <label for="first-name">ফার্স্ট নাম</label>
-            <input type="text" id="first-name" placeholder="ফার্স্ট নাম" required>
+        <div class="form-container">
+            <h2 style="color: #007bff; margin-top: 0;">অ্যাকাউন্ট তৈরি করুন (১/৬)</h2>
             
-            <label for="last-name">লাস্ট নাম</label>
-            <input type="text" id="last-name" placeholder="লাস্ট নাম" required>
-        </div>
-        
-        <div class="nav-buttons">
-            <button class="nav-button back" id="back-btn-1">← Back</button> 
-            <button class="nav-button next" id="next-btn-1">Next →</button>
+            <div class="step-content">
+                <label for="first-name">ফার্স্ট নাম</label>
+                <input type="text" id="first-name" placeholder="ফার্স্ট নাম" required>
+                
+                <label for="last-name">লাস্ট নাম</label>
+                <input type="text" id="last-name" placeholder="লাস্ট নাম" required>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="nav-button back" id="back-btn-1">← Back</button> 
+                <button class="nav-button next" id="next-btn-1">Next →</button>
+            </div>
         </div>
     </section>
+
+    <section id="reg-step-2" class="screen-container hidden">
+        <div class="form-container">
+            <h2 style="color: #007bff; margin-top: 0;">অ্যাকাউন্ট তৈরি করুন (২/৬)</h2>
+            
+            <div class="step-content">
+                <label for="phone-number">ফোন নম্বর</label>
+                <input type="tel" id="phone-number" placeholder="আপনার ফোন নম্বর" required>
+            </div>
+            
+            <div class="nav-buttons">
+                <button class="nav-button back" id="back-btn-2">← Back</button> 
+                <button class="nav-button next" id="next-btn-2">Next →</button>
+            </div>
+        </div>
+    </section>
+    
+    <script src="script.js"></script> 
+</body>
+</html>
     </body>
 </html>
