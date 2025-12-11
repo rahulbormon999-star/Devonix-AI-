@@ -157,3 +157,5 @@ input[type="text"], input[type="tel"], input[type="date"], select {
 .nav-button.next:hover {
     background-color: #0088cc;
 }
+hidden {
+display :  none ! important ;
