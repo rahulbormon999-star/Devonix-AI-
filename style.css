@@ -27,13 +27,12 @@ body {
 /* Devonix AI লেখার ডিজাইন */
 .screen-container h1 {
     font-size: 50px; 
-    color: black; /* উজ্জ্বল কালো রং */
+    color: black; /* উজ্জ্বল কালো রং */}
+   .screen-container h2 {
+       font-size: 45px;
+       color:black;
+   }
     
-    /* লেখার দূরত্ব বাড়ানো (যদি প্রয়োজন হয়) */
-    margin-bottom: 10px; 
-    font-weight: bold;
-}
-
 /* Get Start বাটন ডিজাইন */
 #get-start-btn {
     padding: 15px 30px;
