@@ -1,0 +1,14 @@
+body{
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center; /* বামে–ডানে মাঝখানে */
+}
+
+.screen{
+  width: 90%;          /* স্ক্রিন ছোট হবে */
+  max-width: 600px;    /* খুব বড় হতে দেবে না */
+  margin-top: 50px;    /* উপরে একটু ফাঁকা */
+  text-align: center;  /* লেখা মাঝখানে */
+  font-size: 18px;     /* লেখা বড় দেখাবে */
+}
