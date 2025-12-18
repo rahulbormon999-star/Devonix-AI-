@@ -5,7 +5,7 @@ body{
   display: flex;
   justify-content: center;   /* বামে–ডানে মাঝখানে */
   align-items: flex-start;   /* উপরে একটু নামানো */
-  background: #f5f5f5;
+  background: red;
   font-family: Arial, sans-serif;
 }
 
