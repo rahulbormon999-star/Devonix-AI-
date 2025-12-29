@@ -1,8 +1,10 @@
 h1 {
   colour:eeffbb;
   background-colour:aa0000;
+  found-size:40;
 }
 p {
 colour:red;
   background-colour:yellow;
+  found-size:35;
 }
