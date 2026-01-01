@@ -4,6 +4,8 @@ body {
     align-items: center;   
     height:100%;
     margin:0;
+    background-colour:green;
+    
 }
 .container {
     width: 320px;             
