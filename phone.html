@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dev-Onix AI</title>
+<style>
+body{
+margin:0;
+padding:0;
+height:100vh;
+align-items:center;
+background:#fdd;
+color:#000;
+}
+h1{
+font-size:40px;
+letter-spacing:2p;
+font-family:Georgia, serif;
+text-align:center;
+}
+.div {
+  margin-top:70%;
+  margin-left:8%;
+}
+.text {
+  height:45px;
+  width:90%;
+  border-radius:10px;
+  font-size:20px;
+}
+h2 {
+  margin-bottom:3%;
+  margin-left:3%;
+}
+.btn,.sub {
+  height:35px;
+  width: 90px;
+  margin-top:5%;
+  font-size:25px;
+  border:solid 2px #000;
+  border-radius: 5px;
+}
+.sub {
+  color:#fff;
+  background-color:#00f;
+  margin-left:20%;
+}
+.btn {
+  color:#00f;
+  background-color:#fff;
+  margin-left:10%;
+}
+/* h1 animation*/
+.title{
+text-align:center;
+font-size:40px;
+color:#000;
+margin-top:40px;
+
+/* animation */
+animation: dropDown 3s ease forwards;
+}
+
+/* animation system */
+@keyframes dropDown{
+0%{
+transform:translateY(-200px);
+opacity:0;
+}
+
+100%{
+transform:translateY(0);
+opacity:1;
+}
+}
+/* h2 and input Number animation*/
+h2{
+animation: fromLeft 2s ease;
+}
+.text{
+animation: fromRight 3s ease;
+}
+@keyframes fromLeft{
+0%{
+transform:translateX(-200px);
+opacity:0;
+}
+100%{
+transform:translateX(0);
+opacity:1;
+}
+}
+@keyframes fromRight{
+0%{
+transform:translateX(200px);
+opacity:0;
+}
+100%{
+transform:translateX(0);
+opacity:1;
+}
+}
+/* button and submit animation*/
+div /* বাটন নিচ থেকে উপরে আসবে */
+.btn, .sub{
+animation: fromBottom 5s ease;
+}
+@keyframes fromBottom{
+0%{
+transform:translateY(200px);
+opacity:0;
+}
+100%{
+transform:translateY();
+opacity:1;
+}
+}
+/*body animation */
+   body{
+margin:0;
+padding:0;
+height:100vh;
+
+background: linear-gradient(
+270deg,
+#0ff,
+#c0a,
+#0f0,
+#ff0,
+#fff
+);
+background-size:1000% 1000%;
+animation: bgMove 15s ease infinite;
+}
+/* animation */
+@keyframes bgMove{
+
+0%{
+background-position:0% 50%;
+}
+
+50%{
+background-position:100% 50%;
+}
+
+100%{
+background-position:0% 50%;
+}
+</style>
+</head>
+<body>
+<h1 class="title"><i>Dev-Onix AI</i></h1>
+   <from>
+     <div class="div">
+       <div>
+        <h2>Fhone Number </h2>
+        <input type="number" class="text" placeholder="0133...">
+       </div>
+       <div>
+         <a href="name.html"><button class="btn" type="button">Back</button></a>
+         <input type="submit" value="Next" class="sub">
+       </div>
+     </div>
+   </from>
+</body>
+  </html>
