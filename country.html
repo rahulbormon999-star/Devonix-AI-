@@ -200,21 +200,29 @@ background-position:0% 50%;
       </div>
     </div>
   </form>
+
   <script>
 // save করার জন্য
 function saveData(){
+  // country save
   localStorage.setItem("coun", document.getElementById("coun").value);
-}
-
-// load করার জন্য
-window.onload = function(){
-  document.getElementById("coun").value = localStorage.getItem("coun") || "";
-}
+  // gender save
   let g = document.querySelector('input[name="gender"]:checked');
   if(g){
     localStorage.setItem("gender", g.value);
   }
-    
+}
+// load করার জন্য
+window.onload = function(){
+  // country load
+  document.getElementById("coun").value = localStorage.getItem("coun") || "";
+
+  // gender load
+  let gender = localStorage.getItem("gender");
+  if(gender){
+    document.querySelector('input[value="'+gender+'"]').checked = true;
+  }
+}
   </script>
 </body>
   </html>
