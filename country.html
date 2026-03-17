@@ -169,7 +169,7 @@ background-position:0% 50%;
     <div Class="div">
      <div class="left">
         <h2>Country</h2>
-        <select name="Country" class="right" required>
+        <select name="Country" class="right" id="coun" required>
     <option value="" disabled selected>Select your Country</option>
     <option value="Bangladesh">Bangladesh</option>
     <option value="Garman">Garman</option>
@@ -185,7 +185,7 @@ background-position:0% 50%;
       <div class="gen">
         <h2>Gender</h2>
 <label class="radio right">
-<input type="radio" name="gender" required > Male
+<input type="radio" name="gender" id="gun" required > Male
 </label>
 <label class="radio right">
 <input type="radio" name="gender" > Female
@@ -196,9 +196,22 @@ background-position:0% 50%;
       </div>
       <div class="button">
         <a href="date.html"><button class="btn" type="button">Back</button></a>
-        <input type="submit" value="Next" class="sub" type="button">
+        <input type="submit" value="Next" class="sub" type="button" onclick="saveData()">
       </div>
     </div>
   </form>
+  <script>
+// save করার জন্য
+function saveData(){
+  localStorage.setItem("coun", document.getElementById("coun").value);
+  localStorage.setItem("gun", document.getElementById("gun").value);
+}
+
+// load করার জন্য
+window.onload = function(){
+  document.getElementById("coun").value = localStorage.getItem("coun") || "";
+  document.getElementById("gun").value = localStorage.getItem("gun") || "";
+}
+  </script>
 </body>
   </html>
