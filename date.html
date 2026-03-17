@@ -148,12 +148,23 @@ background-position:0% 50%;
 <form action="country.html">
   <div class="div">
     <h2>Date of Birth</h2>
-  <input type="date" class="input" placeholder="17/07/2008" required>
+  <input type="date" class="input" id="date" required>
   </div>
   <div>
     <a href="phone.html"><button class="btn" type="button">Back</button></a>
     <input type="submit" value="Next" class="sub">
   </div>
 </form>
+  <script>
+// save করার জন্য
+function saveData(){
+  localStorage.setItem("date", document.getElementById("date").value);
+}
+
+// load করার জন্য
+window.onload = function(){
+  document.getElementById("date").value = localStorage.getItem("date") || "";
+}
+  </script>
 </body>
 </html>
