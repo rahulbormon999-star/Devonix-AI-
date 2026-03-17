@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dev-Onix AI</title>
+<style>
+body{
+margin:0;
+padding:0;
+height:100vh;
+align-items:center;
+background-color: #fdd;
+font-family:Arial;
+}
+h1{
+font-size:40px;
+letter-spacing:2px;
+font-family:Georgia, serif;
+text-align:center;
+}
+.div {
+  margin-top:50%;
+  margin-left:8%;
+}
+  select {
+    height:50px;
+    width: 90%;
+    border-radius:10px;
+    font-size:20px;
+  }
+  h2 {
+    margin-bottom:5px;
+  }
+  .radio{
+font-size:25px;
+margin-right:4%;
+}
+input[type="radio"]{
+transform:scale(1.2);
+margin-right:0px;
+}
+  .gen {
+    margin-top:50px;
+  }
+    .btn,.sub {
+    height:20%;
+    width:28%;
+    font-size:25px;
+    margin-top:10%;
+    border:solid 2px #000;
+    border-radius:5px;
+  }
+  .sub {
+    margin-left:20%;
+    background-color:#00f;
+    color:#fff;
+  }
+  .btn {
+    margin-left:10%;
+    color:#00f;
+    background-color:#fff;
+  }
+  .der {
+    font-size:25px;
+    margin-bottom:15px;
+  }
+/* h1 animation */
+.title{
+text-align:center;
+font-size:40px;
+color:#000;
+margin-top:40px;
+/* animation */
+animation: dropDown 2s ease forwards;
+}
+/* animation system */
+@keyframes dropDown{
+0%{
+transform:translateY(-200px);
+opacity:0;
+}
+
+100%{
+transform:translateY(0);
+opacity:1;
+}
+}
+/* body animation */
+/* বাম দিক থেকে আসবে */
+  .left {
+animation: leftMove 1.5s ease;
+}
+/* ডান দিক থেকে আসবে */
+.gen {
+animation: rightMove 1.5s ease;
+}
+/* নিচ থেকে আসবে */
+.button{
+animation: upMove 1.5s ease;
+}
+/* LEFT animation */
+@keyframes leftMove{
+0%{
+transform:translateX(-200px);
+opacity:0;
+}
+100%{
+transform:translateX(0);
+opacity:1;
+}
+}
+
+/* RIGHT animation */
+@keyframes rightMove{
+0%{
+transform:translateX(200px);
+opacity:0;
+}
+100%{
+transform:translateX(0);
+opacity:1;
+}
+}
+
+/* BOTTOM animation */
+@keyframes upMove{
+0%{
+transform:translateY(200px);
+opacity:0;
+}
+100%{
+transform:translateY(0);
+opacity:1;
+}
+}
+/* animation */
+body{
+margin:0;
+padding:0;
+height:100vh;
+background: linear-gradient(
+270deg,
+#c00,
+#0c0,
+#00c,
+#cc0,
+#c0c
+);
+background-size:1000% 1000%;
+animation: bgMove 15s ease infinite;
+}
+/* animation */
+@keyframes bgMove{
+0%{
+background-position:0% 50%;
+}
+50%{
+background-position:100% 50%;
+}
+100%{
+background-position:0% 50%;
+} }
+</style>
+</head>
+<body>
+<h1 Class="title"><i>Dev-Onix AI</i></h1>
+  <form>
+    <div Class="div">
+     <div class="left">
+        <h2>Country</h2>
+        <select name="Country" class="right" required>
+    <option value="" disabled selected>Select your Country</option>
+    <option value="Bangladesh">Bangladesh</option>
+    <option value="India">India </option>
+    <option value="America">America</option>
+    <option value="Chin">Chin</option>
+     <option value="Koriya">Koriya</option>
+    <option value="Japan">Japan</option>
+  <option value="Rushiya">Rushiya</option>
+     <option value="France">France</option>
+        </select>
+      </div>
+      <div class="gen">
+        <h2>Gender</h2>
+<label class="radio right">
+<input type="radio" name="gender" required > Male
+</label>
+<label class="radio right">
+<input type="radio" name="gender" > Female
+</label>
+<label class="radio right">
+<input type="radio" name="gender"> Other
+</label>
+      </div>
+      <div class="button">
+        <a href="date.html"><button class="btn">Back</button></a>
+        <input type="submit" value="Next" class="sub" type="button">
+      </div>
+    </div>
+  </form>
+</body>
+  </html>
