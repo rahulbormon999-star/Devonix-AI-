@@ -184,14 +184,14 @@ background-position:0% 50%;
       </div>
       <div class="gen">
         <h2>Gender</h2>
-<label class="radio right" id="gun">
-<input type="radio" name="gender" required > Male
+<label class="radio right">
+<input type="radio" name="gender" value="Male" required > Male
 </label>
-<label class="radio right" id="gun">
-<input type="radio" name="gender" > Female
+<label class="radio right">
+<input type="radio" name="gender" value="Famale" > Female
 </label>
-<label class="radio right" id="gun">
-<input type="radio" name="gender"> Other
+<label class="radio right">
+<input type="radio" name="gender" value="Other"> Other
 </label>
       </div>
       <div class="button">
@@ -204,13 +204,18 @@ background-position:0% 50%;
 // save করার জন্য
 function saveData(){
   localStorage.setItem("coun", document.getElementById("coun").value);
-  localStorage.setItem("gun", document.getElementById("gun").value);
 }
 
 // load করার জন্য
 window.onload = function(){
   document.getElementById("coun").value = localStorage.getItem("coun") || "";
-  document.getElementById("gun").value = localStorage.getItem("gun") || "";
+}
+    
+function saveData(){
+  let g = document.querySelector('input[name="gender"]:checked');
+  if(g){
+    localStorage.setItem("gender", g.value);
+  }
 }
   </script>
 </body>
