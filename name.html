@@ -205,17 +205,28 @@ background-position:0% 50%;
     <div class="div">
       <div>
        <h2 class="label">First Name</h2>
-      <input type="text" placeholder="Rahul" class="input" required tittle="Place enter youe first name">
+      <input type="text" placeholder="Rahul" class="input" id="name" required>
       </div>
       <div class="last">
         <h2 class="label">Last Name</h2>
-        <input type="text" placeholder="Dev" class="input" required tittle="Place enter your last name">
+        <input type="text" placeholder="Dev" class="input" id="name" required >required
       </div>
       <div class="button">
          <a href="index.html"><button class="btn" type="button">Back</button></a>
-         <input type="submit" value="Next" class="sub">
+         <input type="submit" value="Next" class="sub" onclick="saveData()">
       </div>
     </div>
   </form>
+
+ <script>
+// save
+function saveData(){
+  localStorage.setItem("name", document.getElementById("name").value);
+}
+// load
+window.onload = function(){
+  document.getElementById("name").value = localStorage.getItem("name") || "";
+}
+ </script>
 </body>
     </html>
