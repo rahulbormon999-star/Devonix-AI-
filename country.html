@@ -207,14 +207,14 @@ function saveData(){
 }
 
 // load করার জন্য
-window.onload = function(){{
+window.onload = function(){
   document.getElementById("coun").value = localStorage.getItem("coun") || "";
 }
   let g = document.querySelector('input[name="gender"]:checked');
   if(g){
     localStorage.setItem("gender", g.value);
   }
-    }
+    
   </script>
 </body>
   </html>
