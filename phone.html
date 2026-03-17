@@ -155,13 +155,25 @@ background-position:0% 50%;
      <div class="div">
        <div>
         <h2>Phone Number </h2>
-        <input type="number" class="text" placeholder="0133..." required >
+        <input type="number" class="text" placeholder="0133..." id="phone" required >
        </div>
        <div>
          <a href="name.html"><button class="btn" type="button">Back</button></a>
-         <input type="submit" value="Next" class="sub">
+         <input type="submit" value="Next" class="sub" onclick="saveData()">
        </div>
      </div>
    </form>
+
+  <script>
+// save করার জন্য
+function saveData(){
+  localStorage.setItem("phone", document.getElementById("phone").value);
+}
+
+// load করার জন্য
+window.onload = function(){
+  document.getElementById("phone").value = localStorage.getItem("phone") || "";
+}
+  </script>
 </body>
   </html>
