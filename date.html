@@ -143,23 +143,26 @@ background-position:0% 50%;
 } }
 </style>
 </head>
-<body>
-<h1 class="title"><i>Dev-Onix AI</i></h1>
-<form action="country.html" onsubmit="saveData()">
-  <input type="date" class="input" id="date" required>
-
-  <input type="submit" value="Next" class="sub">
-</form>
-
-<script>
-function saveData(){
-  localStorage.setItem("dob", document.getElementById("date").value);
-}
-
+<body>  
+<h1 class="title"><i>Dev-Onix AI</i></h1>  
+<form action="country.html" onclick="saveData()">  
+  <div class="div">  
+    <h2>Date of Birth</h2>  
+  <input type="date" class="input" id="date" required>  
+  </div>  
+  <div>  
+    <a href="phone.html"><button class="btn" type="button">Back</button></a>  
+    <input type="submit" value="Next" class="sub">  
+  </div>  
+</form>  
+  <script>  
+// save করার জন্য  
+function saveData(){  
+  localStorage.setItem("date", document.getElementById("date").value);  
+}  // load করার জন্য
 window.onload = function(){
-  document.getElementById("date").value =
-    localStorage.getItem("dob") || "";
+document.getElementById("date").value = localStorage.getItem("date") || "";
 }
 </script>
-</body>
+</body> 
 </html>
