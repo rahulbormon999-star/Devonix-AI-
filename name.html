@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dev-Onix AI</title>
+
+<style>
+body{
+margin:0;
+padding:0;
+height:100vh;
+align-items:center;
+background:#fdd;
+color:#000;
+font-family:Arial;
+}
+
+h1{
+ text-align: center;
+font-size:40px;
+letter-spacing:2px;
+font-family: Georgia, serif;
+color:#000;
+}
+.div {
+  margin-top:60%;
+  margin-left:8%;
+}
+input {
+  height:45px;
+  width: 90%;
+  border-radius:10px;
+  font-size: 20px;
+}
+.sub,.btn {
+  height:35px;
+  width: 90px;
+  margin-top:5%;
+  font-size:25px;
+  border:solid 2px #000;
+  border-radius: 5px;
+}
+h2 {
+ margin-bottom:2%;
+}
+.last {
+  margin-top:10%;
+  
+}
+.sub {
+  margin-left: 28%;
+  border-radius:0px;
+  background-color:#00f;
+  color:#fff;
+  border:solid 2px #000;
+  border-radius: 5px;
+}
+.btn {
+  margin-left:5%;
+  color:#00f;
+  background-color: #fff;
+}
+/* animation */
+.title{
+text-align:center;
+font-size:40px;
+color:#000;
+margin-top:40px;
+
+animation: dropDown 2s ease forwards;
+}
+
+/* animation system */
+@keyframes dropDown{
+0%{
+transform:translateY(-200px);
+opacity:0;
+}
+
+100%{
+transform:translateY(0);
+opacity:1;
+}
+}
+/*button animation*/
+.buttons{
+width:100%;
+position:fixed;
+bottom:30px;
+display:flex;
+justify-content:space-between;
+padding:0 40px;
+}
+
+/* Back button animation */
+.btn{
+animation: slideLeft 1.5s ease;
+}
+
+/* Next button animation */
+.sub{
+animation: slideRight 1.5s ease;
+}
+
+/* Left animation */
+@keyframes slideLeft{
+0%{
+transform:translateX(-200px);
+opacity:0;
+}
+
+100%{
+transform:translateX(0);
+opacity:1;
+}
+}
+
+/* Right animation */
+@keyframes slideRight{
+0%{
+transform:translateX(200px);
+opacity:0;
+}
+
+100%{
+transform:translateX(0);
+opacity:1;
+}
+}
+/* input animation*/
+/* label বাম দিক থেকে আসবে */
+.label{
+animation: fromLeft 1s ease;
+}
+
+/* input ডান দিক থেকে আসবে */
+.input{
+animation: fromRight 1s ease;
+}
+
+@keyframes fromLeft{
+0%{
+transform:translateX(-150px);
+opacity:0;
+}
+100%{
+transform:translateX(0);
+opacity:1;
+}
+}
+
+@keyframes fromRight{
+0%{
+transform:translateX(150px);
+opacity:0;
+}
+100%{
+transform:translateX(0);
+opacity:1;
+}
+}
+/*body animation*/
+body{
+margin:0;
+padding:0;
+height:100vh;
+
+background: linear-gradient(
+270deg,
+#0ff,
+#c0a,
+#0f0,
+#1c92d2,
+#00c6ff
+);
+
+background-size:1000% 1000%;
+
+animation: bgMove 15s ease infinite;
+}
+
+/* animation */
+@keyframes bgMove{
+
+0%{
+background-position:0% 50%;
+}
+
+50%{
+background-position:100% 50%;
+}
+
+100%{
+background-position:0% 50%;
+}
+
+}
+</style>
+</head>
+<body>
+  <h1 class="title"><i>Dev-Onix AI</i></h1>
+  <form action="date.html">
+    <div class="div">
+      <div>
+       <h2 class="label">First Name</h2>
+      <input type="text" placeholder="Rahul" class="input" id="fname" required>
+      </div>
+      <div class="last">
+        <h2 class="label">Last Name</h2>
+        <input type="text" placeholder="Dev" class="input" id="lname" required >
+      </div>
+      <div class="button">
+         <a href="index.html"><button class="btn" type="button">Back</button></a>
+         <input type="submit" value="Next" class="sub" onclick="saveData()">
+      </div>
+    </div>
+  </form>
+ <script>
+// save করার জন্য
+function saveData(){
+  localStorage.setItem("fname", document.getElementById("fname").value);
+  localStorage.setItem("lname", document.getElementById("lname").value);
+}
+
+// load করার জন্য
+window.onload = function(){
+  document.getElementById("fname").value = localStorage.getItem("fname") || "";
+  document.getElementById("lname").value = localStorage.getItem("lname") || "";
+}
+ </script>
+</body>
+</html>
