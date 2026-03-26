@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <title>Dev-Onix AI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+<style>
+*{
+  -webkit-tap-highlight-color: transparent;
+}
+body{
+  margin:0;
+  display:;
+  justify-content:;
+  align-items:center;
+  height:100vh;
+  background:#7fffd4;
+  color:#000;
+  font-family:sans-serif;
+}
+
+/* main box */
+.container{
+  text-align:center;
+  padding-left:30%;
+  margin-top:10%;
+}
+h2 {
+  text-align:center;
+  margin-top:2%;
+}
+h1 {
+  text-align:center;
+  font-size:40px;
+  font-family:Georgia, serif;
+  margin-top:7%;
+}
+/* circle */
+.circle{
+  width:150px;
+  height:150px;
+  border-radius:50%;
+  border:solid 2px #000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
+  cursor:pointer;
+  background-color: #fff;
+}
+
+/* image */
+.circle img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+}
+
+/* hidden input */
+.circle input{
+  position:absolute;
+  width:100%;
+  height:100%;
+  opacity:0;
+  cursor:pointer;
+}
+.plus{
+  position:absolute;
+  bottom:5px;
+  font-size:40px;
+  color:#000;
+  background:none;
+  border-radius:50%;
+  border:2px solid #000;
+  width:25px;
+  height:25px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+.Agree .a{
+  border:2px solid #000;
+  color:#fff;
+  background-color:#00f;
+  padding:2% 10%;
+  border-radius:20px;
+}
+.a {
+  text-decoration:none;
+  font-size:30px;
+}
+a {
+  text-decoration:none;
+}
+.Agree {
+  margin:15% 33%;
+  font-size:px;
+  color:#fff;
+}
+.back {
+  margin:5% 5%;
+  width:20px;
+  font-size:30px;
+  text-align:center;
+  color:#000;
+}
+.pra {
+  padding:3% 5%;
+}
+</style>
+</head>
+<body> 
+  <div class="back"><a href="#">⋘</a></div>
+
+  <h1><i>Dev-Onix AI</i></h1>
+
+  <form action="#">
+    <div class="container">
+      <div class="circle">
+        <img id="preview" src="">
+        <span class="plus" onclick="document.getElementById('fileInput').click()">+</span>
+        <input type="file" id="fileInput" accept="image/*" onchange="loadImage(event)">
+      </div>
+    </div>
+
+    <h2 id="uploadText"><u>Upload your picture</u></h2>
+
+    <div class="pra">
+      <p style="text-align:center;font-size:19px;">
+        An account will be created for you in <b><u style="font-family:Georgia, serif"><i>Dev-Onix AI</i></u></b> Company with your information. 
+        So to confirm your account, upload your picture and click on the <br> <b>"I Agree"</b> button
+      </p>
+    </div>
+
+    <div class="Agree">
+      <input type="submit" value="I Agree" class="a">
+    </div>
+  </form>
+
+  <script>
+    function loadImage(event){
+      let image = document.getElementById("preview");
+      image.src = URL.createObjectURL(event.target.files[0]);
+
+      // h2 লেখা লুকানো
+      let h2 = document.getElementById("uploadText");
+      h2.style.display = "none";
+    }
+  </script>
+</body>
+</html>
