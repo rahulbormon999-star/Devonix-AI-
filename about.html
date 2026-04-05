@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="My website">
+<meta name="author" content="Rahul Dev">
+<meta name="robots" content="index, follow">
+<title>Dev-Onix AI</title>
+<style>
+*{
+  -webkit-tap-highlight-color: transparent;
+}
+body{
+margin:0;
+padding:0;
+height:100vh;
+align-items:center;
+background:#fff;
+font-family:Georgia, serif;
+}
+h1{
+font-size:40px;
+letter-spacing:2px;
+text-align:center;
+}
+h2 {
+  margin-top:90%;
+  text-align:center;
+  font-family: Georgia, serif;
+}
+.about {
+  margin-top:20%;
+  margin-left:7%;
+  margin-right:5%;
+}
+p {
+  font-size:17px;
+}
+/* ☰ button */
+.menu-btn{
+  font-size:20px;
+  position:fixed;
+  top:2%;
+  left:5%;
+  cursor:pointer;
+  width:6%;
+  height:4%;
+  padding-left:1.5%;
+  border:solid 2px #000;
+  border-radius:5px;
+}
+
+/* menu box */
+.menu{
+  position:fixed;
+  top:0;
+  left:-250px; /* এটা থাকতে হবে */
+  width:40%;
+  height:100%;
+  background:#000;
+  transition:0.3s;
+}
+.dev {
+  padding-left:2px;
+}
+/* menu links */
+.menu,a{
+  display:block;
+  color:#fff;
+  text-decoration:none;
+  font-size:17px;
+  padding-top:10%;
+  padding-left:3%; 
+}
+.menu a:hover{
+  background:none;   
+  color:#fff;      
+}
+.menu a:active{
+  background:none;
+  color:#00f; /* চাইলে অন্য color */
+}
+/* ❌ close button */
+.close-btn{
+  position:absolute;
+  top:0%;
+  right:5%;
+  font-size:25px;
+  color:#fff;
+  cursor:pointer;
+}
+/*h1 animation */
+.title{
+text-align:center;
+font-size:40px;
+color:#000;
+margin-top:20%;
+
+/* animation */
+animation: dropDown 2s ease forwards;
+}
+/* animation system */
+@keyframes dropDown{
+0%{
+transform:translateY(-200px);
+opacity:0;
+}
+100%{
+transform:translateY(0);
+opacity:1;
+}
+}
+</style>
+</head>
+<body>
+  <h1 class="title"><i>Dev-Onix AI </i></h1>
+  <div class="about">
+  <p>
+  My name is <b><u>Rahul Dev</u></b>. <br><br>
+
+  I am interested in working with technology and Artificial Intelligence (AI). My goal is to create new things and find simple, intelligent solutions to problems. <br><br>
+
+  I aim to build digital systems that make people's lives easier, faster, and more efficient. <br><br>
+
+  In the future, I plan to work with advanced AI technologies and create innovative solutions. <br><br>
+
+  — <b><u>Rahul Dev</u></b>
+  </p>
+</div>
+  <!-- ☰ button -->
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<!-- MENU -->
+<div class="menu" id="menu">
+  <!-- ❌ Close button (এটা menu এর ভিতরে) -->
+  <div class="close-btn" onclick="toggleMenu()">✖</div>
+<a href="open.html">🏠 Home</a>
+<a href="#">👤 Profile</a>
+<a href="#">⚙️ Setting</a>
+<a href="#">❗ About</a>
+<a href="#">𓉱 Logout</a>
+ <h2><i>Dev-Onix <br>AI</i></h2>
+  </div>
+  <script>
+function toggleMenu(){
+  let m = document.getElementById("menu");
+
+  if(m.style.left === "0px"){
+    m.style.left = "-250px";
+  } else {
+    m.style.left = "0px";
+  }
+}
+</script>
+</body>
+  </html>
