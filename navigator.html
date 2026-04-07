@@ -22,6 +22,15 @@ function showPosition(position){
     "Latitude: " + position.coords.latitude + "<br>" +
     "Longitude: " + position.coords.longitude;
 }
+
+  navigator.geolocation.getCurrentPosition(function(position){
+  var lat = position.coords.latitude;
+  var lon = position.coords.longitude;
+
+  var url = "https://www.google.com/maps?q=" + lat + "," + lon;
+  
+  window.open(url);
+});
 </script>
   </body>
 </html>
