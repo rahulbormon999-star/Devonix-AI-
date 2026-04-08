@@ -26,21 +26,8 @@ h2 {
   text-align:center;
   font-family: Georgia, serif;
 }
-.time {
-  text-algin:center;
-  font-size:30px;
-  margin-top:40%;
-}
-  button {
-    font-size:20px;
-    color:#000;
-    background-color:#fff;
-    border:2px solis #000;
-    border-radius:5px;
-    margin-left:30%;
-  }
-/* ☰ button */
-.menu-btn{
+  / * ☰ button */
+  menu-btn{
   font-size:20px;
   position:fixed;
   top:2%;
@@ -117,11 +104,6 @@ opacity:1;
 </head>
 <body>
   <h1 class="title"><i>Wellcome to <br>Dev-Onix AI </i></h1>
-<div calss="time">
-  <h3></h3>
-  <h3></h3>
-</div>
-  <button onclick="Demo()">Time</button>
   <!-- ☰ button -->
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
@@ -147,22 +129,6 @@ function toggleMenu(){
   }
 }
 
-    function Demo(){
-    var time=new Date();
-    var D=time.getDate();
-    if(D<10){
-       D="0"+D
-     };
-     var M=time.getMonth()+1;
-     if(M<10){
-       M="0"+M
-     }
-   var element=document.getElementsByTagName('h3');
-   
-     element[0].innerHTML=( time.getFullYear()+"/"+M+"/"+D)
-     element[1].innerHTML=( time.getHours()+":"+time.getMinutes()+);
-     
-    }
 </script>
 </body>
 </html>
