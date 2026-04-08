@@ -107,7 +107,7 @@ opacity:1;
 
   <h3></h3>
   <h3></h3>
-  <button onclick="Demo()"></button>
+  <button onclick="Demo()">Time</button>
   <!-- ☰ button -->
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
@@ -143,7 +143,7 @@ function toggleMenu(){
      if(M<10){
        M="0"+M
      }
-   var element=document.getElementsByTagName('h1');
+   var element=document.getElementsByTagName('h3');
    
      element[0].innerHTML=( time.getFullYear()+"/"+M+"/"+D)
      element[1].innerHTML=( time.getHours()+":"+time.getMinutes());
