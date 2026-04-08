@@ -104,6 +104,10 @@ opacity:1;
 </head>
 <body>
   <h1 class="title"><i>Wellcome to <br>Dev-Onix AI </i></h1>
+
+  <h3></h3>
+  <h3></h3>
+  <button onclick="Demo()"></button>
   <!-- ☰ button -->
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
@@ -128,6 +132,23 @@ function toggleMenu(){
     m.style.left = "0px";
   }
 }
+
+    function Demo(){
+    var time=new Date();
+    var D=time.getDate();
+    if(D<10){
+       D="0"+D
+     };
+     var M=time.getMonth()+1;
+     if(M<10){
+       M="0"+M
+     }
+   var element=document.getElementsByTagName('h1');
+   
+     element[0].innerHTML=( time.getFullYear()+"/"+M+"/"+D)
+     element[1].innerHTML=( time.getHours()+":"+time.getMinutes());
+     
+    }
 </script>
 </body>
 </html>
