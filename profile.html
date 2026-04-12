@@ -32,7 +32,7 @@ h2 {
 /* Profile লেখা */
 .profile{
   margin-top:15%;
-  text-align:center;
+  padding-left:30%;
   font-size:20px;
 }
 
@@ -176,14 +176,14 @@ let gender = localStorage.getItem("gender") || "Not set";
 
 // show in UI
 document.getElementById("name").innerHTML =
-  "Name: " + fname + " " + lname;
+  "Name : " + fname + " " + lname;
 
 document.getElementById("country").innerHTML =
-  "Country: " + country;
+  "Country : " + country;
 
 // ⚠️ এখানে spelling fix
 document.getElementById("gender").innerHTML =
-  "Gender: " + gender;
+  "Gender : " + gender;
 
 // logout
 function logout(){
