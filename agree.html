@@ -121,7 +121,7 @@ a {
       <div class="circle">
         <img id="preview" src="profile.jpg" style="height:100%; width:100%;">
         <span class="plus" onclick="document.getElementById('fileInput').click()">+</span>
-        <input type="file" id="fileInput" accept="image/*" onchange="loadImage(event)". required>
+        <input type="file" id="fileInput" accept="image/*" onchange="loadImage(event)" required>
       </div>
     </div>
 
@@ -140,14 +140,25 @@ a {
   </form>
 
   <script>
-    function loadImage(event){
-      let image = document.getElementById("preview");
-      image.src = URL.createObjectURL(event.target.files[0]);
+function loadImage(event){
+  let file = event.target.files[0];
+  let reader = new FileReader();
 
-      // h2 লেখা লুকানো
-      let h2 = document.getElementById("uploadText");
-      h2.style.display = "none";
-    }
+  reader.onload = function(){
+    let imageData = reader.result;
+
+    // 👉 localStorage এ save
+    localStorage.setItem("profileImage", imageData);
+
+    // preview show
+    document.getElementById("preview").src = imageData;
+  }
+
+  reader.readAsDataURL(file);
+
+  // লেখা hide
+  document.getElementById("uploadText").style.display = "none";
+}
   </script>
 </body>
 </html>
