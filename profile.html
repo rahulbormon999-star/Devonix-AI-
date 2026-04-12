@@ -127,7 +127,7 @@ opacity:1;
   <img id="profilePic" width="170px" height="170px" style="border-radius:50%; border:1px solid #000;">
   <p id="name"></p>
   <p id="country"></p>
-  <p id="gerder"></p>
+  <p id="gender"></p>
   </div>
 
 <!-- ☰ button -->
@@ -147,7 +147,7 @@ opacity:1;
   <h2><i>Dev-Onix <br>AI</i></h2>
 </div>
 
-<script>
+  <script>
 // menu toggle
 function toggleMenu(){
   let m = document.getElementById("menu");
@@ -166,6 +166,9 @@ if(img){
   document.getElementById("profilePic").src = img;
 }
 
+// 🔥 name fix (missing ছিল)
+let fname = localStorage.getItem("fname") || "";
+let lname = localStorage.getItem("lname") || "";
 
 // country + gender
 let country = localStorage.getItem("coun") || "Not set";
@@ -178,14 +181,15 @@ document.getElementById("name").innerHTML =
 document.getElementById("country").innerHTML =
   "Country: " + country;
 
-document.getElementById("gender").innerHTML =
+// ⚠️ এখানে spelling fix
+document.getElementById("gerder").innerHTML =
   "Gender: " + gender;
 
-  // logout
+// logout
 function logout(){
   localStorage.clear();
   window.location.replace("index.html");
 }
-</script>
+  </script>
   </body>
 </html>
