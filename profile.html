@@ -127,9 +127,6 @@ opacity:1;
   <img id="profilePic" width="120" height="120" style="border-radius:50%;">
   <p id="name"></p>
   </div>
-<div class="profile">
-  <p id="name"></p>
-</div>
 
 <!-- ☰ button -->
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
@@ -160,7 +157,6 @@ function toggleMenu(){
   }
 }
 
-  
 // image load
 let img = localStorage.getItem("profileImage");
 
@@ -168,14 +164,7 @@ if(img){
   document.getElementById("profilePic").src = img;
 }
 
-// name load
-let fname = localStorage.getItem("fname") || "";
-let lname = localStorage.getItem("lname") || "";
-
-document.getElementById("name").innerHTML =
-  "Name: " + fname + " " + lname;
-
-// data load
+// ✅ name load (ONLY ONCE)
 let fname = localStorage.getItem("fname") || "";
 let lname = localStorage.getItem("lname") || "";
 
@@ -188,6 +177,6 @@ function logout(){
   window.location.replace("index.html");
 }
 </script>
-
-</body>
+  
+  </body>
 </html>
