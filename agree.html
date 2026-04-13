@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dev-Onix AI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
+body{
+  margin:0;
+  background:#DBE9FA;
+  font-family:sans-serif;
+  text-align:center;
+}
+
+/* back button */
+.back{
+  margin:10px;
+  font-size:30px;
+  text-align:left;
+}
+.back a{
+  text-decoration:none;
+  color:#000;
+}
+
+/* title */
+h1{
+  font-size:40px;
+  font-family:Georgia, serif;
+  margin-top:10px;
+}
+
+/* circle */
+.circleBox{
+  position:relative;
+  width:150px;
+  height:150px;
+  margin:5% auto;
+}
+
+/* main circle */
+.circle{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  border:2px solid #000;
+  overflow:hidden;
+  background:#fff;
+}
+
+.circle img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* plus button */
+.plus{
+  position:absolute;
+  bottom:5%;  /* বাইরে আনছে */
+  right:0%;
+  width:40px;
+  height:40px;
+  border-radius:70%;
+  background:#fff;
+  color:#000;
+  border:2px solid #000; /* 🔥 এটা circle ঢেকে দিবে */
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:30px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.2s;
+}
+.plus:active{
+  transform:scale(0.85);
+}
+
+/* image */
+.circle img{
+  width:100%;
+  height:100%;
+}
+/* text */
+h2{
+  margin-top:2%;
+}
+
+.pra{
+  padding:5% 10%;
+  font-size:16px;
+  line-height:1.5;
+  margin-bottom:2%;
+}
+
+/* button */
+.Agree{
+  margin-top:5%;
+}
+
+.a{
+  border:2px solid #000;
+  color:#fff;
+  background:#00f;
+  padding:10px 40px;
+  border-radius:25px;
+  font-size:25px;
+  cursor:pointer;
+}
+p {
+  font-size:20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- back -->
+<div class="back">
+  <a href="password.html">⋘</a>
+</div>
+
+<!-- title -->
+<h1><i>Dev-Onix AI</i></h1>
+
+<form action="open.html">
+
+  <!-- circle -->
+  <div class="circleBox">
+  <div class="circle">
+    <img id="preview" src="profile.jpg">
+  </div>
+  <span class="plus" id="plusBtn" onclick="handlePlusClick()">+</span>
+</div>
+<input type="file" id="fileInput" accept="image/*" style="display:none;" onchange="loadImage(event)">
+
+  <!-- text -->
+  <h2 id="uploadText"><u>Upload your picture</u></h2>
+
+  <!-- paragraph -->
+  <div class="pra">
+    <p>
+      An account will be created for you in <b><u style="font-family:Georgia, serif;">Dev-Onix AI</u></b> Company with your information.
+      So to confirm your account, upload your picture and click on the <b>"I Agree"</b> button.
+    </p>
+  </div>
+
+  <!-- button -->
+  <div class="Agree">
+    <input type="submit" value="I Agree" class="a">
+  </div>
+
+</form>
+
+<script>
+
+function handlePlusClick(){
+  let btn = document.getElementById("plusBtn");
+
+  btn.classList.add("clicked");
+
+  setTimeout(() => {
+    btn.classList.remove("clicked");
+    document.getElementById("fileInput").click();
+  }, 150);
+}
+
+function loadImage(event){
+  let file = event.target.files[0];
+  let reader = new FileReader();
+
+  reader.onload = function(){
+    let imageData = reader.result;
+
+    // save localStorage
+    localStorage.setItem("profileImage", imageData);
+
+    // preview
+    document.getElementById("preview").src = imageData;
+
+    // hide text
+    document.getElementById("uploadText").style.display = "none";
+  }
+
+  if(file){
+    reader.readAsDataURL(file);
+  }
+}
+
+</script>
+</body>
+</html>
