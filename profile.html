@@ -94,29 +94,9 @@ h3 {
   letter-spacing:1px;
   margin-top:20%;
 }
-/* animation */
-/*.title{
-text-align:center;
-font-size:40px;
-font-family:Georgia, serif;
-color:#000;
-margin-top:20%;
-animation: dropDown 2s ease forwards;
-}
 
-@keyframes dropDown{
-0%{
-transform:translateY(-200px);
-opacity:0;
-}
-100%{
-transform:translateY(0);
-opacity:1;
-}
-} */
 </style>
 </head>
-
 <body>
 
 <!--<h1 class="title"><i>Dev-Onix AI</i></h1>-->
@@ -140,11 +120,11 @@ opacity:1;
 <div class="menu" id="menu">
   <div class="close-btn" onclick="toggleMenu()">✖</div>
 
-  <a href="open.html">🏠 Home</a>
+  <a href="#" onclick="goopen()">🏠 Home</a>
   <a href="#">👤 Profile</a>
-  <a href="setting.html">⚙️ Setting</a>
-  <a href="about.html">❗ About</a>
-  <a href="#" onclick="logout()">𓉱 Logout</a>
+  <a href="" onclick="gosetting()">⚙️ Setting</a>
+  <a href="#" onclick="goabout()">❗ About</a>
+  <a href="#">𓉱 Logout</a>
 
   <!-- 🔥 নিচে fixed -->
   <h2><i>Dev-Onix <br>AI</i></h2>
@@ -187,11 +167,18 @@ opacity:1;
     "Gender : " + gender;
 
   // logout
-  function logout(){
+  function goopen(){
     localStorage.clear();
-    window.location.replace("index.html");
+    window.location.replace("open.html");
   }
+  function gosetting(){
+      window.location.replace("setting.html")
+    }
+    function goabout(){
+      window.location.replace("about.html")
+    }
 
+    
   // 🔥 DOB + Age (only once)
   let dob = localStorage.getItem("dob");
 
@@ -226,6 +213,8 @@ opacity:1;
     
   let phone = localStorage.getItem("phone") || "Not set";
 document.getElementById("phone").innerHTML = "Phone : " + phone;
+
+    
   </script>
 </body>
 </html>
