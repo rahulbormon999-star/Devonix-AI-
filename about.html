@@ -147,9 +147,9 @@ opacity:1;
 <div class="menu" id="menu">
   <!-- ❌ Close button (এটা menu এর ভিতরে) -->
   <div class="close-btn" onclick="toggleMenu()">✖</div>
-<a href="open.html">🏠 Home</a>
-<a href="profile.html">👤 Profile</a>
-<a href="setting.html">⚙️ Setting</a>
+<a href="#" onclick="goopen()">🏠 Home</a>
+<a href="#" onclick="goprofile()">👤 Profile</a>
+<a href="#" onclick="gosetting()">⚙️ Setting</a>
 <a href="#">❗ About</a>
 <a href="#">𓉱 Logout</a>
  <h2><i>Dev-Onix <br>AI</i></h2>
@@ -164,6 +164,16 @@ function toggleMenu(){
     m.style.left = "0px";
   }
 }
+
+    function goopen(){
+      window.location.replace("open.html")
+    }
+    function goprofile(){
+      window.location.replace("profile.html")
+    }
+    function gosetting(){
+      window.location.replace("setting.html")
+    }
 </script>
 </body>
   </html>
