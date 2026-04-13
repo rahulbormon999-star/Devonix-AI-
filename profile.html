@@ -125,7 +125,7 @@ opacity:1;
 <!-- Profile Data -->
   <div class="profile">
   <img id="profilePic" width="170px" height="170px" style="border-radius:50%; border:1px solid #000;">
-  <p id="name"></p>
+  <h3 id="name"></h3>
   <p id="country"></p>
   <p id="gender"></p>
   <p id="showDob"></p>
@@ -217,9 +217,8 @@ opacity:1;
     }
 
     document.getElementById("showAge").innerHTML =
-      "Year : " + years + " - " + months + " - " + days ;
-
-  } else {
+      "Age :" + years + " year - " + months + " month - " + days + " day" } 
+  else {
     document.getElementById("showDob").innerHTML = "No Data Found";
   }
   </script>
