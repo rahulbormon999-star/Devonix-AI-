@@ -200,6 +200,35 @@ function logout(){
   } else {
     document.getElementById("showDob").innerHTML = "No Data Found";
   }
+    let dob = localStorage.getItem("dob");
+
+  if(dob){
+    // DOB দেখানো
+    document.getElementById("showDob").innerHTML = "DOB: " + dob;
+
+    // Age calculate
+    let birth = new Date(dob);
+    let today = new Date();
+
+    let years = today.getFullYear() - birth.getFullYear();
+    let months = today.getMonth() - birth.getMonth();
+    let days = today.getDate() - birth.getDate();
+
+    if (days < 0) {
+      months--;
+      let prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+      days += prevMonth.getDate();
+    }
+
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+
+    // Age দেখানো
+    document.getElementById("showAge").innerHTML =
+      "Year : " + years + " - " + months + " - " + days;
+  }
   </script>
   </body>
 </html>
