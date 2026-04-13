@@ -216,7 +216,9 @@ opacity:1;
       years--;
       months += 12;
     }
-
+    if(months<10){
+      months="0"+months
+    }
     document.getElementById("showAge").innerHTML =
       "Age : "+" " + years + "yr - " + months + "mo - " + days + "da" } 
   else {
