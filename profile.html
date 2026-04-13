@@ -216,20 +216,16 @@ opacity:1;
       years--;
       months += 12;
     }
-    if(months<10){
-      months="0"+months
-    }
+  
     document.getElementById("showAge").innerHTML =
       "Age : "+" " + years + "<sup>ye</sup> - " + months + "<sup>mo</sup> - " + days + "<sup>d</sup>" } 
-  else {
-    document.getElementById("showDob").innerHTML = "No Data Found";
-  }
-
+      else {
+  document.getElementById("showDob").innerHTML = "Date of Birth : Not set";
+  document.getElementById("showAge").innerHTML = "";
+        }
     
-    let phone = localStorage.getItem("phone") || "Not set";
-
-document.getElementById("phone").innerHTML =
-  "Phone : " + phone;
+  let phone = localStorage.getItem("phone") || "Not set";
+document.getElementById("phone").innerHTML = "Phone : " + phone;
   </script>
 </body>
 </html>
