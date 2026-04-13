@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dev-Onix AI</title>
+<style>
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+body{
+margin:0;
+padding:0;
+height:100vh;
+align-items:center;
+background:#fef;
+color:#000;
+}
+h1{
+font-size:35px;
+letter-spacing:2px;
+}
+.in-btn{
+  margin-top:20%;
+  margin-left:8%;
+}
+input,select {
+  width:90%;
+  height:40px;
+  font-size:20px;
+  border:1.5px solid #000;
+  border-radius:5px;
+}
+button {
+  font-size:25px;
+  color:#fff;
+  background-color:#00f;
+  height:40px;
+  border-radius:5px;
+  margin-bottom:100px;
+}
+h3 {
+  margin-bottom:2px;
+}
+/* profile circle */
+.profile-box {
+  position: relative;
+  width: 31%;
+  margin: auto;
+  margin-bottom:10px;
+  
+}
+
+/* image circle */
+#preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  object-fit: cover;
+}
+
+/* plus button */
+.plus-btn {
+  position: absolute;
+  bottom:5%;
+  right:-4%;
+  width: 40px;
+  height: 40px;
+  background:none;
+  color: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.plus-btn {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+/* click effect */
+.plus-btn:active {
+  transform: scale(0.85);
+  opacity: 0.7; 
+}
+/* hide file input */
+.plus-btn input {
+  display: none;
+}
+/* h1 animation */
+.title{
+text-align:center;
+font-size:40px;
+color:#000;
+margin-top:20%;
+font-family:Georgia, serif;
+/* animation */
+animation: dropDown 2s ease forwards;
+}
+@keyframes dropDown{
+0%{
+transform:translateY(-200px);
+opacity:0;
+}
+
+100%{
+transform:translateY(0);
+opacity:1;
+}
+}
+</style>
+</head>
+<body>
+<h1 class="title"><i>Dev-Onix AI</i></h1>
+   
+   <div class="profile-box">
+  <img id="preview" src="default.png">
+  <label class="plus-btn">
+    📷
+    <input type="file" id="image" accept="image/*">
+  </label>
+</div>
+
+ <div class="in-btn">
+   <h3>Frist Name</h3>
+<input id="fname" placeholder="First Name"><br>
+<h3>Last Name</h3>
+<input id="lname" placeholder="Last Name"><br>
+<h3>phone Number</h3>
+<input id="phone" placeholder="Phone"><br>
+<h3>Country</h3>
+  <input id="country" placeholder="Bangladesh"> <br>
+<h3>Gender</h3>
+<select id="gender">
+  <option value="" disabled selected>Select Gender</option>
+  <option value="Male">Male</option>
+  <option value="Female">Female</option>
+  <option value="Other">Other</option>
+</select><br>
+<h3>Date of Birth</h3>
+<input type="date" id="dob"><br><br>
+<button onclick="saveAll()">💾 Save</button>
+</div>
+
+
+
+<script>
+  // 🔹 Load old data (auto fill)
+  document.getElementById("image").addEventListener("change", function(event){
+  let file = event.target.files[0];
+
+  if(file){
+    let reader = new FileReader();
+
+    reader.onload = function(e){
+      document.getElementById("preview").src = e.target.result;
+    }
+
+    reader.readAsDataURL(file);
+  }
+});
+let img = localStorage.getItem("profileImage");
+
+if(img){
+  document.getElementById("preview").src = img;
+}
+document.getElementById("fname").value = localStorage.getItem("fname") || "";
+document.getElementById("lname").value = localStorage.getItem("lname") || "";
+document.getElementById("phone").value = localStorage.getItem("phone") || "";
+document.getElementById("country").value = localStorage.getItem("coun") || "";
+document.getElementById("gender").value = localStorage.getItem("gender") || "";
+document.getElementById("dob").value = localStorage.getItem("dob") || "";
+
+// 🔹 Save function
+function saveAll(){
+  let image = document.getElementById("preview").src;
+localStorage.setItem("profileImage", image);
+  let fname = document.getElementById("fname").value;
+  let lname = document.getElementById("lname").value;
+  let phone = document.getElementById("phone").value;
+  let country = document.getElementById("country").value;
+  let gender = document.getElementById("gender").value;
+  let dob = document.getElementById("dob").value;
+
+  // 🔥 Basic validation
+  if(fname === "" || phone === ""){
+    alert("Name and Phone required ❌");
+    return;
+  }
+
+  // 🔹 Save to localStorage
+  localStorage.setItem("fname", fname);
+  localStorage.setItem("lname", lname);
+  localStorage.setItem("phone", phone);
+  localStorage.setItem("coun", country);
+  localStorage.setItem("gender", gender);
+  localStorage.setItem("dob", dob);
+
+  alert("Profile Updated Successfully ✅");
+
+}
+</script>
+</body>
+                                                  </html>
