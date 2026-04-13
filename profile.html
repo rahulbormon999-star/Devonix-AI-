@@ -32,7 +32,7 @@ h2 {
 /* Profile লেখা */
 .profile{
   margin-top:15%;
-  padding-left:30%;
+  padding-left:20%;
   font-size:20px;
 }
 
@@ -150,64 +150,54 @@ opacity:1;
 </div>
 
   <script>
-// menu toggle
-function toggleMenu(){
-  let m = document.getElementById("menu");
+  // menu toggle
+  function toggleMenu(){
+    let m = document.getElementById("menu");
 
-  if(m.style.left === "0px"){
-    m.style.left = "-250px";
-  } else {
-    m.style.left = "0px";
+    if(m.style.left === "0px"){
+      m.style.left = "-250px";
+    } else {
+      m.style.left = "0px";
+    }
   }
-}
 
-// image load
-let img = localStorage.getItem("profileImage");
-
-if(img){
-  document.getElementById("profilePic").src = img;
-}
-
-// 🔥 name fix (missing ছিল)
-let fname = localStorage.getItem("fname") || "";
-let lname = localStorage.getItem("lname") || "";
-
-// country + gender
-let country = localStorage.getItem("coun") || "Not set";
-let gender = localStorage.getItem("gender") || "Not set";
-
-// show in UI
-document.getElementById("name").innerHTML =
-  "Name : " + fname + " " + lname;
-
-document.getElementById("country").innerHTML =
-  "Country : " + country;
-
-// ⚠️ এখানে spelling fix
-document.getElementById("gender").innerHTML =
-  "Gender : " + gender;
-
-// logout
-function logout(){
-  localStorage.clear();
-  window.location.replace("index.html");
-}
-
-    let dob = localStorage.getItem("dob");
-
-  // যদি data থাকে তাহলে দেখাও
-  if(dob){
-    document.getElementById("showDob").innerHTML = "Date of Birth : " + dob;
-  } else {
-    document.getElementById("showDob").innerHTML = "No Data Found";
+  // image load
+  let img = localStorage.getItem("profileImage");
+  if(img){
+    document.getElementById("profilePic").src = img;
   }
-    let dob = localStorage.getItem("dob");
+
+  // name
+  let fname = localStorage.getItem("fname") || "";
+  let lname = localStorage.getItem("lname") || "";
+
+  // country + gender
+  let country = localStorage.getItem("coun") || "Not set";
+  let gender = localStorage.getItem("gender") || "Not set";
+
+  // show UI
+  document.getElementById("name").innerHTML =
+    "Name : " + fname + " " + lname;
+
+  document.getElementById("country").innerHTML =
+    "Country : " + country;
+
+  document.getElementById("gender").innerHTML =
+    "Gender : " + gender;
+
+  // logout
+  function logout(){
+    localStorage.clear();
+    window.location.replace("index.html");
+  }
+
+  // 🔥 DOB + Age (only once)
+  let dob = localStorage.getItem("dob");
 
   if(dob){
-    // DOB দেখানো
-    document.getElementById("showDob").innerHTML = "DOB: " + dob;
+    document.getElementById("showDob").innerHTML =
+      "Date of Birth : " + dob;
 
-    // Age calculate
     let birth = new Date(dob);
     let today = new Date();
 
@@ -226,10 +216,12 @@ function logout(){
       months += 12;
     }
 
-    // Age দেখানো
     document.getElementById("showAge").innerHTML =
-      "Year : " + years + " - " + months + " - " + days;
+      "Year : " + years + " - " + months + " - " + days ;
+
+  } else {
+    document.getElementById("showDob").innerHTML = "No Data Found";
   }
   </script>
-  </body>
+</body>
 </html>
