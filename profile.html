@@ -130,6 +130,7 @@ opacity:1;
   <p id="gender"></p>
   <p id="showDob"></p>
     <p id="showAge"></p>
+    <p id="phone"></p>
   </div>
 
 <!-- ☰ button -->
@@ -221,6 +222,12 @@ opacity:1;
   else {
     document.getElementById("showDob").innerHTML = "No Data Found";
   }
+
+    
+    let phone = localStorage.getItem("phone") || "Not set";
+
+document.getElementById("phone").innerHTML =
+  "Phone : " + phone;
   </script>
 </body>
 </html>
