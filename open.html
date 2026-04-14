@@ -133,28 +133,28 @@ function toggleMenu(){
 }
 
     function goprofile(){
-      window.location.replace("profile.html")
+      window.location.href="profile.html";
     }
     
     function gosetting(){
-      window.location.replace("setting.html")
+      window.location.href="setting.html";
     }
     function goabout(){
-      window.location.replace("about.html")
+      window.location.href="about.html";
     }
 
     /* Back to website */
-    history.pushState({page: "home"}, "", location.href);
+    history.pushState(null, "", location.href);
 
 window.onpopstate = function () {
   let exit = confirm("Do you want to exit website?");
   
-  if(exit){
+  if (exit) {
     window.location.href = "about:blank";
   } else {
-    history.pushState({page: "home"}, "", location.href);
+    history.pushState(null, "", location.href);
   }
-};
+};   
     
   </script>
 </body>
