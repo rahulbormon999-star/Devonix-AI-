@@ -223,6 +223,11 @@ h3 {
 document.getElementById("phone").innerHTML = "Phone : " + phone;
 
     
+    /* back to open.html */
+    window.onpopstate = function(){
+  window.location.replace("open.html"); 
+};
+    
   </script>
 </body>
 </html>
