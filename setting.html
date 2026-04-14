@@ -177,6 +177,13 @@ function toggleMenu(){
     function goabout(){
       window.location.replace("about.html")
     }
+
+
+    /* back to open.html */
+    window.onpopstate = function(){
+  window.location.replace("open.html"); 
+};
+    
 </script>
 </body>
 </html>
