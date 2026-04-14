@@ -144,12 +144,18 @@ function toggleMenu(){
     }
 
     /* Back to website */
-    if(window.location.pathname.includes("open.html")) {
-  window.history.pushState(null, null, window.location.href);
-  window.onpopstate = function(){
-    window.close(); 
-  };
-    }
-</script>
+    history.pushState({page: "home"}, "", location.href);
+
+window.onpopstate = function () {
+  let exit = confirm("Do you want to exit website?");
+  
+  if(exit){
+    window.location.href = "about:blank";
+  } else {
+    history.pushState({page: "home"}, "", location.href);
+  }
+};
+    
+  </script>
 </body>
 </html>
