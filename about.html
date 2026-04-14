@@ -176,9 +176,12 @@ function toggleMenu(){
     }
 
     /* back to open.html */
-    window.onpopstate = function(){
-  window.location.replace("open.html"); 
+    history.pushState({page: "current"}, "", location.href);
+
+window.onpopstate = function () {
+  window.location.replace("open.html");
 };
-</script>
+  
+  </script>
 </body>
   </html>
