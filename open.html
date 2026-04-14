@@ -144,18 +144,9 @@ function toggleMenu(){
     }
 
     /* Back to website */
-    history.pushState(null, "", location.href);
-
-window.onpopstate = function () {
-  let exit = confirm("Do you want to exit website?");
-  
-  if (exit) {
-    window.location.href = "about:blank";
-  } else {
-    history.pushState(null, "", location.href);
-  }
-};   
-    
-  </script>
+    window.onpopstate = function () {
+  window.location.href = "about:blank";
+};                     
+    </script>
 </body>
 </html>
