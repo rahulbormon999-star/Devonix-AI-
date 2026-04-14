@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Password Manager</title>
+
+<style>
+*{
+  -webkit-tap-highlight-color: transparent;
+body{
+margin:0;
+padding:0;
+font-family:Arial, sans-serif;
+background: linear-gradient(135deg, #667eea, #764ba2);
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+/* CARD */
+.card{
+background:#fff;
+padding:25px;
+width:90%;
+max-width:350px;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+text-align:center;
+}
+
+/* TITLE */
+.card h2{
+margin-bottom:20px;
+color:#333;
+}
+
+/* INPUT */
+.input-box{
+  position:relative;
+  width:100%;
+}
+
+/* INPUT */
+.input-box input{
+  width:100%;
+  height:45px;
+  padding:0 45px 0 12px; /* right side space ঠিক করা */
+  font-size:16px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  box-sizing:border-box; /* খুব জরুরি */
+}
+
+/* EYE ICON */
+.eye{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:18px;
+  cursor:pointer;
+
+  width:25px;   /* click area control */
+  height:25px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+/* BUTTON */
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+}
+
+/* UPDATE BUTTON */
+.update{
+background:#4CAF50;
+color:#fff;
+}
+
+.update:hover{
+background:#45a049;
+}
+
+/* BACK BUTTON */
+.back{
+background:#f44336;
+color:#fff;
+}
+
+.back:hover{
+background:#d32f2f;
+}
+
+/* TEXT */
+p{
+font-size:14px;
+color:#444;
+margin-top:10px;
+}
+
+#msg{
+font-weight:bold;
+}
+.input-box{
+  position:relative;
+  width:100%;
+  margin-top:10px;
+}
+
+.input-box input{
+  width:100%;
+  height:45px;
+  padding:0 45px 0 12px;
+  font-size:16px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  box-sizing:border-box;
+}
+
+.eye{
+  position:absolute;
+  right:12px;
+  top:50%;
+  transform:translateY(-50%);
+  font-size:18px;
+  cursor:pointer;
+
+  width:25px;
+  height:25px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>🔐 Password Manager</h2>
+
+<p id="showPass">Loading...</p>
+
+<!-- NEW PASSWORD -->
+
+<div class="input-box">
+  <input type="password" id="newPass" placeholder="Enter new password">
+  <span class="eye" onclick="togglePass()">👁️</span>
+</div>
+<!-- MESSAGE -->
+<p id="msg"></p>
+
+<!-- BUTTONS -->
+<button class="update" onclick="updatePass()">Update Password</button>
+<button class="back" onclick="goBack()">Back</button>
+
+</div>
+
+<script>
+
+// LOAD PASSWORD
+function loadPassword(){
+  let pass = localStorage.getItem("userPassword");
+
+  if(pass){
+    document.getElementById("showPass").innerText =
+    "Current Password: " + pass;
+  }else{
+    document.getElementById("showPass").innerText =
+    "No password set";
+  }
+}
+
+loadPassword();
+
+// TOGGLE PASSWORD
+function togglePass(){
+  let input = document.getElementById("newPass");
+
+  if(input.type === "password"){
+    input.type = "text";
+  }else{
+    input.type = "password";
+  }
+}
+
+// UPDATE PASSWORD
+function updatePass(){
+  let newPass = document.getElementById("newPass").value;
+  let msg = document.getElementById("msg");
+
+  if(newPass.length < 8){
+    msg.style.color = "red";
+    msg.innerText = "❌ Minimum 8 characters required";
+    return;
+  }
+
+  if(newPass.length > 10){
+    msg.style.color = "red";
+    msg.innerText = "❌ Maximum 10 characters allowed";
+    return;
+  }
+
+  localStorage.setItem("userPassword", newPass);
+
+  msg.style.color = "green";
+  msg.innerText = "✅ Password updated successfully";
+
+  loadPassword();
+}
+
+// BACK
+function goBack(){
+  window.history.back();
+}
+
+</script>
+
+</body>
+  </html>
