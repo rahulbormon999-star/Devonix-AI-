@@ -133,7 +133,7 @@ h3 {
   <a href="#">👤 Profile</a>
   <a href="#" onclick="gosetting()">⚙️ Setting</a>
   <a href="#" onclick="goabout()">❗ About</a>
-  <a href="#">𓉱 Logout</a>
+  <a href="#" onclick="logout()">𓉱 Logout</a>
 
   <!-- 🔥 নিচে fixed -->
   <h2><i>Dev-Onix <br>AI</i></h2>
@@ -186,7 +186,10 @@ h3 {
       window.location.href="about.html";
     }
 
-    
+    function goabout(){
+      window.location.href="log-sin.html";
+    }
+
   // 🔥 DOB + Age (only once)
   let dob = localStorage.getItem("dob");
 
