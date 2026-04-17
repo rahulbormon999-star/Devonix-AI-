@@ -160,6 +160,24 @@ function login(){
 
 }
 
+  window.onload = function () {
+
+    // যদি user logged in থাকে → সরাসরি home
+    if (localStorage.getItem("isLoggedIn") === "true") {
+        window.location.href = "open.html";
+    }
+
+    // history lock (back button control)
+    history.pushState(null, null, location.href);
+};
+ 
+// BACK BUTTON CONTROL (exit website behavior)
+window.onpopstate = function () {
+    history.pushState(null, null, location.href);
+
+    // website থেকে বের করে দেওয়ার চেষ্টা
+    window.location.href = "about:blank";
+};
 </script>
 
 </body>
