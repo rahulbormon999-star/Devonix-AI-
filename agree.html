@@ -130,7 +130,7 @@ p {
 <!-- title -->
 <h1><i>Dev-Onix AI</i></h1>
 
-<form action="open.html">
+<form action="#">
 
   <!-- circle -->
   <div class="circleBox">
@@ -154,7 +154,7 @@ p {
 
   <!-- button -->
   <div class="Agree">
-    <input type="submit" value="I Agree" class="a">
+    <input type="submit" value="I Agree" class="a" onclick="finishSignup()">
   </div>
 
 </form>
@@ -192,6 +192,11 @@ function loadImage(event){
   if(file){
     reader.readAsDataURL(file);
   }
+}
+// সরাসরি হোম পেইজ এর জন্য ও বাটন
+function finishSignup(){
+  localStorage.setItem("isSignedUp", "true");
+  window.location.href = "open.html";
 }
 
 </script>
