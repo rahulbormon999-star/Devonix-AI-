@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Professional Auth UI</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: Georgia, serif;
+  -webkit-tap-highlight-color: transparent;
+}
+/* Animated Background */
+body{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1c92d2);
+  background-size: 400% 400%;
+  animation: gradientBG 10s ease infinite;
+}
+
+@keyframes gradientBG{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* Main Card */
+.card{
+  width:80%;
+  padding:10% 5%;
+  border-radius:20px;
+  text-align:center;
+
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255,255,255,0.2);
+
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  transform: translateY(0);
+  transition: 0.3s ease;
+}
+
+.card:hover{
+  transform: translateY(-5px);
+}
+
+/* Title */
+.card h1{
+  color:#fff;
+  margin-bottom:7%;
+  font-size:30px;
+  font-family:Georgia, serif;
+}
+
+.card p{
+  color:rgba(255,255,255,0.7);
+  font-size:13px;
+  margin-bottom:2%;
+}
+
+/* Buttons */
+.btn{
+  width:100%;
+  padding:5%;
+  margin:4% 0;
+  border:none;
+  border-radius:12px;
+  font-size:17px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.25s ease;
+  letter-spacing:0.5px;
+}
+
+/* Login */
+.login{
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  color:white;
+}
+
+/* Signup */
+.signup{
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color:white;
+}
+
+/* Hover Effect */
+.btn:hover{
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* Click effect */
+.btn:active{
+  transform: scale(0.98);
+}
+
+/* Footer */
+.footer{
+  margin-top:15px;
+  font-size:11px;
+  color:rgba(255,255,255,0.6);
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h1>Dev-Onix</h1>
+  <p>Choose an option to continue</p>
+
+  <button class="btn login" onclick="login()">Login</button>
+  <button class="btn signup" onclick="signup()">Sign Up</button>
+
+  <div class="footer">Secure Access System</div>
+</div>
+
+<script>
+function login(){
+  //alert("Login clicked");
+   window.location.href = "login.html";
+}
+
+function signup(){
+// alert("SignUp clicked");
+   window.location.href = "name.html";
+}
+</script>
+
+</body>
+</html>
