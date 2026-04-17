@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+/E html>
 <html>
 <head>
   <title>Dev-Onix AI</title>
@@ -129,8 +129,8 @@ p {
 
 <!-- title -->
 <h1><i>Dev-Onix AI</i></h1>
-
-<form id="finishSignup">
+  
+  <form onsubmit="finishSignup(event)">
 
   <!-- circle -->
   <div class="circleBox">
@@ -194,11 +194,17 @@ function loadImage(event){
   }
 }
 // সরাসরি হোম পেইজ এর জন্য ও বাটন
+  /*
 function finishSignup(){
   localStorage.setItem("isSignedUp", "true");
   window.location.href = "open.html";
-}
+} */
+function finishSignup(event){
+  event.preventDefault();
 
+  localStorage.setItem("isSignedUp", "true");
+  window.location.href = "open.html";
+  }
 </script>
 </body>
 </html>
