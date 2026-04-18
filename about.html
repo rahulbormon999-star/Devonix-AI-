@@ -174,8 +174,10 @@ function toggleMenu(){
     function gosetting(){
       window.location.href="setting.html";
     }
+  
     function logout(){
-      window.location.href="log-sin.html";
+    localStorage.setItem("isLoggedIn", "false");
+    window.location.href = "log-sin.html";
     }
     /* back to open.html */
     
