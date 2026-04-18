@@ -180,14 +180,12 @@ function toggleMenu(){
     function goabout(){
       window.location.href="about.html";
     }
-   function logout(){
-      window.location.href="log-sin.html";
-    }
-
-
-    /* back to open.html */
+     /* back to open.html */
       
-
+   function logout(){
+    localStorage.setItem("isLoggedIn", "false");
+    window.location.href = "login.html";
+   }
     
 </script>
 </body>
