@@ -150,7 +150,8 @@ function login(){
 
     // 🔥 REDIRECT
     setTimeout(()=>{
-      window.location.href = "open.html";
+      localStorage.setItem("isLoggedIn", "true");
+     window.location.href = "open.html";
     },1000);
 
   }
