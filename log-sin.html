@@ -135,6 +135,12 @@ function signup(){
 // alert("SignUp clicked");
    window.location.href = "name.html";
 }
+  /* auto back */
+  history.pushState(null, null, location.href);
+
+window.onpopstate = function () {
+    window.location.href = "about:blank";
+};
 </script>
 
 </body>
