@@ -146,7 +146,14 @@ function toggleMenu(){
     localStorage.setItem("isLoggedIn", "false");
     window.location.href = "login.html";
      }
-    
+  /* অটো ব্যাক হবে না */
+ w.onload = function () {
+    let status = localStorage.getItem("isLoggedIn");
+
+    if (status !== "true") {
+        window.location.replacre="log-sin.html");
+    }
+}; 
     /* Back to website */
 
     
