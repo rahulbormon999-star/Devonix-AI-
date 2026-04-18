@@ -189,10 +189,11 @@ h3 {
       window.location.href="about.html";
     }
 
-    function logout(){
-      window.location.href="log-sin.html";
+  
+   function logout(){
+    localStorage.setItem("isLoggedIn", "false");
+    window.location.href = "log-sin.html";
     }
-
   // 🔥 DOB + Age (only once)
   let dob = localStorage.getItem("dob");
 
