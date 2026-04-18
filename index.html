@@ -137,8 +137,15 @@ opacity: 0;">Get Start</button></a>
 
     
 <script>
-if(localStorage.getItem("isSignedUp") === "true"){
-  window.location.href = "open.html"; 
+
+window.onload = function () {
+    let status = localStorage.getItem("isLoggedIn");
+
+    if (status === "true") {
+        window.location.href = "open.html";
+    } else {
+        window.location.href = "login.html";
+    }
 }
 </script>
 </body>
