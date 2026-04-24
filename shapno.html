@@ -339,42 +339,33 @@
                 sendMessage();
             }
         }
+ 
 
         async function sendMessage() {
-            const text = userInput.value.trim();
-            if (!text) return;
+    const text = userInput.value.trim();
+    if (!text) return;
 
-            appendMessage('user', text);
-            userInput.value = '';
-            userInput.style.height = 'auto';
-            sendBtn.disabled = true;
+    appendMessage('user', text);
+    userInput.value = '';
+    userInput.style.height = 'auto';
+    sendBtn.disabled = true;
 
-            saveMessageToSession('user', text);
+    saveMessageToSession('user', text);
 
-            const aiMsgDiv = appendMessage('ai', '<span class="typing-indicator">শাস্ত্র বিশ্লেষণ করা হচ্ছে...</span>');
+    const aiMsgDiv = appendMessage('ai', '<span class="typing-indicator">শাস্ত্র বিশ্লেষণ করা হচ্ছে...</span>');
 
-            try {
-                /* chat gpt cob*/
-                const response = await fetch("http://localhost:5000/api", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ text: text })
-});
+    try {
+        // 👉 এখানেই তোমার তৈরি function ব্যবহার করো
+        const aiText = await fetchAPI(text);
 
-const data = await response.json();
+        typeWriterEffect(aiText, aiMsgDiv);
+        saveMessageToSession('ai', aiText);
 
-const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "উত্তর পাওয়া যায়নি";
-typeWriterEffect(aiText, aiMsgDiv);
+    } catch (error) {
+        aiMsgDiv.innerHTML = "API সমস্যা বা Key শেষ!";
+    }
 
-                /* chat gpt cobe finish */
-             saveMessageToSession('ai', aiText);
-            } catch (error) {
-                aiMsgDiv.innerHTML = "দুঃখিত, বর্তমানে অতিরিক্ত চাপ রয়েছে অথবা আপনার API Key এর লিমিট শেষ হয়ে গেছে। কিছুক্ষণ পর আবার চেষ্টা করুন।";
-            }
-
-            sendBtn.disabled = false;
+    sendBtn.disabled = false;
         }
 
         function appendMessage(sender, text) {
