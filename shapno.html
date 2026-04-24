@@ -412,58 +412,23 @@
         // মাল্টিপল API Key হ্যান্ডেল করার নতুন ফাংশন
         // ==========================================
         async function fetchAPI(userDream) {
-            const prompt = `তুমি একজন হিন্দু শাস্ত্র, বেদ, পুরাণ এবং স্বপ্ন বিশারদ। ব্যবহারকারী তার স্বপ্নের কথা বলবে। তোমাকে হিন্দু শাস্ত্র এবং জ্যোতিষশাস্ত্র অনুযায়ী এই স্বপ্নের সঠিক অর্থ, প্রভাব এবং এর কোনো প্রতিকার থাকলে তা শুধুমাত্র শুদ্ধ বাংলায় গুছিয়ে বলতে হবে। ব্যবহারকারীর স্বপ্ন: "${userDream}"`;
+    const response = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            text: userDream
+        })
+    });
 
-            const requestBody = {
-                contents: [{ parts: [{ text: prompt }] }]
-            };
+    const data = await response.json();
 
-            let attempts = 0;
-            const totalKeys = API_KEYS.length;
+    if (data.error) {
+        throw new Error(data.error);
+    }
 
-            // যদি একটি Key ফেইল করে, লুপ ঘুরে অন্য Key দিয়ে ট্রাই করবে
-            while (attempts < totalKeys) {
-                let currentKey = API_KEYS[currentKeyIndex];
-                let API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${currentKey}`;
-
-                try {
-                    const response = await fetch(API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(requestBody)
-                    });
-
-                    // যদি লিমিট শেষ হয়ে যায় (Error 429 - Too Many Requests)
-                    if (response.status === 429) {
-                        console.warn(`Key ${currentKeyIndex + 1} Limit Reached! Switching to next Key...`);
-                        // পরবর্তী Key তে যাওয়ার জন্য Index পরিবর্তন
-                        currentKeyIndex = (currentKeyIndex + 1) % totalKeys;
-                        attempts++;
-                        continue; // লুপ আবার প্রথম থেকে শুরু হবে নতুন Key দিয়ে
-                    }
-
-                    if (!response.ok) {
-                        throw new Error(`API Error: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-                    
-                    // সফল হলে প্রতিবারই আমরা পরবর্তী কি সেট করে রাখবো, 
-                    // যাতে একেকবার একেকটা কি ব্যবহার হয় (মিনিটের লিমিট ব্যালেন্স করতে)
-                    currentKeyIndex = (currentKeyIndex + 1) % totalKeys; 
-                    
-                    return data.candidates[0].content.parts[0].text;
-
-                } catch (error) {
-                    console.error("Fetch Error:", error);
-                    // নেটওয়ার্ক সমস্যা বা অন্য কোনো কারণে ফেইল করলে পরের কি দিয়ে ট্রাই
-                    currentKeyIndex = (currentKeyIndex + 1) % totalKeys;
-                    attempts++;
-                }
-            }
-
-            // যদি সব Key এর লিমিট শেষ হয়ে যায়
-            throw new Error("All API Keys exhausted.");
+    return data.candidates[0].content.parts[0].text;
         }
 
         // History Management Functions
