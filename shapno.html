@@ -354,7 +354,21 @@
             const aiMsgDiv = appendMessage('ai', '<span class="typing-indicator">শাস্ত্র বিশ্লেষণ করা হচ্ছে...</span>');
 
             try {
-                const response = await fetchAPI(text);
+                /* chat gpt cob*/
+                const response = await fetch("http://localhost:5000/api", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ text: text })
+});
+
+const data = await response.json();
+
+const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "উত্তর পাওয়া যায়নি";
+typeWriterEffect(aiText, aiMsgDiv);
+
+                /* chat gpt cobe finish */
                 typeWriterEffect(response, aiMsgDiv);
                 saveMessageToSession('ai', response);
             } catch (error) {
