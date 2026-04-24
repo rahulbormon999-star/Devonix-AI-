@@ -369,8 +369,7 @@ const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "উত্ত�
 typeWriterEffect(aiText, aiMsgDiv);
 
                 /* chat gpt cobe finish */
-                typeWriterEffect(response, aiMsgDiv);
-                saveMessageToSession('ai', response);
+             saveMessageToSession('ai', aiText);
             } catch (error) {
                 aiMsgDiv.innerHTML = "দুঃখিত, বর্তমানে অতিরিক্ত চাপ রয়েছে অথবা আপনার API Key এর লিমিট শেষ হয়ে গেছে। কিছুক্ষণ পর আবার চেষ্টা করুন।";
             }
