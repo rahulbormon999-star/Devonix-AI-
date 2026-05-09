@@ -251,97 +251,42 @@ let isCurrentVisible = false;
 let messageTimeout;
 
 // ১. পেজ লোড হলে পাসওয়ার্ড দেখানো
-function loadPassword() {
-  let pass = localStorage.getItem("userPassword");
-  let display = document.getElementById("currentPassDisplay");
-  let btn = document.getElementById("toggleCurrentBtn");
+ function updatePass() {
 
-  if (pass) {
-    if (isCurrentVisible) {
-      display.innerText = pass; // পাসওয়ার্ড দেখাবে
-      display.style.letterSpacing = "1px";
-      btn.innerText = "🙈"; // চোখ বন্ধ আইকন
-    } else {
-      display.innerText = "•".repeat(pass.length); // পাসওয়ার্ড হাইড করবে
-      display.style.letterSpacing = "4px";
-      btn.innerText = "👁️"; // চোখ খোলা আইকন
-    }
-    btn.style.display = "block";
-  } else {
-    display.innerText = "Not set yet";
-    display.style.letterSpacing = "0px";
-    btn.style.display = "none";
-  }
-}
-
-// পেজ লোড হওয়ার সাথে সাথে কল করা হলো
-loadPassword();
-
-// ২. বর্তমান পাসওয়ার্ড শো/হাইড করার ফাংশন
-function toggleCurrentPassword() {
-  isCurrentVisible = !isCurrentVisible;
-  loadPassword();
-}
-
-// ৩. নতুন পাসওয়ার্ড ইনপুটের শো/হাইড ফাংশন
-function toggleNewPass() {
-  let input = document.getElementById("newPass");
-  let eyeIcon = document.querySelector(".eye");
-
-  if (input.type === "password") {
-    input.type = "text";
-    eyeIcon.innerText = "🙈";
-  } else {
-    input.type = "password";
-    eyeIcon.innerText = "👁️";
-  }
-}
-
-// ৪. মেসেজ দেখানোর ফাংশন (৩ সেকেন্ড পর মুছে যাবে)
-function showMessage(text, color) {
-  let msgBox = document.getElementById("msg");
-  msgBox.innerText = text;
-  msgBox.style.color = color;
-
-  clearTimeout(messageTimeout);
-  messageTimeout = setTimeout(() => {
-    msgBox.innerText = "";
-  }, 3000);
-}
-
-// ৫. পাসওয়ার্ড আপডেট করার ফাংশন
-function updatePass() {
   let newPassInput = document.getElementById("newPass");
   let newPass = newPassInput.value.trim();
 
   // Validation
-  if (newPass.length === 0) {
-    showMessage("❌ Please enter a password", "#ef4444"); // Red
+  if(newPass.length === 0){
+    showMessage("❌ Please enter a password", "#ef4444");
     return;
   }
-  if (newPass.length < 8) {
+
+  if(newPass.length < 8){
     showMessage("❌ Minimum 8 characters required", "#ef4444");
     return;
   }
-  if (newPass.length > 10) {
+
+  if(newPass.length > 10){
     showMessage("❌ Maximum 10 characters allowed", "#ef4444");
     return;
   }
 
-  // Save to Local Storage
-  localStorage.setItem("userPassword",newPass);
-  
-  // Success Message
-  showMessage("✅ Password updated successfully!", "#10b981"); // Green
-  
-  // Reset Input & State
-  newPassInput.value = "";
-  isCurrentVisible = false; // আপডেট করার পর বর্তমান পাসওয়ার্ড আবার হাইড হয়ে যাবে
-  
-  // Reload Display
-  loadPassword();
-}
+  // SAVE NEW PASSWORD
+  localStorage.setItem("userPassword", newPass);
 
+  // SUCCESS MESSAGE
+  showMessage("✅ Password updated successfully!", "#10b981");
+
+  // RESET INPUT
+  newPassInput.value = "";
+
+  // HIDE CURRENT PASSWORD AGAIN
+  isCurrentVisible = false;
+
+  // RELOAD PASSWORD
+  loadPassword();
+ }
 // ৬. ব্যাক বাটন
 function goBack() {
   window.history.back();
