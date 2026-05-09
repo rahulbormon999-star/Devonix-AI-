@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dev-Onix AI | Profile</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+    :root { --primary: #6366f1; --bg: #f8fafc; }
+    body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; }
+    .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+    
+    .profile-box { text-align: center; margin-bottom: 20px; }
+    #preview { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid var(--primary); cursor: pointer; }
+    
+    h3 { font-size: 14px; color: #64748b; margin: 15px 0 5px; }
+    input, select { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; box-sizing: border-box; outline: none; font-size: 16px; }
+    input:focus { border-color: var(--primary); }
+    
+    button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; margin-top: 25px; cursor: pointer; transition: 0.3s; }
+    button:hover { opacity: 0.9; transform: translateY(-2px); }
+    
+    .title { text-align: center; font-size: 24px; color: #1e293b; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h1 class="title">My Profile</h1>
+    <div class="profile-box">
+        <img id="preview" src="https://ui-avatars.com/api/?name=User" onclick="document.getElementById('image').click()">
+        <input type="file" id="image" hidden accept="image/*">
+    </div>
+
+    <h3>First Name</h3>
+    <input id="fname" placeholder="John">
+    <h3>Last Name</h3>
+    <input id="lname" placeholder="Doe">
+    <h3>Phone</h3>
+    <input id="phone" placeholder="+880 1xxx xxxxxx">
+    <h3>Country</h3>
+    <input id="country" placeholder="Bangladesh">
+    <h3>Gender</h3>
+    <select id="gender">
+        <option value="">Select Gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+    </select>
+    <h3>Date of Birth</h3>
+    <input type="date" id="dob">
+    
+    <button onclick="saveAll()">Update Profile</button>
+</div>
+
+<script>
+    // Image handling
+    document.getElementById("image").addEventListener("change", function(e){
+        let reader = new FileReader();
+        reader.onload = function(){ document.getElementById("preview").src = reader.result; }
+        reader.readAsDataURL(e.target.files[0]);
+    });
+
+    // Load Data
+    window.onload = () => {
+        document.getElementById("preview").src = localStorage.getItem("profileImage") || "https://ui-avatars.com/api/?name=User";
+        document.getElementById("fname").value = localStorage.getItem("fname") || "";
+        document.getElementById("lname").value = localStorage.getItem("lname") || "";
+        document.getElementById("phone").value = localStorage.getItem("phone") || "";
+        document.getElementById("country").value = localStorage.getItem("coun") || "";
+        document.getElementById("gender").value = localStorage.getItem("gender") || "";
+        document.getElementById("dob").value = localStorage.getItem("dob") || "";
+    };
+
+    // Save Data
+    function saveAll(){
+        localStorage.setItem("profileImage", document.getElementById("preview").src);
+        localStorage.setItem("fname", document.getElementById("fname").value);
+        localStorage.setItem("lname", document.getElementById("lname").value);
+        localStorage.setItem("phone", document.getElementById("phone").value);
+        localStorage.setItem("coun", document.getElementById("country").value);
+        localStorage.setItem("gender", document.getElementById("gender").value);
+        localStorage.setItem("dob", document.getElementById("dob").value);
+        alert("Profile Updated Successfully ✅");
+    }
+</script>
+</body>
+</html>
