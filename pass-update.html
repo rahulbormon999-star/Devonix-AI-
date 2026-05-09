@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Password Manager">
+<meta name="author" content="Rahul Dev">
+<title>Password Manager</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    /* Modern soft gradient background */
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* Main Card */
+  .card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 400px;
+    padding: 35px 25px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05), 0 5px 15px rgba(0, 0, 0, 0.03);
+    text-align: center;
+  }
+
+  /* Header Section */
+  .header-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+    display: inline-block;
+    background: #eff6ff;
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    border-radius: 50%;
+  }
+
+  .card h2 {
+    color: #111827;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 25px;
+  }
+
+  /* Current Password Display Section */
+  .current-pass-box {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .current-pass-info {
+    text-align: left;
+  }
+
+  .current-pass-info small {
+    display: block;
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .current-pass-info strong {
+    font-size: 16px;
+    color: #374151;
+    letter-spacing: 2px;
+  }
+
+  .toggle-current-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #6b7280;
+    padding: 5px;
+    transition: 0.2s;
+  }
+  .toggle-current-btn:hover { transform: scale(1.1); }
+
+  /* Input Section */
+  .input-label {
+    display: block;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 8px;
+  }
+
+  .input-box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .input-box input {
+    width: 100%;
+    height: 50px;
+    padding: 0 45px 0 15px;
+    font-size: 15px;
+    color: #1f2937;
+    border: 1.5px solid #d1d5db;
+    border-radius: 10px;
+    background: #fff;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .input-box input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  }
+
+  .eye {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    cursor: pointer;
+    color: #6b7280;
+    transition: 0.2s;
+  }
+
+  .helper-text {
+    text-align: left;
+    font-size: 12px;
+    color: #9ca3af;
+    margin-bottom: 20px;
+  }
+
+  /* Message Display */
+  #msg {
+    font-size: 14px;
+    font-weight: 500;
+    min-height: 20px;
+    margin-bottom: 15px;
+    transition: 0.3s;
+  }
+
+  /* Buttons */
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .update {
+    background: #3b82f6;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+  }
+
+  .update:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+  }
+
+  .update:active { transform: translateY(0); }
+
+  .back {
+    background: #f3f4f6;
+    color: #4b5563;
+  }
+
+  .back:hover {
+    background: #e5e7eb;
+    color: #1f2937;
+  }
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  
+  <div class="header-icon">🔐</div>
+  <h2>Password Manager</h2>
+
+  <!-- Current Password Display Box -->
+  <div class="current-pass-box">
+    <div class="current-pass-info">
+      <small>Current Password</small>
+      <strong id="currentPassDisplay">Loading...</strong>
+    </div>
+    <button class="toggle-current-btn" id="toggleCurrentBtn" onclick="toggleCurrentPassword()">👁️</button>
+  </div>
+
+  <!-- Form Section -->
+  <label class="input-label" for="newPass">Create New Password</label>
+  <div class="input-box">
+    <input type="password" id="newPass" placeholder="Enter new password">
+    <span class="eye" onclick="toggleNewPass()">👁️</span>
+  </div>
+  <p class="helper-text">Must be between 8 and 10 characters.</p>
+
+  <!-- Notification Message -->
+  <p id="msg"></p>
+
+  <!-- Action Buttons -->
+  <div class="btn-group">
+    <button class="update" onclick="updatePass()">Update Password</button>
+    <button class="back" onclick="goBack()">Go Back</button>
+  </div>
+
+</div>
+
+<script>
+// ভেরিয়েবল
+let isCurrentVisible = false;
+let messageTimeout;
+
+// ১. পেজ লোড হলে পাসওয়ার্ড দেখানো
+function loadPassword() {
+  let pass = localStorage.getItem("userPassword");
+  let display = document.getElementById("currentPassDisplay");
+  let btn = document.getElementById("toggleCurrentBtn");
+
+  if (pass) {
+    if (isCurrentVisible) {
+      display.innerText = pass; // পাসওয়ার্ড দেখাবে
+      display.style.letterSpacing = "1px";
+      btn.innerText = "🙈"; // চোখ বন্ধ আইকন
+    } else {
+      display.innerText = "•".repeat(pass.length); // পাসওয়ার্ড হাইড করবে
+      display.style.letterSpacing = "4px";
+      btn.innerText = "👁️"; // চোখ খোলা আইকন
+    }
+    btn.style.display = "block";
+  } else {
+    display.innerText = "Not set yet";
+    display.style.letterSpacing = "0px";
+    btn.style.display = "none";
+  }
+}
+
+// পেজ লোড হওয়ার সাথে সাথে কল করা হলো
+loadPassword();
+
+// ২. বর্তমান পাসওয়ার্ড শো/হাইড করার ফাংশন
+function toggleCurrentPassword() {
+  isCurrentVisible = !isCurrentVisible;
+  loadPassword();
+}
+
+// ৩. নতুন পাসওয়ার্ড ইনপুটের শো/হাইড ফাংশন
+function toggleNewPass() {
+  let input = document.getElementById("newPass");
+  let eyeIcon = document.querySelector(".eye");
+
+  if (input.type === "password") {
+    input.type = "text";
+    eyeIcon.innerText = "🙈";
+  } else {
+    input.type = "password";
+    eyeIcon.innerText = "👁️";
+  }
+}
+
+// ৪. মেসেজ দেখানোর ফাংশন (৩ সেকেন্ড পর মুছে যাবে)
+function showMessage(text, color) {
+  let msgBox = document.getElementById("msg");
+  msgBox.innerText = text;
+  msgBox.style.color = color;
+
+  clearTimeout(messageTimeout);
+  messageTimeout = setTimeout(() => {
+    msgBox.innerText = "";
+  }, 3000);
+}
+
+// ৫. পাসওয়ার্ড আপডেট করার ফাংশন
+function updatePass() {
+  let newPassInput = document.getElementById("newPass");
+  let newPass = newPassInput.value.trim();
+
+  // Validation
+  if (newPass.length === 0) {
+    showMessage("❌ Please enter a password", "#ef4444"); // Red
+    return;
+  }
+  if (newPass.length < 8) {
+    showMessage("❌ Minimum 8 characters required", "#ef4444");
+    return;
+  }
+  if (newPass.length > 10) {
+    showMessage("❌ Maximum 10 characters allowed", "#ef4444");
+    return;
+  }
+
+  // Save to Local Storage
+  localStorage.setItem("userPassword", newPass);
+  
+  // Success Message
+  showMessage("✅ Password updated successfully!", "#10b981"); // Green
+  
+  // Reset Input & State
+  newPassInput.value = "";
+  isCurrentVisible = false; // আপডেট করার পর বর্তমান পাসওয়ার্ড আবার হাইড হয়ে যাবে
+  
+  // Reload Display
+  loadPassword();
+}
+
+// ৬. ব্যাক বাটন
+function goBack() {
+  window.history.back();
+}
+</script>
+
+</body>
+</html>
