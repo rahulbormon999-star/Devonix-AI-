@@ -246,51 +246,145 @@
 </div>
 
 <script>
-// ভেরিয়েবল
+
+// VARIABLES
 let isCurrentVisible = false;
 let messageTimeout;
 
-// ১. পেজ লোড হলে পাসওয়ার্ড দেখানো
- function updatePass() {
+// PAGE LOAD হলে password দেখাবে
+window.onload = function(){
+  loadPassword();
+}
+
+// CURRENT PASSWORD LOAD
+function loadPassword(){
+
+  let pass = localStorage.getItem("userPassword");
+
+  let display = document.getElementById("currentPassDisplay");
+
+  let btn = document.getElementById("toggleCurrentBtn");
+
+  if(pass){
+
+    if(isCurrentVisible){
+
+      display.innerText = pass;
+      display.style.letterSpacing = "1px";
+      btn.innerText = "🙈";
+
+    }else{
+
+      display.innerText = "•".repeat(pass.length);
+      display.style.letterSpacing = "4px";
+      btn.innerText = "👁️";
+
+    }
+
+    btn.style.display = "block";
+
+  }else{
+
+    display.innerText = "No Password";
+    display.style.letterSpacing = "0";
+    btn.style.display = "none";
+
+  }
+}
+
+// SHOW/HIDE CURRENT PASSWORD
+function toggleCurrentPassword(){
+
+  isCurrentVisible = !isCurrentVisible;
+
+  loadPassword();
+}
+
+// SHOW/HIDE NEW PASSWORD
+function toggleNewPass(){
+
+  let input = document.getElementById("newPass");
+
+  let eye = document.querySelector(".eye");
+
+  if(input.type === "password"){
+
+    input.type = "text";
+    eye.innerText = "🙈";
+
+  }else{
+
+    input.type = "password";
+    eye.innerText = "👁️";
+
+  }
+}
+
+// MESSAGE FUNCTION
+function showMessage(text,color){
+
+  let msg = document.getElementById("msg");
+
+  msg.innerText = text;
+
+  msg.style.color = color;
+
+  clearTimeout(messageTimeout);
+
+  messageTimeout = setTimeout(()=>{
+
+    msg.innerText = "";
+
+  },3000);
+}
+
+// UPDATE PASSWORD
+function updatePass() {
 
   let newPassInput = document.getElementById("newPass");
+
   let newPass = newPassInput.value.trim();
 
-  // Validation
+  // VALIDATION
   if(newPass.length === 0){
-    showMessage("❌ Please enter a password", "#ef4444");
+
+    showMessage("❌ Please enter password","#ef4444");
     return;
   }
 
   if(newPass.length < 8){
-    showMessage("❌ Minimum 8 characters required", "#ef4444");
+
+    showMessage("❌ Minimum 8 characters","#ef4444");
     return;
   }
 
   if(newPass.length > 10){
-    showMessage("❌ Maximum 10 characters allowed", "#ef4444");
+
+    showMessage("❌ Maximum 10 characters","#ef4444");
     return;
   }
 
-  // SAVE NEW PASSWORD
+  // SAVE PASSWORD
   localStorage.setItem("userPassword", newPass);
 
-  // SUCCESS MESSAGE
-  showMessage("✅ Password updated successfully!", "#10b981");
+  // SUCCESS
+  showMessage("✅ Password Updated","#10b981");
 
-  // RESET INPUT
+  // RESET
   newPassInput.value = "";
 
-  // HIDE CURRENT PASSWORD AGAIN
   isCurrentVisible = false;
 
   // RELOAD PASSWORD
   loadPassword();
- }
-// ৬. ব্যাক বাটন
-function goBack() {
+}
+
+// BACK BUTTON
+function goBack(){
+
   window.history.back();
 }
+
 </script>
 
 </body>
