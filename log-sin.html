@@ -128,12 +128,13 @@ body{
 <script>
 function login(){
   //alert("Login clicked");
-   window.location.href = "login.html";
+   window.location.href = "login.html"
 }
 
 function signup(){
 // alert("SignUp clicked");
    window.location.href = "name.html";
+  localStorage.clear();
 }
   /* auto back */
   history.pushState(null, null, location.href);
