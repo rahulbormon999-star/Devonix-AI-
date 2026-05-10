@@ -238,67 +238,50 @@ function login(){
   let inputF = document.getElementById("fname").value.trim();
   let inputL = document.getElementById("lname").value.trim();
   let inputP = document.getElementById("pass").value.trim();
-  
+
   let msg = document.getElementById("msg");
   let btn = document.getElementById("loginBtn");
-
-  // Input Validation
-  if(inputF === "" || inputL === "" || inputP === ""){
-    showError("❌ দয়া করে সবগুলো ঘর পূরণ করুন");
-    return;
-  }
 
   // STORED DATA
   let savedF = localStorage.getItem("fname");
   let savedL = localStorage.getItem("lname");
   let savedP = localStorage.getItem("userPassword");
 
-  // Check condition
-  if(inputF === savedF && inputL === savedL && inputP === savedP){
-    
-    // Success State
-    msg.style.color = "#10b981"; 
+  // EMPTY CHECK
+  if(inputF === "" || inputL === "" || inputP === ""){
+    showError("❌ দয়া করে সবগুলো ঘর পূরণ করুন");
+    return;
+  }
+
+  // LOGIN CHECK
+  if(
+    inputF === savedF &&
+    inputL === savedL &&
+    inputP === savedP
+  ){
+
+    msg.style.color = "green";
     msg.innerText = "✅ Login Successful!";
-    
-    // Button updating state
+
     btn.innerText = "Redirecting...";
     btn.disabled = true;
 
-    // REDIRECT
     setTimeout(()=>{
+
       localStorage.setItem("isLoggedIn", "true");
+
       window.location.href = "open.html";
-    }, 1500);
 
-  } else {
-    // Error State
-    showError("❌ আপনার দেওয়া তথ্য সঠিক নয়!");
+    },1500);
+
   }
 
-}
+  else{
 
-// Error Show & Shake Function
-function showError(text) {
-  let msg = document.getElementById("msg");
-  let card = document.getElementById("loginCard");
+    showError("❌ Password অথবা তথ্য ভুল");
 
-  msg.style.color = "#ef4444"; 
-  msg.innerText = text;
-
-  // Shake animation
-  card.classList.add("shake-anim");
-  setTimeout(() => {
-    card.classList.remove("shake-anim");
-  }, 400);
-}
-
-// Enter Key Press to Login
-document.addEventListener("keypress", function(event) {
-  if (event.key === "Enter") {
-    login();
   }
-});
-
+}
 </script>
 </body>
 </html>
