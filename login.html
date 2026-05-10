@@ -216,47 +216,86 @@
 
 </div>
 
+
 <script>
 
-// SHOW/HIDE PASSWORD
+// SHOW / HIDE PASSWORD
 function togglePass(){
+
   let input = document.getElementById("pass");
   let eyeIcon = document.querySelector(".eye");
 
   if(input.type === "password"){
+
     input.type = "text";
-    eyeIcon.innerText = "🙈"; 
+    eyeIcon.innerText = "🙈";
+
   }else{
+
     input.type = "password";
-    eyeIcon.innerText = "👁️"; 
+    eyeIcon.innerText = "👁️";
+
   }
+}
+
+// ERROR FUNCTION
+function showError(text){
+
+  let msg = document.getElementById("msg");
+  let card = document.getElementById("loginCard");
+
+  msg.style.color = "red";
+  msg.innerText = text;
+
+  // SHAKE ANIMATION
+  card.classList.add("shake-anim");
+
+  setTimeout(()=>{
+
+    card.classList.remove("shake-anim");
+
+  },400);
+
 }
 
 // LOGIN FUNCTION
 function login(){
 
+  // USER INPUT
   let inputF = document.getElementById("fname").value.trim();
   let inputL = document.getElementById("lname").value.trim();
   let inputP = document.getElementById("pass").value.trim();
 
+  // MESSAGE & BUTTON
   let msg = document.getElementById("msg");
   let btn = document.getElementById("loginBtn");
 
-  // STORED DATA
+  // LOCAL STORAGE DATA
   let savedF = localStorage.getItem("fname");
   let savedL = localStorage.getItem("lname");
   let savedP = localStorage.getItem("userPassword");
 
+  // DEBUG CHECK
+  console.log("Saved First Name:", savedF);
+  console.log("Saved Last Name:", savedL);
+  console.log("Saved Password:", savedP);
+
+  console.log("Input First Name:", inputF);
+  console.log("Input Last Name:", inputL);
+  console.log("Input Password:", inputP);
+
   // EMPTY CHECK
   if(inputF === "" || inputL === "" || inputP === ""){
+
     showError("❌ দয়া করে সবগুলো ঘর পূরণ করুন");
     return;
+
   }
 
   // LOGIN CHECK
   if(
-    inputF === savedF &&
-    inputL === savedL &&
+    inputF.toLowerCase() === savedF.toLowerCase() &&
+    inputL.toLowerCase() === savedL.toLowerCase() &&
     inputP === savedP
   ){
 
@@ -266,22 +305,35 @@ function login(){
     btn.innerText = "Redirecting...";
     btn.disabled = true;
 
-    setTimeout(()=>{
+    // SAVE LOGIN STATUS
+    localStorage.setItem("isLoggedIn","true");
 
-      localStorage.setItem("isLoggedIn", "true");
+    // REDIRECT
+    setTimeout(()=>{
 
       window.location.href = "open.html";
 
     },1500);
 
-  }
+  }else{
 
-  else{
-
-    showError("❌ Password অথবা তথ্য ভুল");
+    showError("❌ First Name, Last Name অথবা Password ভুল");
 
   }
+
 }
+
+// ENTER KEY SUPPORT
+document.addEventListener("keypress", function(event){
+
+  if(event.key === "Enter"){
+
+    login();
+
+  }
+
+});
+
 </script>
 </body>
 </html>
