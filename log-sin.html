@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="Login Page">
+<title>Dev-Onix AI | Login</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    /* আপনার আগের অ্যাপের মতো সুন্দর ব্যাকগ্রাউন্ড অ্যানিমেশন */
+    background: linear-gradient(270deg, #0ff, #c0a, #0f0, #1c92d2, #00c6ff);
+    background-size: 1000% 1000%;
+    animation: bgMove 15s ease infinite;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  @keyframes bgMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Main Login Card */
+  .card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 400px;
+    padding: 40px 25px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    animation: dropDown 1s ease forwards;
+  }
+
+  @keyframes dropDown {
+    0% { transform: translateY(-50px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  .header-icon {
+    font-size: 45px;
+    margin-bottom: 10px;
+  }
+
+  .card h2 {
+    color: #111827;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    font-family: Georgia, serif;
+    letter-spacing: 1px;
+  }
+
+  .card p.subtitle {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 30px;
+  }
+
+  /* Inputs */
+  .input-label {
+    display: block;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 8px;
+  }
+
+  .input-box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .input-box input {
+    width: 100%;
+    height: 50px;
+    padding: 0 45px 0 15px;
+    font-size: 16px;
+    color: #1f2937;
+    border: 1.5px solid #d1d5db;
+    border-radius: 10px;
+    background: #f9fafb;
+    transition: all 0.3s ease;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .input-box input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  }
+
+  .eye {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    cursor: pointer;
+    color: #6b7280;
+    transition: 0.2s;
+  }
+
+  /* Message Display */
+  #msg {
+    font-size: 14px;
+    font-weight: 600;
+    min-height: 20px;
+    margin-bottom: 15px;
+    transition: 0.3s;
+  }
+
+  /* Buttons */
+  button.login-btn {
+    width: 100%;
+    padding: 15px;
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+  }
+
+  button.login-btn:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+  }
+
+  button.login-btn:active {
+    transform: translateY(0);
+  }
+
+  /* Signup Link */
+  .signup-link {
+    margin-top: 25px;
+    font-size: 14px;
+    color: #4b5563;
+    font-weight: 500;
+  }
+
+  .signup-link a {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 700;
+    transition: 0.2s;
+  }
+
+  .signup-link a:hover {
+    text-decoration: underline;
+    color: #1d4ed8;
+  }
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  
+  <div class="header-icon">✨</div>
+  <h2>Dev-Onix AI</h2>
+  <p class="subtitle">Login to access your smart tools</p>
+
+  <!-- Full Name Input -->
+  <label class="input-label" for="loginName">Full Name</label>
+  <div class="input-box">
+    <input type="text" id="loginName" placeholder="e.g. Rahul Dev" autocomplete="off">
+  </div>
+
+  <!-- Password Input -->
+  <label class="input-label" for="loginPass">Password</label>
+  <div class="input-box">
+    <input type="password" id="loginPass" placeholder="Enter your password">
+    <span class="eye" id="eyeIcon" onclick="togglePass()">👁️</span>
+  </div>
+
+  <!-- Notification Message -->
+  <p id="msg"></p>
+
+  <!-- Login Button -->
+  <button class="login-btn" onclick="handleLogin()">Login</button>
+
+  <!-- Signup Navigation -->
+  <div class="signup-link">
+    Don't have an account? <a href="name.html">Sign Up</a>
+  </div>
+
+</div>
+
+<script>
+// SHOW/HIDE PASSWORD
+function togglePass() {
+  let input = document.getElementById("loginPass");
+  let icon = document.getElementById("eyeIcon");
+
+  if(input.type === "password"){
+    input.type = "text";
+    icon.innerText = "🙈";
+  } else {
+    input.type = "password";
+    icon.innerText = "👁️";
+  }
+}
+
+// LOGIN LOGIC
+function handleLogin() {
+  let inputName = document.getElementById("loginName").value.trim().toLowerCase();
+  let inputPass = document.getElementById("loginPass").value.trim();
+  let msg = document.getElementById("msg");
+
+  // ১. ইনপুট খালি আছে কিনা চেক
+  if(inputName === "" || inputPass === "") {
+    msg.innerText = "❌ Please fill in all fields!";
+    msg.style.color = "#ef4444";
+    return;
+  }
+
+  // ২. লোকাল স্টোরেজ থেকে ইউজারের ডাটা বের করা
+  let savedFname = localStorage.getItem("fname") || "";
+  let savedLname = localStorage.getItem("lname") || "";
+  let savedPass = localStorage.getItem("userPassword") || "";
+
+  // ইউজারের Full Name তৈরি করা (স্পেস সহ)
+  let savedFullName = (savedFname + " " + savedLname).trim().toLowerCase();
+
+  // ৩. যদি কোনো অ্যাকাউন্ট খোলা না থাকে
+  if(savedFullName === "" || savedPass === "") {
+    msg.innerText = "❌ Account not found. Please Sign Up!";
+    msg.style.color = "#ef4444";
+    return;
+  }
+
+  // ৪. নাম এবং পাসওয়ার্ড মেলানো
+  if(inputName === savedFullName && inputPass === savedPass) {
+    msg.innerText = "✅ Login Successful!";
+    msg.style.color = "#10b981";
+    
+    // লগইন সফল হলে open.html এ নিয়ে যাবে
+    setTimeout(() => {
+      window.location.href = "open.html";
+      localStorage.setItem("isLoggedIn", "true");
+    }, 1000);
+
+  } else if (inputName !== savedFullName) {
+    msg.innerText = "❌ Incorrect Full Name!";
+    msg.style.color = "#ef4444";
+  } else {
+    msg.innerText = "❌ Incorrect Password!";
+    msg.style.color = "#ef4444";
+  }
+}
+</script>
+
+</body>
+</html>
