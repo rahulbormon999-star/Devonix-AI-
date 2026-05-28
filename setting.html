@@ -132,6 +132,9 @@
     font-size:2vw;
   }
 }
+ .apps {
+     text-align:center;
+ }
 </style>
 </head>
 <body>
@@ -149,6 +152,7 @@
     <a href="#" onclick="goprofile()">👤 Profile</a>
     <a href="#">⚙️ Setting</a>
     <a href="#" onclick="goabout()">❗ About</a>
+   <a href="#" onclick="goapps()" class="apps">Apps</a>
 <!--    <a href="#" onclick="logout()">𓉱 Logout</a> -->
     <h2><i>Dev-Onix AI</i></h2>
   </div>
@@ -177,13 +181,16 @@
         localStorage.setItem("isLoggedIn", "false");
         window.location.href = "log-sin.html";
     }
-    
+    function goapps(){
+      window.location.href="apps.html";
+    }
     function goproseting(){
     window.location.href="proupdate.html";
   }
     function password(){
     window.location.href="pass-update.html";
     }
+   
   </script>
 </body>
    </html>
