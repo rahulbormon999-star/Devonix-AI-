@@ -349,101 +349,99 @@
 
     </div> -->
 
-    <script>
-        function goBack() {
-            if (document.referrer) {
-                window.history.back();
+ <script>
+    function goBack() {
+        if (document.referrer) {
+            window.history.back();
+        } else {
+            alert("পূর্ববর্তী পৃষ্ঠা পাওয়া যায়নি।");
+        }
+    }
+
+    const activeDownloads = {};
+    const appContainer = document.getElementById('appContainer');
+
+    function startDownload(appId, pwaLink) {
+        if (Object.keys(activeDownloads).length > 0) {
+            alert("অন্য একটি প্রসেস চলছে, অনুগ্রহ করে অপেক্ষা করুন।");
+            return;
+        }
+
+        const appCard = document.getElementById(`app-${appId}`);
+        if (!appCard) return;
+
+        const downloadBtn = appCard.querySelector('.download-btn');
+        const progressControls = appCard.querySelector('.progress-controls');
+        const percentText = appCard.querySelector('.percent-text');
+        const progressCircle = appCard.querySelector('.progress-ring__circle-active');
+
+        appContainer.classList.add('has-active-download');
+        appCard.classList.add('downloading');
+
+        downloadBtn.style.display = 'none';
+        progressControls.style.display = 'flex';
+        
+        const activeCircumference = 2 * Math.PI * 36; 
+        progressCircle.style.strokeDasharray = activeCircumference;
+
+        let progress = 0;
+        setProgress(progressCircle, percentText, 0, activeCircumference);
+
+        activeDownloads[appId] = setInterval(() => {
+            if (progress < 100) {
+                progress += 5; // প্রগ্রেস স্পিড
+                setProgress(progressCircle, percentText, progress, activeCircumference);
             } else {
-                alert("পূর্ববর্তী পৃষ্ঠা পাওয়া যায়নি।");
-            }
-        }
-
-        const activeDownloads = {};
-        const appContainer = document.getElementById('appContainer');
-
-        function startDownload(appId, pwaLink) {
-            // একসাথে কেবল একটি ডাউনলোড করতে দেওয়ার জন্য চেক
-            if (Object.keys(activeDownloads).length > 0) {
-                alert("অনুগ্রহ করে চলমান ডাউনলোডটি শেষ হওয়া পর্যন্ত অপেক্ষা করুন।");
-                return;
-            }
-
-            const appCard = document.getElementById(`app-${appId}`);
-            if (!appCard) return;
-
-            const downloadBtn = appCard.querySelector('.download-btn');
-            const progressControls = appCard.querySelector('.progress-controls');
-            const percentText = appCard.querySelector('.percent-text');
-            const progressCircle = appCard.querySelector('.progress-ring__circle-active');
-
-            // কনটেইনার ও কার্ডে ডাউনলোড ক্লাস যুক্ত করা
-            appContainer.classList.add('has-active-download');
-            appCard.classList.add('downloading');
-
-            downloadBtn.style.display = 'none';
-            progressControls.style.display = 'flex';
-            
-            // নতুন রিং সাইজের পরিধি হিসাব করা (r=36 এর জন্য ২ * pi * ৩৬ = ২২৬.২)
-            const activeCircumference = 2 * Math.PI * 36; 
-            progressCircle.style.strokeDasharray = activeCircumference;
-
-            let progress = 0;
-            setProgress(progressCircle, percentText, 0, activeCircumference);
-
-            activeDownloads[appId] = setInterval(() => {
-                if (progress < 100) {
-                    progress += 2; // ডাউনলোড স্পিড নিয়ন্ত্রণ
-                    setProgress(progressCircle, percentText, progress, activeCircumference);
-                } else {
-                    clearInterval(activeDownloads[appId]);
-                    delete activeDownloads[appId];
-                    completeDownload(appCard, downloadBtn, progressControls, pwaLink);
-                }
-            }, 60);
-        }
-
-        function setProgress(circle, textElement, percent, circumference) {
-            const offset = circumference - (percent / 100) * circumference;
-            circle.style.strokeDashoffset = offset;
-            textElement.textContent = `${percent}%`;
-        }
-
-        function cancelDownload(appId) {
-            if (activeDownloads[appId]) {
                 clearInterval(activeDownloads[appId]);
                 delete activeDownloads[appId];
+                completeDownload(appCard, downloadBtn, progressControls, pwaLink);
             }
+        }, 100);
+    }
 
-            const appCard = document.getElementById(`app-${appId}`);
-            if (appCard) {
-                const downloadBtn = appCard.querySelector('.download-btn');
-                const progressControls = appCard.querySelector('.progress-controls');
-                const progressCircle = appCard.querySelector('.progress-ring__circle-active');
-                
-                // ডিফল্ট নরমাল রিং সাইজ রিসেট (r=28 এর জন্য পরিধি ১৭৬)
-                const defaultCircumference = 2 * Math.PI * 28;
+    function setProgress(circle, textElement, percent, circumference) {
+        const offset = circumference - (percent / 100) * circumference;
+        circle.style.strokeDashoffset = offset;
+        textElement.textContent = `${percent}%`;
+    }
 
-                appContainer.classList.remove('has-active-download');
-                appCard.classList.remove('downloading');
-                
-                downloadBtn.style.display = 'block';
-                progressControls.style.display = 'none';
-                
-                progressCircle.style.strokeDasharray = defaultCircumference;
-                progressCircle.style.strokeDashoffset = defaultCircumference;
-            }
+    function cancelDownload(appId) {
+        if (activeDownloads[appId]) {
+            clearInterval(activeDownloads[appId]);
+            delete activeDownloads[appId];
         }
 
-        function completeDownload(appCard, downloadBtn, progressControls, pwaLink) {
+        const appCard = document.getElementById(`app-${appId}`);
+        if (appCard) {
+            const downloadBtn = appCard.querySelector('.download-btn');
+            const progressControls = appCard.querySelector('.progress-controls');
+            const progressCircle = appCard.querySelector('.progress-ring__circle-active');
+            
+            const defaultCircumference = 2 * Math.PI * 28;
+
             appContainer.classList.remove('has-active-download');
             appCard.classList.remove('downloading');
             
             downloadBtn.style.display = 'block';
             progressControls.style.display = 'none';
             
-            // ব্রাউজারের নতুন ট্যাবে নির্দিষ্ট PWA বা ডাউনলোড লিংকটি ওপেন হবে
-            window.open(pwaLink, '_blank');
+            progressCircle.style.strokeDasharray = defaultCircumference;
+            progressCircle.style.strokeDashoffset = defaultCircumference;
         }
-    </script>
+    }
+
+    function completeDownload(appCard, downloadBtn, progressControls, pwaLink) {
+        appContainer.classList.remove('has-active-download');
+        appCard.classList.remove('downloading');
+        
+        downloadBtn.style.display = 'block';
+        progressControls.style.display = 'none';
+        
+        // অ্যাপটি ওপেন করার পাশাপাশি ইউজারকে ইন্সটলেশনের জন্য নির্দেশ দেওয়া
+        window.open(pwaLink, '_blank');
+        
+        alert("অ্যাপটি চালু হয়েছে! \n\nএটি আপনার ডিভাইসে স্থায়ীভাবে রাখতে ব্রাউজারের মেনু (⋮) থেকে 'Install App' বা 'Add to Home Screen' বাটনে ক্লিক করুন।");
+    }
+ </script>
 </body>
 </html>
