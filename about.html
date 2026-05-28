@@ -132,6 +132,9 @@ img{
     height:180px;
   }
 }
+ .apps {
+     text-align:center;
+ }
 </style>
 </head>
 <body>
@@ -148,7 +151,8 @@ img{
     <a href="#" onclick="gohome()">🏠 Home</a>
     <a href="#" onclick="goprofile()">👤 Profile</a>
     <a href="#" onclick="gosetting()">⚙️ Setting</a>
-    <a href="#">❗ About</a>
+    <a href="#">❗ About</a> 
+   <a href="#" onclick="goapps()" class="apps">Apps</a>
   <!--  <a href="#" onclick="logout()">𓉱 Logout</a> -->
     <h2><i>Dev-Onix AI</i></h2>
   </div>
@@ -188,6 +192,9 @@ img{
         localStorage.setItem("isLoggedIn", "false");
         window.location.href = "log-sin.html";
     }
+   function goapps(){
+      window.location.href="apps.html";
+   }
   </script>
 </body>
   </html>
