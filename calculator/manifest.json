@@ -1,0 +1,23 @@
+{
+  "name": "Devonix Calculator",
+  "short_name": "Calculator",
+  "start_url": "/calculator/index.html",
+  "scope": "/calculator/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#00d2ff",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
