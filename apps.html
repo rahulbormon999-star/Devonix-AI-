@@ -349,27 +349,23 @@
 
     </div> -->
 
- <script>
-    function goBack() {
-        if (document.referrer) {
-            window.history.back();
-        } else {
-            alert("পূর্ববর্তী পৃষ্ঠা পাওয়া যায়নি।");
-        }
-    }
-
+<script>
     const activeDownloads = {};
     const appContainer = document.getElementById('appContainer');
+    
+    // PWA ইনস্টল প্রম্পট ধরার জন্য ভেরিয়েবল
+    let deferredPrompt;
+
+    // ব্রাউজার যখনই দেখবে এটি PWA, তখনই এই ইভেন্টটি কাজ করবে
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault(); // ব্রাউজারের অটোমেটিক প্রম্পট আটকে দিলাম
+        deferredPrompt = e;  // প্রম্পটটি সেভ করে রাখলাম
+    });
 
     function startDownload(appId, pwaLink) {
-        if (Object.keys(activeDownloads).length > 0) {
-            alert("অন্য একটি প্রসেস চলছে, অনুগ্রহ করে অপেক্ষা করুন।");
-            return;
-        }
+        if (Object.keys(activeDownloads).length > 0) return;
 
         const appCard = document.getElementById(`app-${appId}`);
-        if (!appCard) return;
-
         const downloadBtn = appCard.querySelector('.download-btn');
         const progressControls = appCard.querySelector('.progress-controls');
         const percentText = appCard.querySelector('.percent-text');
@@ -385,63 +381,45 @@
         progressCircle.style.strokeDasharray = activeCircumference;
 
         let progress = 0;
-        setProgress(progressCircle, percentText, 0, activeCircumference);
-
         activeDownloads[appId] = setInterval(() => {
-            if (progress < 100) {
-                progress += 5; // প্রগ্রেস স্পিড
-                setProgress(progressCircle, percentText, progress, activeCircumference);
-            } else {
+            progress += 10;
+            const offset = activeCircumference - (progress / 100) * activeCircumference;
+            progressCircle.style.strokeDashoffset = offset;
+            percentText.textContent = `${progress}%`;
+
+            if (progress >= 100) {
                 clearInterval(activeDownloads[appId]);
                 delete activeDownloads[appId];
-                completeDownload(appCard, downloadBtn, progressControls, pwaLink);
+                
+                // ডাউনলোড শেষ হওয়ার পর আসল ম্যাজিক
+                handleInstall();
             }
-        }, 100);
+        }, 200);
     }
 
-    function setProgress(circle, textElement, percent, circumference) {
-        const offset = circumference - (percent / 100) * circumference;
-        circle.style.strokeDashoffset = offset;
-        textElement.textContent = `${percent}%`;
+    function handleInstall() {
+        // যদি প্রম্পট সেভ করা থাকে, তবে সেটা দেখাও
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the install');
+                }
+                deferredPrompt = null;
+            });
+        } else {
+            // যদি ব্রাউজার অটোমেটিক প্রম্পট না দেয় (যেমন আগে ইন্সটল করা থাকলে), 
+            // তখন ইউজারকে গাইড করো
+            alert("অ্যাপটি ইনস্টল হওয়ার জন্য প্রস্তুত! \nব্রাউজারের উপরের ৩-ডট (⋮) মেনু থেকে 'Install' বা 'Add to Home Screen' চাপুন।");
+        }
+        
+        // UI রিসেট
+        location.reload(); 
     }
 
     function cancelDownload(appId) {
-        if (activeDownloads[appId]) {
-            clearInterval(activeDownloads[appId]);
-            delete activeDownloads[appId];
-        }
-
-        const appCard = document.getElementById(`app-${appId}`);
-        if (appCard) {
-            const downloadBtn = appCard.querySelector('.download-btn');
-            const progressControls = appCard.querySelector('.progress-controls');
-            const progressCircle = appCard.querySelector('.progress-ring__circle-active');
-            
-            const defaultCircumference = 2 * Math.PI * 28;
-
-            appContainer.classList.remove('has-active-download');
-            appCard.classList.remove('downloading');
-            
-            downloadBtn.style.display = 'block';
-            progressControls.style.display = 'none';
-            
-            progressCircle.style.strokeDasharray = defaultCircumference;
-            progressCircle.style.strokeDashoffset = defaultCircumference;
-        }
+        location.reload(); // সিম্পল রিসেট
     }
-
-    function completeDownload(appCard, downloadBtn, progressControls, pwaLink) {
-        appContainer.classList.remove('has-active-download');
-        appCard.classList.remove('downloading');
-        
-        downloadBtn.style.display = 'block';
-        progressControls.style.display = 'none';
-        
-        // অ্যাপটি ওপেন করার পাশাপাশি ইউজারকে ইন্সটলেশনের জন্য নির্দেশ দেওয়া
-        window.open(pwaLink, '_blank');
-        
-        alert("অ্যাপটি চালু হয়েছে! \n\nএটি আপনার ডিভাইসে স্থায়ীভাবে রাখতে ব্রাউজারের মেনু (⋮) থেকে 'Install App' বা 'Add to Home Screen' বাটনে ক্লিক করুন।");
-    }
- </script>
+</script>
 </body>
 </html>
