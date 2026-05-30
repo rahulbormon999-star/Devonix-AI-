@@ -1866,6 +1866,29 @@ function solveSimul() {
     }
   }); */
  // Initialize on load
+  // অটো চেক এবং ইন্সটল
+  // Register Service Worker locally inside the app directory
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then((reg) => console.log('Calculator Local SW Registered Scope:', reg.scope))
+    .catch((err) => console.log('SW Registration failed locally:', err));
+}
+
+// Redirect logic if opened via manual URL with parameter
+let localDeferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  localDeferredPrompt = e;
+  
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('install') === 'true') {
+    localDeferredPrompt.prompt();
+    localDeferredPrompt.userChoice.then((choiceResult) => {
+      window.history.replaceState({}, document.title, window.location.pathname);
+      localDeferredPrompt = null;
+    });
+  }
+});
   window.onload = init;             
 </script>
 </body>
