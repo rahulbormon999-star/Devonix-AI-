@@ -476,6 +476,37 @@
    all-btn {
      margin-bottom:
    }
+    /* install button css */
+    #installScreen{
+    position:fixed;
+    inset:0;
+    background:#ffffff;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+    z-index:9999;
+}
+
+#installBtn,
+#cancelBtn{
+    width:180px;
+    height:50px;
+    border:none;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:600;
+}
+
+#installBtn{
+    background:#00875f;
+    color:white;
+}
+
+#cancelBtn{
+    background:#e9ecef;
+}
     @media (max-height: 600px) {
       .display-area { height: 18vh; min-height: 100px; }
       .keypad { gap: 3px; padding: 4px 5px; }
@@ -498,10 +529,18 @@
   </style>
 </head>
 <body>
- <!-- ইনস্টল এলার্ট শুরু -->
-<!-- <div id="installContainer" style="display:none; text-align:center; padding:15px; background:#00d2ff; color:#000; font-weight:bold; cursor:pointer; position:fixed; top:0; width:100%; z-index:9999;">
-  📱 অ্যাপটি ডাউনলোড করুন (ইন্সটল করুন)
-</div> -->
+<!-- ইন্সটল করার জন্য লুকানো UI -->
+  <div id="calculatorApp" style="display:none;">
+  <!-- Calculator UI -->
+</div>
+
+<div id="installScreen">
+  <h2>Install Pro Calculator</h2>
+
+  <button id="installBtn">Install</button>
+  <button id="cancelBtn">Cancel</button>
+</div>
+  <!--ইন্সটল এর কোড শেষ -->
 <div class="app-container">
   <!-- DISPLAY AREA -->
   <div class="display-area">
@@ -1888,6 +1927,45 @@ window.addEventListener('beforeinstallprompt', (e) => {
       localDeferredPrompt = null;
     });
   }
+});
+
+  // for install button 
+  let deferredPrompt;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+});
+
+document.getElementById("installBtn").addEventListener("click", async () => {
+
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+
+    const result = await deferredPrompt.userChoice;
+
+    if (result.outcome === "accepted") {
+
+        setTimeout(() => {
+            window.location.href = "../apps.html";
+        }, 1500);
+
+    }
+});
+
+document.getElementById("cancelBtn").addEventListener("click", () => {
+
+    window.location.href = "../apps.html";
+
+});
+  // for install to back
+  window.addEventListener("appinstalled", () => {
+
+    setTimeout(() => {
+        window.location.href = "../apps.html";
+    }, 1000);
+
 });
   window.onload = init;             
 </script>
