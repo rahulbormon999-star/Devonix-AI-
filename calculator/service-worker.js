@@ -1,5 +1,5 @@
 // ক্যাশের নাম ও ভার্সন
-const CACHE_NAME = 'devonix-calc-v2';
+const CACHE_NAME = 'devonix-calc-v3';
 
 // যেসব ফাইল অফলাইনে কাজ করার জন্য ক্যাশ করা হবে
 const ASSETS = [
