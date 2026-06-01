@@ -529,18 +529,8 @@
   </style>
 </head>
 <body>
-<!-- ইন্সটল করার জন্য লুকানো UI -->
-  <div id="calculatorApp" style="display:none;">
-  <!-- Calculator UI -->
-</div>
-
-<div id="installScreen">
-  <h2>Install Pro Calculator</h2>
-
-  <button id="installBtn">Install</button>
-  <button id="cancelBtn">Cancel</button>
-</div>
-  <!--ইন্সটল এর কোড শেষ -->
+<div id="calculatorApp" style="display:none;">
+  
 <div class="app-container">
   <!-- DISPLAY AREA -->
   <div class="display-area">
@@ -803,6 +793,21 @@
 </div>
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+</div>
+
+  
+  <div id="installScreen" style="display:none;">   
+  <div id="calculatorApp" style="display:none;">  
+</div>
+
+<div id="installScreen">
+  <h2>Install Pro Calculator</h2>
+
+  <button id="installBtn">Install</button>
+  <button id="cancelBtn">Cancel</button>
+</div>
+  <!--ইন্সটল এর কোড শেষ -->
+  </div>
 <script>
   // STATE
   // ════════════════════════════════════════
@@ -1967,7 +1972,31 @@ document.getElementById("cancelBtn").addEventListener("click", () => {
     }, 1000);
 
 });
-  window.onload = init;             
+  window.onload = init;        
+
+  // Install and Cancel button contral
+  function isPWAInstalled() {
+
+    return window.matchMedia('(display-mode: standalone)').matches
+           || window.navigator.standalone === true;
+}
+
+window.addEventListener("load", () => {
+
+    const installScreen = document.getElementById("installScreen");
+    const calculatorApp = document.getElementById("calculatorApp");
+
+    if (isPWAInstalled()) {
+
+        installScreen.style.display = "none";
+        calculatorApp.style.display = "block";
+
+    } else {
+
+        installScreen.style.display = "flex";
+        calculatorApp.style.display = "none";
+    }
+});
 </script>
 </body>
   </html>
