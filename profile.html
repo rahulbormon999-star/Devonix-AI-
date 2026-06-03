@@ -121,6 +121,54 @@
  .apps {
      text-align:center;
  }
+ /* apps button anb img */
+ .apps{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:10px;
+    line-height:1;
+}
+
+.apps-logo{
+    width:24px;
+    height:24px;
+    object-fit:contain;
+    position:relative;
+    top:3px;
+}
+
+.icon-wrapper{
+    width: 64px;
+    height: 64px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.app-icon{
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+    position: relative;
+    top:0;
+}
+
+/* ছোট মোবাইল */
+@media (max-width:480px){
+    .apps-logo{
+        width:20px;
+        height:20px;
+    }
+}
+
+/* বড় মোবাইল */
+@media (min-width:481px){
+    .apps-logo{
+        width:26px;
+        height:26px;
+    }
+}
 </style>
 </head>
 <body>
@@ -136,7 +184,10 @@
     <a href="#">👤 Profile</a>
     <a href="#" onclick="gosetting()">⚙️ Setting</a>
     <a href="#" onclick="goabout()">❗ About</a>
-   <a href="#" onclick="goapps()" class="apps">Apps</a>
+   <a href="#" onclick="goapps()" class="apps">
+    <img src="1780474142335.png" class="apps-logo">
+    <span>Apps</span>
+   </a>
   <!--  <a href="#" onclick="logout()">𓉱 Logout</a> -->
     <h2><i>Dev-Onix AI</i></h2>
   </div>
