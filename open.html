@@ -60,12 +60,21 @@
      text-align:center;
  }
  /* apps button image */
- .apps{
+.apps{
     display:flex;
     align-items:center;
-    gap:10px;
     justify-content:flex-start;
- }
+    gap:10px;
+    line-height:1;
+}
+
+.apps-logo{
+    width:24px;
+    height:24px;
+    object-fit:contain;
+    vertical-align:middle;
+    display:block;
+}
 
 .icon-wrapper{
     width: 64px;
@@ -116,8 +125,8 @@
     <a href="#" onclick="gosetting()">⚙️ Setting</a>
     <a href="#" onclick="goabout()">❗ About</a>
    <a href="#" onclick="goapps()" class="apps">
-    <img src="Generated Image May 29, 2026 - 9_50PM (2).png" alt="Apps" class="apps-logo">
-    Apps
+    <img src="Generated Image May 29, 2026 - 9_50PM (2).png" class="apps-logo">
+    <span>Apps</span>
    </a>
   <!--  <a href="#" onclick="logout()">𓉱 Logout</a> -->
     <h2><i>Dev-Onix AI</i></h2>
