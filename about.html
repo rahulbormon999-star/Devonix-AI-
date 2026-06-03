@@ -73,7 +73,7 @@ p{
 }
 
 /* Responsive image */
-img{
+.about img{
   width:100%;
   max-width:320px;
   height:auto;
@@ -81,8 +81,7 @@ img{
   margin:auto;
   object-fit:cover;
   margin-bottom:1vh;
- border:2px solids #000;
-}
+ }
 
 /* Circle profile image */
 .profile-img{
@@ -146,11 +145,12 @@ img{
 }
 
 .apps-logo{
-    width:24px;
-    height:24px;
+    width:24px !important;
+    height:24px !important;
+    max-width:24px !important;
+    display:inline-block !important;
+    margin:0 !important;
     object-fit:contain;
-    position:relative;
-    top:3px;
 }
 
 .icon-wrapper{
