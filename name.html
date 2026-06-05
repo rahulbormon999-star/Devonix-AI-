@@ -214,7 +214,7 @@ background-position:0% 50%;
         <input type="text" placeholder="Dev" class="input" id="lname" required >
       </div>
       <div class="button">
-         <a href="index.html"><button class="btn" type="button">Back</button></a>
+         <a href="#" onclick="goback()"><button class="btn" type="button">Back</button></a>
          <input type="submit" value="Next" class="sub">
       </div>
     </div>
@@ -260,7 +260,7 @@ window.submitForm = async function(event){
       createdAt: new Date().toISOString()
     });
 
-    alert("Data Saved Successfully");
+  //  alert("Data Saved Successfully");
 
     window.location.href = "date.html";
 
@@ -272,7 +272,9 @@ window.submitForm = async function(event){
   }
 
 }
-
+ function goback() {
+  window.history.back();
+ }
 </script>
   </body>
 </html>
