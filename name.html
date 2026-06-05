@@ -203,7 +203,7 @@ background-position:0% 50%;
 </head>
 <body>
   <h1 class="title"><i>Dev-Onix AI</i></h1>
-  <form onsubmit="saveData()" action="date.html">
+  <form onsubmit="submitForm(event)">
     <div class="div">
       <div>
        <h2 class="label">First Name</h2>
@@ -215,18 +215,64 @@ background-position:0% 50%;
       </div>
       <div class="button">
          <a href="index.html"><button class="btn" type="button">Back</button></a>
-         <input type="submit" value="Next" class="sub" onclick="saveData()">
+         <input type="submit" value="Next" class="sub">
       </div>
     </div>
   </form>
- <script>
- function saveData(){
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAT2lFlsHO47bsm3UiX1jUqeaFI_OVJKes",
+  authDomain: "devonix-ai.firebaseapp.com",
+  projectId: "devonix-ai",
+  storageBucket: "devonix-ai.firebasestorage.app",
+  messagingSenderId: "67398450167",
+  appId: "1:67398450167:web:ac02bc67d9bf590c0f4cf2",
+  measurementId: "G-NBD8K60T0V"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.submitForm = async function(event){
+
+  event.preventDefault();
+
   let fname = document.getElementById("fname").value;
   let lname = document.getElementById("lname").value;
 
   localStorage.setItem("fname", fname);
   localStorage.setItem("lname", lname);
+
+  try {
+
+    await addDoc(collection(db, "users"), {
+      firstName: fname,
+      lastName: lname,
+      createdAt: new Date().toISOString()
+    });
+
+    alert("Data Saved Successfully");
+
+    window.location.href = "date.html";
+
+  } catch(error) {
+
+    console.error(error);
+    alert("Firebase Save Failed");
+
+  }
+
 }
- </script>
+
+</script>
   </body>
 </html>
