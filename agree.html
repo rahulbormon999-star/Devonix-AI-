@@ -154,14 +154,35 @@ p {
 
   <!-- button -->
   <div class="Agree">
-    <input type="submit" value="I Agree" class="a" onclick="finishSignup()">
+    <input type="submit" value="I Agree" class="a">
   </div>
 
 </form>
 
-<script>
+<script type="module">
 
-function handlePlusClick(){
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getFirestore,
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAT2lFlsHO47bsm3UiX1jUqeaFI_OVJKes",
+  authDomain: "devonix-ai.firebaseapp.com",
+  projectId: "devonix-ai",
+  storageBucket: "devonix-ai.firebasestorage.app",
+  messagingSenderId: "67398450167",
+  appId: "1:67398450167:web:ac02bc67d9bf590c0f4cf2",
+  measurementId: "G-NBD8K60T0V"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.handlePlusClick = function(){
   let btn = document.getElementById("plusBtn");
 
   btn.classList.add("clicked");
@@ -172,20 +193,17 @@ function handlePlusClick(){
   }, 150);
 }
 
-function loadImage(event){
+window.loadImage = function(event){
   let file = event.target.files[0];
   let reader = new FileReader();
 
   reader.onload = function(){
     let imageData = reader.result;
 
-    // save localStorage
     localStorage.setItem("profileImage", imageData);
 
-    // preview
     document.getElementById("preview").src = imageData;
 
-    // hide text
     document.getElementById("uploadText").style.display = "none";
   }
 
@@ -193,19 +211,48 @@ function loadImage(event){
     reader.readAsDataURL(file);
   }
 }
-// সরাসরি হোম পেইজ এর জন্য ও বাটন
-  /*
-function finishSignup(){
-  localStorage.setItem("isSignedUp", "true");
-  window.location.href = "open.html";
-} */
-function finishSignup(event){
+
+window.finishSignup = async function(event){
+
   event.preventDefault();
 
-  localStorage.setItem("isLoggedIn", "true");
-  window.location.href = "open.html";
+  let userId = localStorage.getItem("userId");
+
+  if(!userId){
+    userId = "user_" + Date.now();
+    localStorage.setItem("userId", userId);
   }
 
-</script>
+  try{
+
+    await setDoc(doc(db,"users",userId),{
+
+      firstName: localStorage.getItem("fname") || "",
+      lastName: localStorage.getItem("lname") || "",
+      phone: localStorage.getItem("phone") || "",
+      country: localStorage.getItem("coun") || "",
+      gender: localStorage.getItem("gender") || "",
+      dob: localStorage.getItem("dob") || "",
+      password: localStorage.getItem("password") || "",
+      profileImage: localStorage.getItem("profileImage") || "",
+
+      createdAt: new Date().toISOString()
+
+    });
+
+    localStorage.setItem("isLoggedIn", "true");
+
+    window.location.href = "open.html";
+
+  }catch(error){
+
+    console.error(error);
+    alert("Firebase Save Failed");
+
+  }
+
+}
+
+      </script>
 </body>
 </html>
