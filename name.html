@@ -235,9 +235,9 @@ window.location.href = "date.html";
 
   //পেজ লোড হওয়া চেক
     const isLoggedIn = localStorage.getItem("isLoggedIn");
-    if (isLoggedIn !== "true") {
-      window.location.href = "open.html"; 
-    }
+if (isLoggedIn === "true") {
+    window.location.href = "open.html";
+}
 </script>
   </body>
 </html>
