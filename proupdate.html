@@ -260,7 +260,28 @@
 
 </div>
 
-<script>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getFirestore,
+  doc,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAT2lFlsHO47bsm3UiX1jUqeaFI_OVJKes",
+  authDomain: "devonix-ai.firebaseapp.com",
+  projectId: "devonix-ai",
+  storageBucket: "devonix-ai.firebasestorage.app",
+  messagingSenderId: "67398450167",
+  appId: "1:67398450167:web:ac02bc67d9bf590c0f4cf2",
+  measurementId: "G-NBD8K60T0V"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
     // Navigation Functions (For switching views like a pro app)
     function openView(viewId) {
         document.querySelectorAll('.view-section').forEach(view => {
@@ -277,6 +298,7 @@
     function loadProfileData() {
         // Load Image
         let savedImg = localStorage.getItem("profileImage");
+        
         document.getElementById("preview").src = savedImg ? savedImg : "https://ui-avatars.com/api/?name=User";
 
         // Load Texts (For Inputs and Display Lists)
@@ -313,6 +335,18 @@
         reader.onload = function(){ 
             let base64Img = reader.result;
             document.getElementById("preview").src = base64Img;
+            let userId = localStorage.getItem("userId");
+
+if(userId){
+
+    updateDoc(doc(db,"users",userId),{
+
+        profileImage: base64Img,
+        updatedAt: new Date().toISOString()
+
+    });
+
+    }
             localStorage.setItem("profileImage", base64Img); // Save to storage instantly
         }
         if(e.target.files[0]) {
@@ -321,22 +355,91 @@
     });
 
     // Save Data Logic based on specific views
-    function saveData(type) {
-        if (type === 'name') {
-            localStorage.setItem("fname", document.getElementById("fname").value);
-            localStorage.setItem("lname", document.getElementById("lname").value);
-        } else if (type === 'phone') {
-            localStorage.setItem("phone", document.getElementById("phone").value);
-        } else if (type === 'country') {
-            localStorage.setItem("coun", document.getElementById("country").value);
-        } else if (type === 'gender') {
-            localStorage.setItem("gender", document.getElementById("gender").value);
-        } else if (type === 'dob') {
-            localStorage.setItem("dob", document.getElementById("dob").value);
+    async function saveData(type) {
+
+    if (type === 'name') {
+
+        localStorage.setItem("fname",
+            document.getElementById("fname").value);
+
+        localStorage.setItem("lname",
+            document.getElementById("lname").value);
+
+    }
+
+    else if (type === 'phone') {
+
+        localStorage.setItem("phone",
+            document.getElementById("phone").value);
+
+    }
+
+    else if (type === 'country') {
+
+        localStorage.setItem("coun",
+            document.getElementById("country").value);
+
+    }
+
+    else if (type === 'gender') {
+
+        localStorage.setItem("gender",
+            document.getElementById("gender").value);
+
+    }
+
+    else if (type === 'dob') {
+
+        localStorage.setItem("dob",
+            document.getElementById("dob").value);
+
+    }
+
+    let userId = localStorage.getItem("userId");
+
+    if(userId){
+
+        try{
+
+            await updateDoc(doc(db,"users",userId),{
+
+                firstName:
+                localStorage.getItem("fname") || "",
+
+                lastName:
+                localStorage.getItem("lname") || "",
+
+                phone:
+                localStorage.getItem("phone") || "",
+
+                country:
+                localStorage.getItem("coun") || "",
+
+                gender:
+                localStorage.getItem("gender") || "",
+
+                dob:
+                localStorage.getItem("dob") || "",
+
+                profileImage:
+                localStorage.getItem("profileImage") || "",
+
+                updatedAt:
+                new Date().toISOString()
+
+            });
+
+        }catch(error){
+
+            console.error(error);
+
         }
-        
-        loadProfileData(); // Refresh UI
-        closeView();       // Go back to main menu automatically
+
+    }
+
+    loadProfileData();
+
+    closeView();
     }
 </script>
 </body>
