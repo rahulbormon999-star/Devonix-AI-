@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings - Dev-Onix AI</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { 
+    margin: 0; 
+    padding: 0; 
+    background: #f4f6f9; 
+    font-family: 'Georgia', serif; 
+    min-height: 100vh; 
+    display: flex; 
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  /* মূল কন্টেইনার */
+  .container {
+    width: 100%;
+    max-width: 480px;
+    background: #fff;
+    min-height: 100vh;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* হেডার */
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 18px 20px;
+    border-bottom: 1px solid #eef2f6;
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  /* ব্যাক বাটন (বড় আকারের) */
+  .back-btn {
+    font-size: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #111;
+    padding: 10px;
+    margin-right: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    transition: background 0.2s;
+  }
+  .back-btn:active { background: #f0f2f5; }
+
+  .header-title {
+    font-size: 19px;
+    font-weight: bold;
+    color: #111;
+  }
+
+  /* স্ক্রিন কন্ট্রোল */
+  .screen {
+    display: none;
+    padding: 20px;
+    flex-grow: 1;
+    animation: fadeIn 0.2s ease-in-out;
+  }
+  .screen.active {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* প্রোফাইল সেকশন (মেনু স্ক্রিন) */
+  .profile-section {
+    text-align: center;
+    padding: 25px 0;
+    border-bottom: 8px solid #f4f6f9;
+  }
+  
+  /* প্রোফাইল ছবি এবং প্লাস বাটন */
+  .avatar-wrapper {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 12px;
+  }
+  .avatar-preview-menu {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #0284c7;
+    background: #e0e0e0;
+  }
+  .plus-icon-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #0284c7;
+    color: white;
+    border: 3px solid #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    transition: transform 0.1s;
+    padding: 0;
+  }
+  .plus-icon-btn:active { transform: scale(0.9); }
+
+  .profile-section h3 {
+    margin: 10px 0 5px;
+    font-size: 18px;
+    color: #222;
+  }
+  .profile-section p {
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+  }
+
+  /* সেটিংস মেনু লিস্ট */
+  .menu-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .menu-item:active { background: #f8fafc; }
+  .menu-icon {
+    font-size: 18px;
+    margin-right: 15px;
+    width: 35px;
+    height: 35px;
+    background: #f0f5ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .menu-info {
+    flex-grow: 1;
+  }
+  .menu-info span {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+  }
+  .menu-info small {
+    display: block;
+    font-size: 12px;
+    color: #888;
+    margin-top: 3px;
+  }
+  .chevron {
+    color: #ccc;
+    font-size: 14px;
+  }
+
+  /* ফর্ম উপাদান */
+  .form-group {
+    margin-top: 15px;
+    margin-bottom: 20px;
+  }
+  .form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .form-control {
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    background: #f9fbfd;
+    font-family: 'Georgia', serif;
+    transition: 0.2s;
+  }
+  .form-control:focus {
+    border-color: #0284c7;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
+  }
+
+  /* গ্যালারি এবং ক্যামেরা পপ-আপ (Modal) */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 99;
+    justify-content: center;
+    align-items: flex-end;
+  }
+  .modal-overlay.active {
+    display: flex;
+  }
+  .modal-content {
+    background: #fff;
+    width: 100%;
+    max-width: 480px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding: 25px 20px;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+    animation: slideUp 0.25s ease-out;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  .modal-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #444;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .modal-options {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  /* মডাল লেবেল বাটন */
+  .modal-opt-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Georgia', serif;
+  }
+  .modal-opt-icon {
+    width: 60px;
+    height: 60px;
+    background: #f4f6f9;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 8px;
+    transition: background 0.15s;
+  }
+  .modal-opt-btn:active .modal-opt-icon {
+    background: #e2e8f0;
+  }
+  .modal-opt-btn span {
+    font-size: 14px;
+    color: #333;
+    font-weight: 600;
+  }
+  .modal-close-btn {
+    width: 100%;
+    padding: 12px;
+    background: #f4f6f9;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #555;
+  }
+
+  /* অ্যাকশন সেভ বাটন */
+  .action-btn {
+    width: 100%;
+    padding: 14px;
+    background: #0284c7;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: auto;
+    font-family: 'Georgia', serif;
+    transition: background 0.2s;
+  }
+  .action-btn:active { background: #026ca3; }
+
+  /* টোস্ট নোটিফিকেশন */
+  .toast {
+    position: fixed;
+    bottom: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #222;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 13px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    transition: 0.3s ease-in-out;
+    z-index: 100;
+    white-space: nowrap;
+  }
+  .toast.show { bottom: 30px; }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- ================= ১. প্রধান সেটিংস মেনু ================= -->
+    <div id="mainMenuScreen" class="screen active">
+      <div class="header" style="padding-left:0; padding-right:0;">
+        <button class="back-btn" onclick="goBackToProfile()">←</button>
+        <span class="header-title">Settings</span>
+      </div>
+      
+      <!-- প্রোফাইল সেকশন প্লাস বাটন সহ -->
+      <div class="profile-section">
+        <div class="avatar-wrapper">
+          <img id="menuAvatar" class="avatar-preview-menu" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile">
+          <button class="plus-icon-btn" onclick="openImageModal()">+</button>
+        </div>
+        <h3 id="menuName">User Name</h3>
+        <p>Tap + icon to update photo</p>
+      </div>
+
+      <!-- ইমেজ ইনপুট ফিল্ডস (যা এখন মডাল লেবেলের সাথে লিংকড) -->
+      <input type="file" id="galleryInput" accept="image/*" style="display: none;">
+      <!-- capture="environment" রিয়ার ক্যামেরা এবং capture="user" সেলফি ক্যামেরা চালু করে -->
+      <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;">
+
+      <div class="menu-list">
+        <!-- নাম (First & Last Name একত্রে) -->
+        <div class="menu-item" onclick="openScreen('editNameScreen')">
+          <div class="menu-icon">👤</div>
+          <div class="menu-info">
+            <span>Name</span>
+            <small id="subName">Not set</small>
+          </div>
+          <div class="chevron">❯</div>
+        </div>
+
+        <!-- ফোন নম্বর -->
+        <div class="menu-item" onclick="openScreen('editPhoneScreen')">
+          <div class="menu-icon">📞</div>
+          <div class="menu-info">
+            <span>Phone Number</span>
+            <small id="subPhone">Not set</small>
+          </div>
+          <div class="chevron">❯</div>
+        </div>
+
+        <!-- দেশ -->
+        <div class="menu-item" onclick="openScreen('editCountryScreen')">
+          <div class="menu-icon">🌍</div>
+          <div class="menu-info">
+            <span>Country</span>
+            <small id="subCountry">Not set</small>
+          </div>
+          <div class="chevron">❯</div>
+        </div>
+
+        <!-- জেন্ডার -->
+        <div class="menu-item" onclick="openScreen('editGenderScreen')">
+          <div class="menu-icon">⚧</div>
+          <div class="menu-info">
+            <span>Gender</span>
+            <small id="subGender">Not set</small>
+          </div>
+          <div class="chevron">❯</div>
+        </div>
+
+        <!-- জন্মতারিখ -->
+        <div class="menu-item" onclick="openScreen('editDobScreen')">
+          <div class="menu-icon">📅</div>
+          <div class="menu-info">
+            <span>Date of Birth</span>
+            <small id="subDob">Not set</small>
+          </div>
+          <div class="chevron">❯</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= ২. নাম এডিট স্ক্রিন ================= -->
+    <div id="editNameScreen" class="screen">
+      <div class="header" style="padding-left:0;">
+        <button class="back-btn" onclick="openScreen('mainMenuScreen')">←</button>
+        <span class="header-title">Edit Name</span>
+      </div>
+      
+      <div style="margin-top: 15px;">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" id="fnameInput" class="form-control" placeholder="e.g. John">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" id="lnameInput" class="form-control" placeholder="e.g. Doe">
+        </div>
+      </div>
+      <button class="action-btn" onclick="saveName()">Update Name</button>
+    </div>
+
+    <!-- ================= ৩. ফোন নম্বর এডিট স্ক্রিন ================= -->
+    <div id="editPhoneScreen" class="screen">
+      <div class="header" style="padding-left:0;">
+        <button class="back-btn" onclick="openScreen('mainMenuScreen')">←</button>
+        <span class="header-title">Phone Number</span>
+      </div>
+      <div class="form-group">
+        <label>Enter Phone Number</label>
+        <input type="tel" id="phoneInput" class="form-control" placeholder="e.g. +123456789">
+      </div>
+      <button class="action-btn" onclick="savePhone()">Update Phone Number</button>
+    </div>
+
+    <!-- ================= ৪. দেশ এডিট স্ক্রিন ================= -->
+    <div id="editCountryScreen" class="screen">
+      <div class="header" style="padding-left:0;">
+        <button class="back-btn" onclick="openScreen('mainMenuScreen')">←</button>
+        <span class="header-title">Country</span>
+      </div>
+      <div class="form-group">
+        <label>Enter Country Name</label>
+        <input type="text" id="countryInput" class="form-control" placeholder="e.g. Bangladesh">
+      </div>
+      <button class="action-btn" onclick="saveCountry()">Update Country</button>
+    </div>
+
+    <!-- ================= ৫. জেন্ডার এডিট স্ক্রিন ================= -->
+    <div id="editGenderScreen" class="screen">
+      <div class="header" style="padding-left:0;">
+        <button class="back-btn" onclick="openScreen('mainMenuScreen')">←</button>
+        <span class="header-title">Gender</span>
+      </div>
+      <div class="form-group">
+        <label>Select Gender</label>
+        <select id="genderInput" class="form-control">
+          <option value="Not set">Choose option</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <button class="action-btn" onclick="saveGender()">Update Gender</button>
+    </div>
+
+    <!-- ================= ৬. জন্মতারিখ এডিট স্ক্রিন ================= -->
+    <div id="editDobScreen" class="screen">
+      <div class="header" style="padding-left:0;">
+        <button class="back-btn" onclick="openScreen('mainMenuScreen')">←</button>
+        <span class="header-title">Date of Birth</span>
+      </div>
+      <div class="form-group">
+        <label>Select Date of Birth</label>
+        <input type="date" id="dobInput" class="form-control">
+      </div>
+      <button class="action-btn" onclick="saveDob()">Update Date of Birth</button>
+    </div>
+
+  </div>
+
+  <!-- ক্যামেরা/গ্যালারি মোডাল (পপ-আপ) -->
+  <div id="imageSourceModal" class="modal-overlay" onclick="closeImageModal()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-title">Select Photo Source</div>
+      <div class="modal-options">
+        
+        <!-- গ্যালারি বাটন (HTML Label ব্যবহার করা হয়েছে) -->
+        <label for="galleryInput" class="modal-opt-btn" onclick="closeImageModal()">
+          <div class="modal-opt-icon">🖼️</div>
+          <span>Gallery</span>
+        </label>
+
+        <!-- ক্যামেরা বাটন (HTML Label ব্যবহার করা হয়েছে) -->
+        <label for="cameraInput" class="modal-opt-btn" onclick="closeImageModal()">
+          <div class="modal-opt-icon">📷</div>
+          <span>Camera</span>
+        </label>
+        
+      </div>
+      <button class="modal-close-btn" onclick="closeImageModal()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- টোস্ট নোটিফিকেশন -->
+  <div id="toast" class="toast">Changes saved!</div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        loadData();
+    });
+
+    // লোকালস্টোরেজ থেকে ডাটা নিয়ে ইন্টারফেসে বসানো
+    function loadData() {
+        let fname = localStorage.getItem("fname") || "";
+        let lname = localStorage.getItem("lname") || "";
+        let phone = localStorage.getItem("phone") || "Not set";
+        let country = localStorage.getItem("coun") || "Not set";
+        let gender = localStorage.getItem("gender") || "Not set";
+        let dob = localStorage.getItem("dob") || "Not set";
+        let img = localStorage.getItem("profileImage") || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
+        // মূল প্রোফাইল ছবি এবং নাম লোড
+        document.getElementById("menuAvatar").src = img;
+        document.getElementById("menuName").innerText = (fname || lname) ? (fname + " " + lname) : "User Name";
+
+        // সাব-টাইটেল ডাটা লোড
+        document.getElementById("subName").innerText = (fname || lname) ? (fname + " " + lname) : "Not set";
+        document.getElementById("subPhone").innerText = phone;
+        document.getElementById("subCountry").innerText = country;
+        document.getElementById("subGender").innerText = gender;
+        document.getElementById("subDob").innerText = dob;
+
+        // সাব-স্ক্রিন ইনপুট মান লোড
+        document.getElementById("fnameInput").value = fname;
+        document.getElementById("lnameInput").value = lname;
+        document.getElementById("phoneInput").value = phone === "Not set" ? "" : phone;
+        document.getElementById("countryInput").value = country === "Not set" ? "" : country;
+        document.getElementById("genderInput").value = gender;
+        document.getElementById("dobInput").value = dob === "Not set" ? "" : dob;
+    }
+
+    // স্ক্রিন পরিবর্তন করার ফাংশন
+    function openScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    // প্রোফাইল পেজে ফিরে যাওয়া
+    function goBackToProfile() {
+        window.location.href = "open.html"; 
+    }
+
+    // টোস্ট নোটিফিকেশন প্রদর্শন
+    function showToast(message) {
+        const toast = document.getElementById("toast");
+        toast.innerText = message;
+        toast.classList.add("show");
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 1500);
+    }
+
+    /* ================= ক্যামেরা এবং গ্যালারি কন্ট্রোল ফাংশনস ================= */
+    
+    function openImageModal() {
+        document.getElementById("imageSourceModal").classList.add("active");
+    }
+
+    function closeImageModal() {
+        document.getElementById("imageSourceModal").classList.remove("active");
+    }
+
+    // ইমেজ প্রসেসিং ও অটো-সেভ হ্যান্ডলার
+    function processFile(file) {
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                let base64Img = event.target.result;
+                // লোকালস্টোরেজে সেভ এবং ইন্টারফেসে আপডেট
+                localStorage.setItem("profileImage", base64Img);
+                document.getElementById("menuAvatar").src = base64Img;
+                showToast("Profile photo updated!");
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    document.getElementById("galleryInput").addEventListener("change", function(e) {
+        processFile(e.target.files[0]);
+    });
+
+    document.getElementById("cameraInput").addEventListener("change", function(e) {
+        processFile(e.target.files[0]);
+    });
+
+    /* ================= তথ্য সেভ করার ফাংশনসমূহ ================= */
+
+    // নাম সেভ
+    function saveName() {
+        let fname = document.getElementById("fnameInput").value.trim();
+        let lname = document.getElementById("lnameInput").value.trim();
+
+        localStorage.setItem("fname", fname);
+        localStorage.setItem("lname", lname);
+        
+        loadData();
+        showToast("Name updated successfully!");
+        setTimeout(() => openScreen('mainMenuScreen'), 800);
+    }
+
+    // ফোন নম্বর সেভ
+    function savePhone() {
+        let val = document.getElementById("phoneInput").value.trim() || "Not set";
+        localStorage.setItem("phone", val);
+        loadData();
+        showToast("Phone number updated!");
+        setTimeout(() => openScreen('mainMenuScreen'), 800);
+    }
+
+    // দেশ সেভ
+    function saveCountry() {
+        let val = document.getElementById("countryInput").value.trim() || "Not set";
+        localStorage.setItem("coun", val);
+        loadData();
+        showToast("Country updated!");
+        setTimeout(() => openScreen('mainMenuScreen'), 800);
+    }
+
+    // জেন্ডার সেভ
+    function saveGender() {
+        let val = document.getElementById("genderInput").value;
+        localStorage.setItem("gender", val);
+        loadData();
+        showToast("Gender updated!");
+        setTimeout(() => openScreen('mainMenuScreen'), 800);
+    }
+
+    // জন্মতারিখ সেভ
+    function saveDob() {
+        let val = document.getElementById("dobInput").value || "Not set";
+        localStorage.setItem("dob", val);
+        loadData();
+        showToast("Birthdate updated!");
+        setTimeout(() => openScreen('mainMenuScreen'), 800);
+    }
+  </script>
+</body>
+  </html>
