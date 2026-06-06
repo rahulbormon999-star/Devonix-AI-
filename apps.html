@@ -298,6 +298,30 @@
                 </div>
             </div>
         </div>
+        <!-- 2nd app -->
+        <div class="app-card" id="app-1">
+            <div class="app-left">
+                <div class="icon-wrapper">
+                    <!-- Progress Circle (Circumference: 2 * pi * r. For active r=36, C =~ 226) -->
+                    <svg class="progress-ring" width="64" height="64">
+                        <circle class="progress-ring__circle-bg" stroke="#e0e0e0" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"/>
+                        <circle class="progress-ring__circle-active" stroke="#00875f" stroke-width="4" fill="transparent" r="28" cx="32" cy="32" stroke-dasharray="226" stroke-dashoffset="226"/>
+                    </svg>
+                    <img src="Generated Image June 06, 2026 - 8_23PM.png" alt="Icon" class="app-icon">
+                </div>
+                <div class="app-details">
+                    <span class="app-name">Swapno App</span>
+                    <span class="app-category"></span>
+                </div>
+            </div>
+            <div class="app-right">
+                <button class="download-btn" onclick="startDownload(1, 'https://swapno-two.vercel.app')">Download</button>
+                <div class="progress-controls">
+                    <span class="percent-text">0%</span>
+                    <button class="cancel-btn" onclick="cancelDownload(1)">Cancel</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
