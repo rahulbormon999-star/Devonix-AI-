@@ -219,66 +219,17 @@ background-position:0% 50%;
       </div>
     </div>
   </form>
-<script type="module">
+<script>  function submitForm(event){
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+event.preventDefault();  
 
-import {
-  getFirestore,
-  doc,
-  setDoc
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+let fname = document.getElementById("fname").value.trim();  
+let lname = document.getElementById("lname").value.trim();  
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAT2lFlsHO47bsm3UiX1jUqeaFI_OVJKes",
-  authDomain: "devonix-ai.firebaseapp.com",
-  projectId: "devonix-ai",
-  storageBucket: "devonix-ai.firebasestorage.app",
-  messagingSenderId: "67398450167",
-  appId: "1:67398450167:web:15ace091d76a14fe0f4cf2",
-  measurementId: "G-3WCH56BB9W"
-};
+localStorage.setItem("fname", fname);  
+localStorage.setItem("lname", lname);  
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-window.submitForm = async function(event){
-
-    event.preventDefault();
-
-    let fname = document.getElementById("fname").value.trim();
-    let lname = document.getElementById("lname").value.trim();
-
-    localStorage.setItem("fname", fname);
-    localStorage.setItem("lname", lname);
-
-    let userId = localStorage.getItem("userId");
-
-    if(!userId){
-        userId = "user_" + Date.now();
-        localStorage.setItem("userId", userId);
-    }
-
-    try{
-
-        await setDoc(
-            doc(db, "users", userId),
-            {
-                firstName: fname,
-                lastName: lname,
-                updatedAt: new Date().toISOString()
-            },
-            { merge: true }
-        );
-
-        window.location.href = "date.html";
-
-    }catch(error){
-
-        console.error(error);
-        alert("Firebase Save Failed");
-
-    }
+window.location.href = "date.html";
 
 }
 
