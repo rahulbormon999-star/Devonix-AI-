@@ -159,100 +159,57 @@ p {
 
 </form>
 
-<script type="module">
+<script>
+  // ছবি আপলোডের লজিক
+  window.handlePlusClick = function(){
+    let btn = document.getElementById("plusBtn");
+    btn.classList.add("clicked");
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
-import {
-  getFirestore,
-  doc,
-  setDoc
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-
-const firebaseConfig = {
-  apiKey: "AIzaSyAT2lFlsHO47bsm3UiX1jUqeaFI_OVJKes",
-  authDomain: "devonix-ai.firebaseapp.com",
-  projectId: "devonix-ai",
-  storageBucket: "devonix-ai.firebasestorage.app",
-  messagingSenderId: "67398450167",
-  appId: "1:67398450167:web:5171a27d965036870f4cf2",
-  measurementId: "G-J12H5M9L5R"
-};
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-window.handlePlusClick = function(){
-  let btn = document.getElementById("plusBtn");
-
-  btn.classList.add("clicked");
-
-  setTimeout(() => {
-    btn.classList.remove("clicked");
-    document.getElementById("fileInput").click();
-  }, 150);
-}
-
-window.loadImage = function(event){
-  let file = event.target.files[0];
-  let reader = new FileReader();
-
-  reader.onload = function(){
-    let imageData = reader.result;
-
-    localStorage.setItem("profileImage", imageData);
-
-    document.getElementById("preview").src = imageData;
-
-    document.getElementById("uploadText").style.display = "none";
+    setTimeout(() => {
+      btn.classList.remove("clicked");
+      document.getElementById("fileInput").click();
+    }, 150);
   }
 
-  if(file){
-    reader.readAsDataURL(file);
+  window.loadImage = function(event){
+    let file = event.target.files[0];
+    let reader = new FileReader();
+
+    reader.onload = function(){
+      let imageData = reader.result;
+      // ছবি লোকাল স্টোরেজে সেভ করছি
+      localStorage.setItem("profileImage", imageData);
+      document.getElementById("preview").src = imageData;
+      document.getElementById("uploadText").style.display = "none";
+    }
+
+    if(file){
+      reader.readAsDataURL(file);
+    }
   }
-}
 
-window.finishSignup = async function(event){
+  // ফর্ম সাবমিট লজিক
+  window.finishSignup = function(event){
+    event.preventDefault();
 
-  event.preventDefault();
+    // চেক করছি ছবি আপলোড করা হয়েছে কি না
+    const profileImage = localStorage.getItem("profileImage");
 
-  let userId = localStorage.getItem("userId");
+    if (!profileImage) {
+      alert("অনুগ্রহ করে আগে আপনার একটি ছবি আপলোড করুন।");
+      return; // ছবি না থাকলে বাটন কাজ করবে না
+    }
 
-  if(!userId){
-    userId = "user_" + Date.now();
-    localStorage.setItem("userId", userId);
-  }
-
-  try{
-
-    await setDoc(doc(db,"users",userId),{
-
-      firstName: localStorage.getItem("fname") || "",
-      lastName: localStorage.getItem("lname") || "",
-      phone: localStorage.getItem("phone") || "",
-      country: localStorage.getItem("coun") || "",
-      gender: localStorage.getItem("gender") || "",
-      dob: localStorage.getItem("dob") || "",
-      password: localStorage.getItem("password") || "",
-      profileImage: localStorage.getItem("profileImage") || "",
-
-      createdAt: new Date().toISOString()
-
-    });
-
+    // সব ঠিক থাকলে লোকাল স্টোরেজ সেট করে পরের পেইজে যাবে
     localStorage.setItem("isLoggedIn", "true");
+    
+    // ইউজার আইডি চেক
+    if(!localStorage.getItem("userId")){
+      localStorage.setItem("userId", "user_" + Date.now());
+    }
 
     window.location.href = "open.html";
-
-  }catch(error){
-
-    console.error(error);
-    alert("Firebase Save Failed");
-
   }
-
-}
-
-      </script>
+</script>
 </body>
 </html>
