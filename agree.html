@@ -169,18 +169,18 @@ import {
   setDoc
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyAT2lFlsHO47bsm3UiX1jUqeaFI_OVJKes",
   authDomain: "devonix-ai.firebaseapp.com",
   projectId: "devonix-ai",
   storageBucket: "devonix-ai.firebasestorage.app",
   messagingSenderId: "67398450167",
-  appId: "1:67398450167:web:ac02bc67d9bf590c0f4cf2",
-  measurementId: "G-NBD8K60T0V"
+  appId: "1:67398450167:web:5171a27d965036870f4cf2",
+  measurementId: "G-J12H5M9L5R"
 };
-
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const analytics = getAnalytics(app);
 
 window.handlePlusClick = function(){
   let btn = document.getElementById("plusBtn");
