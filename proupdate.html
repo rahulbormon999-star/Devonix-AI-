@@ -372,75 +372,141 @@ if(userId){
         localStorage.setItem("phone",
             document.getElementById("phone").value);
 
+<script>
+
+// Navigation Functions
+function openView(viewId) {
+    document.querySelectorAll('.view-section').forEach(view => {
+        view.classList.remove('active');
+    });
+    document.getElementById(viewId).classList.add('active');
+}
+
+function closeView() {
+    openView('main-view');
+}
+
+// Load Data
+function loadProfileData() {
+
+    let savedImg = localStorage.getItem("profileImage");
+
+    document.getElementById("preview").src =
+        savedImg || "https://ui-avatars.com/api/?name=User";
+
+    let fname = localStorage.getItem("fname") || "";
+    let lname = localStorage.getItem("lname") || "";
+    let phone = localStorage.getItem("phone") || "";
+    let country = localStorage.getItem("coun") || "";
+    let gender = localStorage.getItem("gender") || "";
+    let dob = localStorage.getItem("dob") || "";
+
+    // Input values
+    document.getElementById("fname").value = fname;
+    document.getElementById("lname").value = lname;
+    document.getElementById("phone").value = phone;
+    document.getElementById("country").value = country;
+    document.getElementById("gender").value = gender;
+    document.getElementById("dob").value = dob;
+
+    // Display values
+    let fullName = (fname + " " + lname).trim();
+
+    document.getElementById("display-name").innerText =
+        fullName || "Not set";
+
+    document.getElementById("display-phone").innerText =
+        phone || "Not set";
+
+    document.getElementById("display-country").innerText =
+        country || "Not set";
+
+    document.getElementById("display-gender").innerText =
+        gender || "Not set";
+
+    document.getElementById("display-dob").innerText =
+        dob || "Not set";
+}
+
+// Page Load
+window.onload = loadProfileData;
+
+// Profile Image Save
+document.getElementById("image").addEventListener("change", function(e){
+
+    let file = e.target.files[0];
+
+    if(!file) return;
+
+    let reader = new FileReader();
+
+    reader.onload = function(){
+
+        let base64Img = reader.result;
+
+        document.getElementById("preview").src = base64Img;
+
+        localStorage.setItem("profileImage", base64Img);
+
+    };
+
+    reader.readAsDataURL(file);
+
+});
+
+// Save Data
+function saveData(type) {
+
+    if(type === "name") {
+
+        localStorage.setItem(
+            "fname",
+            document.getElementById("fname").value
+        );
+
+        localStorage.setItem(
+            "lname",
+            document.getElementById("lname").value
+        );
     }
 
-    else if (type === 'country') {
+    else if(type === "phone") {
 
-        localStorage.setItem("coun",
-            document.getElementById("country").value);
-
+        localStorage.setItem(
+            "phone",
+            document.getElementById("phone").value
+        );
     }
 
-    else if (type === 'gender') {
+    else if(type === "country") {
 
-        localStorage.setItem("gender",
-            document.getElementById("gender").value);
-
+        localStorage.setItem(
+            "coun",
+            document.getElementById("country").value
+        );
     }
 
-    else if (type === 'dob') {
+    else if(type === "gender") {
 
-        localStorage.setItem("dob",
-            document.getElementById("dob").value);
-
+        localStorage.setItem(
+            "gender",
+            document.getElementById("gender").value
+        );
     }
 
-    let userId = localStorage.getItem("userId");
+    else if(type === "dob") {
 
-    if(userId){
-
-        try{
-
-            await updateDoc(doc(db,"users",userId),{
-
-                firstName:
-                localStorage.getItem("fname") || "",
-
-                lastName:
-                localStorage.getItem("lname") || "",
-
-                phone:
-                localStorage.getItem("phone") || "",
-
-                country:
-                localStorage.getItem("coun") || "",
-
-                gender:
-                localStorage.getItem("gender") || "",
-
-                dob:
-                localStorage.getItem("dob") || "",
-
-                profileImage:
-                localStorage.getItem("profileImage") || "",
-
-                updatedAt:
-                new Date().toISOString()
-
-            });
-
-        }catch(error){
-
-            console.error(error);
-
-        }
-
+        localStorage.setItem(
+            "dob",
+            document.getElementById("dob").value
+        );
     }
 
     loadProfileData();
 
     closeView();
-    }
-</script>
+}
+
+        </script>
 </body>
   </html>
