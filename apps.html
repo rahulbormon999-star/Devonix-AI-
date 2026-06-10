@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic PWA Store</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            width: 100%;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 12px;
+            transition: background 0.2s;
+        }
+
+        .back-btn:hover {
+            background-color: #f0f0f0;
+        }
+
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-left: 20%;
+        }
+
+        /* App List Container (Responsive wrapper) */
+        .app-container {
+            max-width: 800px;
+            width: 100%;
+            margin: 20px auto;
+            padding: 0 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* App Item Card - Normal State */
+        .app-card {
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            border: 1px solid #eef0f2;
+            transition: all 0.4s ease; /* স্মুথ ট্রানজিশন */
+            order: 0; /* ডিফল্ট পজিশন */
+            width: 100%;
+        }
+
+        /* Left Side: Icon and Name */
+        .app-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.4s ease;
+        }
+
+        /* Circular Progress Wrapper */
+        .icon-wrapper {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .progress-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.1s linear;
+        }
+
+        .app-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 10px;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .app-details {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .app-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #202124;
+        }
+
+        .app-category {
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 2px;
+        }
+
+        /* Right Side: Action Button */
+        .app-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .download-btn {
+            background-color: #00875f;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .download-btn:hover {
+            background-color: #00704f;
+        }
+
+        /* Progress Info (Hidden initially) */
+        .progress-controls {
+            display: none;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .percent-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #00875f;
+        }
+
+        .cancel-btn {
+            background-color: #f1f3f4;
+            color: #5f6368;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .cancel-btn:hover {
+            background-color: #e8eaed;
+        }
+
+        /* ===================================================
+           ACTIVE DOWNLOADING STATE (গুগল প্লে স্টোর স্টাইল)
+           =================================================== */
+        .app-card.downloading {
+            order: -1; /* লিস্টের সবার উপরে চলে যাবে */
+            flex-direction: column; /* এলিমেন্টগুলো উপর-নিচে সাজাবে */
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            background-color: #ffffff;
+            border: 2px solid #00875f;
+            box-shadow: 0 4px 12px rgba(0, 135, 95, 0.1);
+        }
+
+        /* ডাউনলোডের সময় আইকন ও টেক্সট স্ক্রিনের মাঝখানে নিয়ে যাওয়া */
+        .app-card.downloading .app-left {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 14px;
+        }
+
+        .app-card.downloading .icon-wrapper {
+            width: 80px;
+            height: 80px;
+        }
+
+        /* ডাউনলোডের সময় আইকন একটু বড় দেখাবে */
+        .app-card.downloading .app-icon {
+            width: 58px;
+            height: 58px;
+            border-radius: 12px;
+        }
+
+        /* বৃত্তাকার প্রগ্রেস রিং বড় করা */
+        .app-card.downloading .progress-ring {
+            width: 80px;
+            height: 80px;
+        }
+
+        /* রিং সাইজ পরিবর্তন ডায়নামিকালি হ্যান্ডেল করতে SVG circle এর ব্যাসার্ধ অ্যাডজাস্ট */
+        .app-card.downloading .progress-ring__circle-bg,
+        .app-card.downloading .progress-ring__circle-active {
+            r: 36px;
+            cx: 40px;
+            cy: 40px;
+        }
+
+        .app-card.downloading .app-name {
+            font-size: 18px;
+        }
+
+        /* ক্যান্সেল বাটন ও পার্সেন্টেজ নিচে নামানো */
+        .app-card.downloading .app-right {
+            margin-top: 16px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* ডাউনলোড না হওয়া অন্য অ্যাপগুলোর জন্য স্টাইল */
+        .app-container.has-active-download .app-card:not(.downloading) {
+            opacity: 0.7; /* বাকি অ্যাপগুলো কিছুটা আবছা দেখাবে */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation Bar -->
+    <div class="top-bar">
+        <button class="back-btn" onclick="goBack()" aria-label="Back">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </button>
+        <span class="page-title"> Dev-Onix Store</span>
+    </div>
+
+    <!-- App List Container -->
+    <div class="app-container" id="appContainer">
+
+        <!-- App Item 1 (Pro Calculator) -->
+        <div class="app-card" id="app-1">
+            <div class="app-left">
+                <div class="icon-wrapper">
+                    <!-- Progress Circle (Circumference: 2 * pi * r. For active r=36, C =~ 226) -->
+                    <svg class="progress-ring" width="64" height="64">
+                        <circle class="progress-ring__circle-bg" stroke="#e0e0e0" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"/>
+                        <circle class="progress-ring__circle-active" stroke="#00875f" stroke-width="4" fill="transparent" r="28" cx="32" cy="32" stroke-dasharray="226" stroke-dashoffset="226"/>
+                    </svg>
+                    <img src="calLogo.png" alt="Icon" class="app-icon">
+                </div>
+                <div class="app-details">
+                    <span class="app-name">Pro Calculator</span>
+                    <span class="app-category"></span>
+                </div>
+            </div>
+            <div class="app-right">
+                <button class="download-btn" onclick="startDownload(1, 'https://pro-calculator-inky.vercel.app')">Download</button>
+                <div class="progress-controls">
+                    <span class="percent-text">0%</span>
+                    <button class="cancel-btn" onclick="cancelDownload(1)">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2nd app (Swapno App) -->
+        <div class="app-card" id="app-2"> <!-- আইডি পরিবর্তন করে app-2 করা হয়েছে -->
+            <div class="app-left">
+                <div class="icon-wrapper">
+                    <!-- Progress Circle -->
+                    <svg class="progress-ring" width="64" height="64">
+                        <circle class="progress-ring__circle-bg" stroke="#e0e0e0" stroke-width="4" fill="transparent" r="28" cx="32" cy="32"/>
+                        <circle class="progress-ring__circle-active" stroke="#00875f" stroke-width="4" fill="transparent" r="28" cx="32" cy="32" stroke-dasharray="226" stroke-dashoffset="226"/>
+                    </svg>
+                    <img src="Generated Image June 06, 2026 - 8_23PM.png" alt="Icon" class="app-icon">
+                </div>
+                <div class="app-details">
+                    <span class="app-name">Swapno App</span>
+                    <span class="app-category"></span>
+                </div>
+            </div>
+            <div class="app-right">
+                <!-- ফাংশন প্যারামিটার পরিবর্তন করে 2 করা হয়েছে -->
+                <button class="download-btn" onclick="startDownload(2, 'https://swapno-two.vercel.app')">Download</button>
+                <div class="progress-controls">
+                    <span class="percent-text">0%</span>
+                    <button class="cancel-btn" onclick="cancelDownload(2)">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goBack() {
+            if (document.referrer) {
+                window.history.back();
+            } else {
+                alert("পূর্ববর্তী পৃষ্ঠা পাওয়া যায়নি।");
+            }
+        }
+
+        const activeDownloads = {};
+        const appContainer = document.getElementById('appContainer');
+
+        function startDownload(appId, pwaLink) {
+            // একসাথে কেবল একটি ডাউনলোড করতে দেওয়ার জন্য চেক
+            if (Object.keys(activeDownloads).length > 0) {
+                alert("অনুগ্রহ করে চলমান ডাউনলোডটি শেষ হওয়া পর্যন্ত অপেক্ষা করুন।");
+                return;
+            }
+
+            const appCard = document.getElementById(`app-${appId}`);
+            if (!appCard) return;
+
+            const downloadBtn = appCard.querySelector('.download-btn');
+            const progressControls = appCard.querySelector('.progress-controls');
+            const percentText = appCard.querySelector('.percent-text');
+            const progressCircle = appCard.querySelector('.progress-ring__circle-active');
+
+            // কনটেইনার ও কার্ডে ডাউনলোড ক্লাস যুক্ত করা
+            appContainer.classList.add('has-active-download');
+            appCard.classList.add('downloading');
+
+            downloadBtn.style.display = 'none';
+            progressControls.style.display = 'flex';
+            
+            // নতুন রিং সাইজের পরিধি হিসাব করা (r=36 এর জন্য ২ * pi * ৩৬ = ২২৬.২)
+            const activeCircumference = 2 * Math.PI * 36; 
+            progressCircle.style.strokeDasharray = activeCircumference;
+
+            let progress = 0;
+            setProgress(progressCircle, percentText, 0, activeCircumference);
+
+            activeDownloads[appId] = setInterval(() => {
+                if (progress < 100) {
+                    progress += 2; // ডাউনলোড স্পিড নিয়ন্ত্রণ
+                    setProgress(progressCircle, percentText, progress, activeCircumference);
+                } else {
+                    clearInterval(activeDownloads[appId]);
+                    delete activeDownloads[appId];
+                    completeDownload(appCard, downloadBtn, progressControls, pwaLink);
+                }
+            }, 60);
+        }
+
+        function setProgress(circle, textElement, percent, circumference) {
+            const offset = circumference - (percent / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            textElement.textContent = `${percent}%`;
+        }
+
+        function cancelDownload(appId) {
+            if (activeDownloads[appId]) {
+                clearInterval(activeDownloads[appId]);
+                delete activeDownloads[appId];
+            }
+
+            const appCard = document.getElementById(`app-${appId}`);
+            if (appCard) {
+                const downloadBtn = appCard.querySelector('.download-btn');
+                const progressControls = appCard.querySelector('.progress-controls');
+                const progressCircle = appCard.querySelector('.progress-ring__circle-active');
+                
+                // ডিফল্ট নরমাল রিং সাইজ রিসেট (r=28 এর জন্য পরিধি ১৭৬)
+                const defaultCircumference = 2 * Math.PI * 28;
+
+                appContainer.classList.remove('has-active-download');
+                appCard.classList.remove('downloading');
+                
+                downloadBtn.style.display = 'block';
+                progressControls.style.display = 'none';
+                
+                progressCircle.style.strokeDasharray = defaultCircumference;
+                progressCircle.style.strokeDashoffset = defaultCircumference;
+            }
+        }
+
+        function completeDownload(appCard, downloadBtn, progressControls, pwaLink) {
+            appContainer.classList.remove('has-active-download');
+            appCard.classList.remove('downloading');
+            
+            downloadBtn.style.display = 'block';
+            progressControls.style.display = 'none';
+            
+            // ব্রাউজারের নতুন ট্যাবে নির্দিষ্ট PWA বা ডাউনলোড লিংকটি ওপেন হবে
+            window.open(pwaLink, '_blank');
+        }
+    </script>
+</body>
+</html>
