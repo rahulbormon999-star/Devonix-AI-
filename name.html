@@ -85,6 +85,7 @@ opacity:0;
 transform:translateY(0);
 opacity:1;
 }
+
 }
 /*button animation*/
 .buttons{
@@ -219,22 +220,40 @@ background-position:0% 50%;
       </div>
     </div>
   </form>
-<script>  function submitForm(event){
 
-event.preventDefault();  
+<!-- Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
 
-let fname = document.getElementById("fname").value.trim();  
-let lname = document.getElementById("lname").value.trim();  
+<script>
+  // Firebase Configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAT2lFlsHO47bsm3UiX1jUqeaFI_OVJKes",
+    authDomain: "devonix-ai.firebaseapp.com",
+    projectId: "devonix-ai",
+    storageBucket: "devonix-ai.firebasestorage.app",
+    messagingSenderId: "67398450167",
+    appId: "1:67398450167:web:15ace091d76a14fe0f4cf2",
+    databaseURL: "https://devonix-ai-default-rtdb.asia-southeast1.firebasedatabase.app"
+  };
 
-localStorage.setItem("fname", fname);  
-localStorage.setItem("lname", lname);  
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
 
-window.location.href = "date.html";
+  function submitForm(event) {
+    event.preventDefault();
 
-}
+    let fname = document.getElementById("fname").value.trim();
+    let lname = document.getElementById("lname").value.trim();
 
+    // localStorage এ সেভ করছি
+    localStorage.setItem("fname", fname);
+    localStorage.setItem("lname", lname);
 
-
+    // পরের পেজে যাচ্ছি
+    window.location.href = "date.html";
+  }
 </script>
   </body>
 </html>
