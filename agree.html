@@ -117,6 +117,42 @@ h2{
 p {
   font-size:20px;
 }
+
+/* লোডিং স্পিনার */
+.loading {
+  display: none;
+  text-align: center;
+  margin: 20px 0;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #00f;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-msg {
+  color: red;
+  font-weight: bold;
+  margin: 10px 0;
+  display: none;
+}
+
+.success-msg {
+  color: green;
+  font-weight: bold;
+  margin: 10px 0;
+  display: none;
+}
 </style>
 </head>
 
@@ -135,7 +171,7 @@ p {
   <!-- circle -->
   <div class="circleBox">
   <div class="circle">
-    <img id="preview" src="profile.jpg">
+    <img id="preview" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile">
   </div>
   <span class="plus" id="plusBtn" onclick="handlePlusClick()">+</span>
 </div>
@@ -152,14 +188,45 @@ p {
     </p>
   </div>
 
+  <!-- লোডিং এবং মেসেজ -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>আপনার অ্যাকাউন্ট তৈরি হচ্ছে...</p>
+  </div>
+  <div class="error-msg" id="errorMsg"></div>
+  <div class="success-msg" id="successMsg"></div>
+
   <!-- button -->
   <div class="Agree">
-    <input type="submit" value="I Agree" class="a">
+    <input type="submit" value="I Agree" class="a" id="agreeBtn">
   </div>
 
 </form>
 
+<!-- Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js"></script>
+
 <script>
+  // Firebase Configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAT2lFlsHO47bsm3UiX1jUqeaFI_OVJKes",
+    authDomain: "devonix-ai.firebaseapp.com",
+    projectId: "devonix-ai",
+    storageBucket: "devonix-ai.firebasestorage.app",
+    messagingSenderId: "67398450167",
+    appId: "1:67398450167:web:15ace091d76a14fe0f4cf2",
+    databaseURL: "https://devonix-ai-default-rtdb.asia-southeast1.firebasedatabase.app"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+  const storage = firebase.storage();
+
+  let profileImageFile = null;
+
   // ছবি আপলোডের লজিক
   window.handlePlusClick = function(){
     let btn = document.getElementById("plusBtn");
@@ -173,17 +240,17 @@ p {
 
   window.loadImage = function(event){
     let file = event.target.files[0];
-    let reader = new FileReader();
-
-    reader.onload = function(){
-      let imageData = reader.result;
-      // ছবি লোকাল স্টোরেজে সেভ করছি
-      localStorage.setItem("profileImage", imageData);
-      document.getElementById("preview").src = imageData;
-      document.getElementById("uploadText").style.display = "none";
-    }
-
+    profileImageFile = file;
+    
     if(file){
+      let reader = new FileReader();
+      reader.onload = function(){
+        let imageData = reader.result;
+        // লোকাল স্টোরেজে সেভ করছি (ব্যাকআপের জন্য)
+        localStorage.setItem("profileImage", imageData);
+        document.getElementById("preview").src = imageData;
+        document.getElementById("uploadText").style.display = "none";
+      }
       reader.readAsDataURL(file);
     }
   }
@@ -192,23 +259,81 @@ p {
   window.finishSignup = function(event){
     event.preventDefault();
 
-    // চেক করছি ছবি আপলোড করা হয়েছে কি না
-    const profileImage = localStorage.getItem("profileImage");
-
-    if (!profileImage) {
-      alert("অনুগ্রহ করে আগে আপনার একটি ছবি আপলোড করুন।");
-      return; // ছবি না থাকলে বাটন কাজ করবে না
+    // চেক করছি ছবি আপলোড করা হয়েছে কি না
+    if (!profileImageFile) {
+      showError("অনুগ্রহ করে আগে আপনার একটি ছবি আপলোড করুন।");
+      return;
     }
 
-    // সব ঠিক থাকলে লোকাল স্টোরেজ সেট করে পরের পেইজে যাবে
-    localStorage.setItem("isLoggedIn", "true");
+    // লোডিং শো করছি
+    document.getElementById("loading").style.display = "block";
+    document.getElementById("agreeBtn").disabled = true;
+
+    // localStorage থেকে ডেটা সংগ্রহ করছি
+    const fname = localStorage.getItem("fname") || "";
+    const lname = localStorage.getItem("lname") || "";
+    const dob = localStorage.getItem("dob") || "";
+    const country = localStorage.getItem("coun") || "";
+    const gender = localStorage.getItem("gender") || "";
+    const phone = localStorage.getItem("phone") || "";
+
+    // ইউনিক ইউজার ID তৈরি করছি
+    const userId = "user_" + Date.now();
+    localStorage.setItem("userId", userId);
+
+    // Firebase Storage এ ইমেজ আপলোড করছি
+    const storageRef = storage.ref();
+    const imageRef = storageRef.child(`profile_images/${userId}/${profileImageFile.name}`);
     
-    // ইউজার আইডি চেক
-    if(!localStorage.getItem("userId")){
-      localStorage.setItem("userId", "user_" + Date.now());
-    }
+    imageRef.put(profileImageFile).then(snapshot => {
+      return snapshot.ref.getDownloadURL();
+    }).then(downloadURL => {
+      // ডাউনলোড লিংক পাওয়া গেছে, এখন Firebase Database এ সেভ করছি
+      const userData = {
+        firstName: fname,
+        lastName: lname,
+        dateOfBirth: dob,
+        country: country,
+        gender: gender,
+        phone: phone,
+        profileImage: downloadURL,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
 
-    window.location.href = "open.html";
+      // Firebase Database এ ডেটা সেভ করছি
+      return database.ref('users/' + userId).set(userData);
+    }).then(() => {
+      // সফল
+      document.getElementById("loading").style.display = "none";
+      showSuccess("✅ আপনার অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!");
+      
+      // মেসেজ দেখানোর পর পরের পেজে যাচ্ছি
+      setTimeout(() => {
+        localStorage.setItem("isLoggedIn", "true");
+        window.location.href = "open.html";
+      }, 1500);
+    }).catch(error => {
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("agreeBtn").disabled = false;
+      showError("❌ ত্রুটি: " + error.message);
+      console.error("Error:", error);
+    });
+  }
+
+  function showError(message) {
+    const errorMsg = document.getElementById("errorMsg");
+    errorMsg.innerText = message;
+    errorMsg.style.display = "block";
+    setTimeout(() => {
+      errorMsg.style.display = "none";
+    }, 3000);
+  }
+
+  function showSuccess(message) {
+    const successMsg = document.getElementById("successMsg");
+    successMsg.innerText = message;
+    successMsg.style.display = "block";
   }
 </script>
 </body>
