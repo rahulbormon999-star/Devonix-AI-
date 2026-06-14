@@ -154,7 +154,7 @@ background-position:0% 50%;
 </head>
 <body>
 <h1 class="title"><i>Dev-Onix AI</i></h1>
-   <form action="password.html" onsubmit="saveData()">
+   <form onsubmit="saveData(event)">
      <div class="div">
        <div>
         <h2>Phone Number </h2>
@@ -167,16 +167,37 @@ background-position:0% 50%;
      </div>
    </form>
 
-  <script>
-// save করার জন্য
-function saveData(){
-  localStorage.setItem("phone", document.getElementById("phone").value);
-}
+<!-- Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
 
-// load করার জন্য
-window.onload = function(){
-  document.getElementById("phone").value = localStorage.getItem("phone") || "";
-}
-  </script>
+<script>
+  // Firebase Configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyAT2lFlsHO47bsm3UiX1jUqeaFI_OVJKes",
+    authDomain: "devonix-ai.firebaseapp.com",
+    projectId: "devonix-ai",
+    storageBucket: "devonix-ai.firebasestorage.app",
+    messagingSenderId: "67398450167",
+    appId: "1:67398450167:web:15ace091d76a14fe0f4cf2",
+    databaseURL: "https://devonix-ai-default-rtdb.asia-southeast1.firebasedatabase.app"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const database = firebase.database();
+
+  // save করার জন্য
+  function saveData(event) {
+    event.preventDefault();
+    localStorage.setItem("phone", document.getElementById("phone").value);
+    window.location.href = "password.html";
+  }
+
+  // load করার জন্য
+  window.onload = function(){
+    document.getElementById("phone").value = localStorage.getItem("phone") || "";
+  }
+</script>
 </body>
 </html>
