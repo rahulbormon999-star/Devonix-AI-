@@ -42,7 +42,7 @@
     z-index: 10;
   }
   
-  /* ব্যাক বাটন (বড় আকারের) */
+  /* ব্যাক বাটন (বড় আকারের) */
   .back-btn {
     font-size: 28px;
     background: none;
@@ -316,6 +316,7 @@
     transition: background 0.2s;
   }
   .action-btn:active { background: #026ca3; }
+  .action-btn:disabled { background: #ccc; cursor: not-allowed; }
 
   /* টোস্ট নোটিফিকেশন */
   .toast {
@@ -334,6 +335,28 @@
     white-space: nowrap;
   }
   .toast.show { bottom: 30px; }
+
+  /* লোডিং স্পিনার */
+  .loading {
+    display: none;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #0284c7;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 </style>
 </head>
 <body>
@@ -359,7 +382,6 @@
 
       <!-- ইমেজ ইনপুট ফিল্ডস (যা এখন মডাল লেবেলের সাথে লিংকড) -->
       <input type="file" id="galleryInput" accept="image/*" style="display: none;">
-      <!-- capture="environment" রিয়ার ক্যামেরা এবং capture="user" সেলফি ক্যামেরা চালু করে -->
       <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;">
 
       <div class="menu-list">
@@ -432,10 +454,13 @@
           <input type="text" id="lnameInput" class="form-control" placeholder="e.g. Doe">
         </div>
       </div>
-      <button class="action-btn" onclick="saveName()">Update Name</button>
+      <div class="loading" id="nameLoading">
+        <div class="spinner"></div>
+      </div>
+      <button class="action-btn" onclick="saveName()" id="nameBtn">Update Name</button>
     </div>
 
-    <!-- ================= ৩. ফোন নম্বর এডিট স্ক্রিন ================= -->
+    <!-- ================= ३. ফোন নম্বর এডিট স্ক্রিন ================= -->
     <div id="editPhoneScreen" class="screen">
       <div class="header" style="padding-left:0;">
         <button class="back-btn" onclick="openScreen('mainMenuScreen')">←</button>
@@ -445,10 +470,13 @@
         <label>Enter Phone Number</label>
         <input type="tel" id="phoneInput" class="form-control" placeholder="e.g. +123456789">
       </div>
-      <button class="action-btn" onclick="savePhone()">Update Phone Number</button>
+      <div class="loading" id="phoneLoading">
+        <div class="spinner"></div>
+      </div>
+      <button class="action-btn" onclick="savePhone()" id="phoneBtn">Update Phone Number</button>
     </div>
 
-    <!-- ================= ৪. দেশ এডিট স্ক্রিন ================= -->
+    <!-- ================= ४. দেশ এডিট স্ক্রিন ================= -->
     <div id="editCountryScreen" class="screen">
       <div class="header" style="padding-left:0;">
         <button class="back-btn" onclick="openScreen('mainMenuScreen')">←</button>
@@ -458,10 +486,13 @@
         <label>Enter Country Name</label>
         <input type="text" id="countryInput" class="form-control" placeholder="e.g. Bangladesh">
       </div>
-      <button class="action-btn" onclick="saveCountry()">Update Country</button>
+      <div class="loading" id="countryLoading">
+        <div class="spinner"></div>
+      </div>
+      <button class="action-btn" onclick="saveCountry()" id="countryBtn">Update Country</button>
     </div>
 
-    <!-- ================= ৫. জেন্ডার এডিট স্ক্রিন ================= -->
+    <!-- ================= ५. জেন্ডার এডিট স্ক্রিন ================= -->
     <div id="editGenderScreen" class="screen">
       <div class="header" style="padding-left:0;">
         <button class="back-btn" onclick="openScreen('mainMenuScreen')">←</button>
@@ -476,10 +507,13 @@
           <option value="Other">Other</option>
         </select>
       </div>
-      <button class="action-btn" onclick="saveGender()">Update Gender</button>
+      <div class="loading" id="genderLoading">
+        <div class="spinner"></div>
+      </div>
+      <button class="action-btn" onclick="saveGender()" id="genderBtn">Update Gender</button>
     </div>
 
-    <!-- ================= ৬. জন্মতারিখ এডিট স্ক্রিন ================= -->
+    <!-- ================= ६. জন্মতারিখ এডিট স্ক্রিন ================= -->
     <div id="editDobScreen" class="screen">
       <div class="header" style="padding-left:0;">
         <button class="back-btn" onclick="openScreen('mainMenuScreen')">←</button>
@@ -489,7 +523,10 @@
         <label>Select Date of Birth</label>
         <input type="date" id="dobInput" class="form-control">
       </div>
-      <button class="action-btn" onclick="saveDob()">Update Date of Birth</button>
+      <div class="loading" id="dobLoading">
+        <div class="spinner"></div>
+      </div>
+      <button class="action-btn" onclick="saveDob()" id="dobBtn">Update Date of Birth</button>
     </div>
 
   </div>
@@ -500,13 +537,13 @@
       <div class="modal-title">Select Photo Source</div>
       <div class="modal-options">
         
-        <!-- গ্যালারি বাটন (HTML Label ব্যবহার করা হয়েছে) -->
+        <!-- গ্যালারি বাটন (HTML Label ব্যবহার করা হয়েছে) -->
         <label for="galleryInput" class="modal-opt-btn" onclick="closeImageModal()">
           <div class="modal-opt-icon">🖼️</div>
           <span>Gallery</span>
         </label>
 
-        <!-- ক্যামেরা বাটন (HTML Label ব্যবহার করা হয়েছে) -->
+        <!-- ক্যামেরা বাটন (HTML Label ব্যবহার করা হয়েছে) -->
         <label for="cameraInput" class="modal-opt-btn" onclick="closeImageModal()">
           <div class="modal-opt-icon">📷</div>
           <span>Camera</span>
@@ -520,12 +557,36 @@
   <!-- টোস্ট নোটিফিকেশন -->
   <div id="toast" class="toast">Changes saved!</div>
 
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js"></script>
+
   <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAT2lFlsHO47bsm3UiX1jUqeaFI_OVJKes",
+      authDomain: "devonix-ai.firebaseapp.com",
+      projectId: "devonix-ai",
+      storageBucket: "devonix-ai.firebasestorage.app",
+      messagingSenderId: "67398450167",
+      appId: "1:67398450167:web:15ace091d76a14fe0f4cf2",
+      databaseURL: "https://devonix-ai-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const storage = firebase.storage();
+
+    let userId = localStorage.getItem("userId");
+    let newImageFile = null;
+
     document.addEventListener("DOMContentLoaded", function() {
         loadData();
     });
 
-    // লোকালস্টোরেজ থেকে ডাটা নিয়ে ইন্টারফেসে বসানো
+    // লোকালস্টোরেজ এবং Firebase থেকে ডাটা নিয়ে ইন্টারফেসে বসানো
     function loadData() {
         let fname = localStorage.getItem("fname") || "";
         let lname = localStorage.getItem("lname") || "";
@@ -563,7 +624,7 @@
         document.getElementById(screenId).classList.add('active');
     }
 
-    // প্রোফাইল পেজে ফিরে যাওয়া
+    // প্রোফাইল পেজে ফিরে যাওয়া
     function goBackToProfile() {
         window.location.href = "open.html"; 
     }
@@ -591,16 +652,41 @@
     // ইমেজ প্রসেসিং ও অটো-সেভ হ্যান্ডলার
     function processFile(file) {
         if (file) {
+            newImageFile = file;
             const reader = new FileReader();
             reader.onload = function(event) {
                 let base64Img = event.target.result;
                 // লোকালস্টোরেজে সেভ এবং ইন্টারফেসে আপডেট
                 localStorage.setItem("profileImage", base64Img);
                 document.getElementById("menuAvatar").src = base64Img;
-                showToast("Profile photo updated!");
+                
+                // Firebase Storage এ আপলোড শুরু করছি
+                uploadImageToFirebase(file);
             };
             reader.readAsDataURL(file);
         }
+    }
+
+    // Firebase Storage এ ইমেজ আপলোড করার ফাংশন
+    function uploadImageToFirebase(file) {
+        const storageRef = storage.ref();
+        const imageRef = storageRef.child(`profile_images/${userId}/${file.name}`);
+        
+        imageRef.put(file).then(snapshot => {
+            return snapshot.ref.getDownloadURL();
+        }).then(downloadURL => {
+            // Firebase Database এ ইমেজ URL আপডেট করছি
+            return database.ref('users/' + userId).update({
+                profileImage: downloadURL,
+                updatedAt: new Date().toISOString()
+            });
+        }).then(() => {
+            showToast("Profile photo updated!");
+            newImageFile = null;
+        }).catch(error => {
+            console.error("Error uploading image:", error);
+            showToast("Error uploading photo!");
+        });
     }
 
     document.getElementById("galleryInput").addEventListener("change", function(e) {
@@ -618,49 +704,153 @@
         let fname = document.getElementById("fnameInput").value.trim();
         let lname = document.getElementById("lnameInput").value.trim();
 
+        if (!fname && !lname) {
+            showToast("Please enter at least one name!");
+            return;
+        }
+
+        // লোডিং দেখাচ্ছি
+        document.getElementById("nameLoading").style.display = "block";
+        document.getElementById("nameBtn").disabled = true;
+
+        // localStorage এ সেভ করছি
         localStorage.setItem("fname", fname);
         localStorage.setItem("lname", lname);
         
-        loadData();
-        showToast("Name updated successfully!");
-        setTimeout(() => openScreen('mainMenuScreen'), 800);
+        // Firebase Database এ আপডেট করছি
+        database.ref('users/' + userId).update({
+            firstName: fname,
+            lastName: lname,
+            updatedAt: new Date().toISOString()
+        }).then(() => {
+            document.getElementById("nameLoading").style.display = "none";
+            document.getElementById("nameBtn").disabled = false;
+            loadData();
+            showToast("Name updated successfully!");
+            setTimeout(() => openScreen('mainMenuScreen'), 800);
+        }).catch(error => {
+            document.getElementById("nameLoading").style.display = "none";
+            document.getElementById("nameBtn").disabled = false;
+            console.error("Error updating name:", error);
+            showToast("Error updating name!");
+        });
     }
 
     // ফোন নম্বর সেভ
     function savePhone() {
         let val = document.getElementById("phoneInput").value.trim() || "Not set";
+
+        // লোডিং দেখাচ্ছি
+        document.getElementById("phoneLoading").style.display = "block";
+        document.getElementById("phoneBtn").disabled = true;
+
+        // localStorage এ সেভ করছি
         localStorage.setItem("phone", val);
-        loadData();
-        showToast("Phone number updated!");
-        setTimeout(() => openScreen('mainMenuScreen'), 800);
+        
+        // Firebase Database এ আপডেট করছি
+        database.ref('users/' + userId).update({
+            phone: val,
+            updatedAt: new Date().toISOString()
+        }).then(() => {
+            document.getElementById("phoneLoading").style.display = "none";
+            document.getElementById("phoneBtn").disabled = false;
+            loadData();
+            showToast("Phone number updated!");
+            setTimeout(() => openScreen('mainMenuScreen'), 800);
+        }).catch(error => {
+            document.getElementById("phoneLoading").style.display = "none";
+            document.getElementById("phoneBtn").disabled = false;
+            console.error("Error updating phone:", error);
+            showToast("Error updating phone!");
+        });
     }
 
     // দেশ সেভ
     function saveCountry() {
         let val = document.getElementById("countryInput").value.trim() || "Not set";
+
+        // লোডিং দেখাচ্ছি
+        document.getElementById("countryLoading").style.display = "block";
+        document.getElementById("countryBtn").disabled = true;
+
+        // localStorage এ সেভ করছি
         localStorage.setItem("coun", val);
-        loadData();
-        showToast("Country updated!");
-        setTimeout(() => openScreen('mainMenuScreen'), 800);
+        
+        // Firebase Database এ আপডেট করছি
+        database.ref('users/' + userId).update({
+            country: val,
+            updatedAt: new Date().toISOString()
+        }).then(() => {
+            document.getElementById("countryLoading").style.display = "none";
+            document.getElementById("countryBtn").disabled = false;
+            loadData();
+            showToast("Country updated!");
+            setTimeout(() => openScreen('mainMenuScreen'), 800);
+        }).catch(error => {
+            document.getElementById("countryLoading").style.display = "none";
+            document.getElementById("countryBtn").disabled = false;
+            console.error("Error updating country:", error);
+            showToast("Error updating country!");
+        });
     }
 
     // জেন্ডার সেভ
     function saveGender() {
         let val = document.getElementById("genderInput").value;
+
+        // লোডিং দেখাচ্ছি
+        document.getElementById("genderLoading").style.display = "block";
+        document.getElementById("genderBtn").disabled = true;
+
+        // localStorage এ সেভ করছি
         localStorage.setItem("gender", val);
-        loadData();
-        showToast("Gender updated!");
-        setTimeout(() => openScreen('mainMenuScreen'), 800);
+        
+        // Firebase Database এ আপডেট করছি
+        database.ref('users/' + userId).update({
+            gender: val,
+            updatedAt: new Date().toISOString()
+        }).then(() => {
+            document.getElementById("genderLoading").style.display = "none";
+            document.getElementById("genderBtn").disabled = false;
+            loadData();
+            showToast("Gender updated!");
+            setTimeout(() => openScreen('mainMenuScreen'), 800);
+        }).catch(error => {
+            document.getElementById("genderLoading").style.display = "none";
+            document.getElementById("genderBtn").disabled = false;
+            console.error("Error updating gender:", error);
+            showToast("Error updating gender!");
+        });
     }
 
     // জন্মতারিখ সেভ
     function saveDob() {
         let val = document.getElementById("dobInput").value || "Not set";
+
+        // লোডিং দেখাচ্ছি
+        document.getElementById("dobLoading").style.display = "block";
+        document.getElementById("dobBtn").disabled = true;
+
+        // localStorage এ সেভ করছি
         localStorage.setItem("dob", val);
-        loadData();
-        showToast("Birthdate updated!");
-        setTimeout(() => openScreen('mainMenuScreen'), 800);
+        
+        // Firebase Database এ আপডেট করছি
+        database.ref('users/' + userId).update({
+            dateOfBirth: val,
+            updatedAt: new Date().toISOString()
+        }).then(() => {
+            document.getElementById("dobLoading").style.display = "none";
+            document.getElementById("dobBtn").disabled = false;
+            loadData();
+            showToast("Birthdate updated!");
+            setTimeout(() => openScreen('mainMenuScreen'), 800);
+        }).catch(error => {
+            document.getElementById("dobLoading").style.display = "none";
+            document.getElementById("dobBtn").disabled = false;
+            console.error("Error updating dob:", error);
+            showToast("Error updating birthdate!");
+        });
     }
   </script>
 </body>
-  </html>
+</html>
