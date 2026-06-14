@@ -23,8 +23,8 @@ body{
     align-items:center;
     background:#72d1cf;
     font-family: Arial, sans-serif;
-    <img src="tek.jpg" style="width:100%; height:100%;">
 }
+
 h1{
     margin-top:40px;
     font-size:40px;
@@ -50,8 +50,52 @@ button{
     color:white;
     border:solid 3px #000;
     border-radius:20px;
+    cursor: pointer;
+    transition: 0.3s;
 }
-    @keyframes slideDown{
+
+button:hover{
+    background: darkblue;
+    transform: scale(1.05);
+}
+
+button:disabled{
+    background: gray;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* লোডিং স্পিনার */
+.loading-spinner {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.8);
+    padding: 30px;
+    border-radius: 10px;
+    z-index: 1000;
+    text-align: center;
+    color: white;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #00f;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes slideDown{
     from{
         transform: translateY(-50px);
         opacity: 0;
@@ -84,43 +128,44 @@ button{
         box-shadow: 0 0 0 0 rgba(0,0,0,0);
     }
 }
+
 /*  এনিমেশন ২*/
-    body{
-margin:0;
-padding:0;
+body{
+    margin:0;
+    padding:0;
 }
 
 .ai-bg{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100vh;
-background:url("rahul.jpg");
-background-size:cover;
-background-position:center;
-z-index:-1;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100vh;
+    background:url("rahul.jpg");
+    background-size:cover;
+    background-position:center;
+    z-index:-1;
 }
 
 /* glowing light animation */
 .ai-bg::after{
-content:"";
-position:absolute;
-width:100%;
-height:100%;
-background: radial-gradient(circle, rgba(0,255,255,0.8) 2px, transparent 4px);
-background-size:120px 120px;
-animation: moveLight 6s linear infinite;
-opacity:0.6;
+    content:"";
+    position:absolute;
+    width:100%;
+    height:100%;
+    background: radial-gradient(circle, rgba(0,255,255,0.8) 2px, transparent 4px);
+    background-size:120px 120px;
+    animation: moveLight 6s linear infinite;
+    opacity:0.6;
 }
 
 @keyframes moveLight{
-0%{
-background-position:0 0;
-}
-100%{
-background-position:200px 200px;
-}
+    0%{
+        background-position:0 0;
+    }
+    100%{
+        background-position:200px 200px;
+    }
 }
 </style>
 </head>
@@ -130,22 +175,92 @@ background-position:200px 200px;
 <h1 style="animation: slideDown 1.5s ease forwards;
 opacity: 0;"><b><i>Dev-Onix AI</i></b></h1>
 <div class="center">
-<button style="animation: slideUp 1.5s ease forwards, pulse 2s infinite 2s;
+<button id="startBtn" style="animation: slideUp 1.5s ease forwards, pulse 2s infinite 2s;
 opacity: 0;" onclick="goname()">Get Start</button>
 </div>
+
+<!-- লোডিং স্পিনার -->
+<div class="loading-spinner" id="loadingSpinner">
+    <div class="spinner"></div>
+    <p>চেক করা হচ্ছে...</p>
+</div>
+
 <div class="ai-bg"></div>
 
-    
-<script>
-function goname(){
-    window.location.href="name.html";
-}
+<!-- Firebase Scripts -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
 
-//পেজ লোড হওয়া চেক
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-if (isLoggedIn === "true") {
-    window.location.href = "open.html";
-}
+<script>
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyAT2lFlsHO47bsm3UiX1jUqeaFI_OVJKes",
+        authDomain: "devonix-ai.firebaseapp.com",
+        projectId: "devonix-ai",
+        storageBucket: "devonix-ai.firebasestorage.app",
+        messagingSenderId: "67398450167",
+        appId: "1:67398450167:web:15ace091d76a14fe0f4cf2",
+        databaseURL: "https://devonix-ai-default-rtdb.asia-southeast1.firebasedatabase.app"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // পেজ লোড হওয়া চেক
+    function checkUserLogin() {
+        // লোডিং স্পিনার দেখাচ্ছি
+        document.getElementById("loadingSpinner").style.display = "block";
+        document.getElementById("startBtn").disabled = true;
+
+        // localStorage থেকে userId পাচ্ছি
+        const userId = localStorage.getItem("userId");
+
+        if (!userId) {
+            // কোন userId নেই = নতুন ইউজার
+            document.getElementById("loadingSpinner").style.display = "none";
+            document.getElementById("startBtn").disabled = false;
+            return; // index.html এ থাকবে
+        }
+
+        // Firebase Database থেকে ইউজার ডেটা চেক করছি
+        database.ref('users/' + userId).once('value', function(snapshot) {
+            document.getElementById("loadingSpinner").style.display = "none";
+            
+            if (snapshot.exists()) {
+                // ডেটা আছে = লগইন আছে
+                localStorage.setItem("isLoggedIn", "true");
+                window.location.href = "open.html";
+            } else {
+                // ডেটা নেই = নতুন সাইনআপ প্রয়োজন
+                localStorage.removeItem("userId");
+                localStorage.setItem("isLoggedIn", "false");
+                document.getElementById("startBtn").disabled = false;
+            }
+        }).catch(error => {
+            console.error("Error checking user:", error);
+            document.getElementById("loadingSpinner").style.display = "none";
+            document.getElementById("startBtn").disabled = false;
+        });
+    }
+
+    // পেজ লোড হওয়ার সাথে সাথে চেক করছি
+    window.addEventListener("load", checkUserLogin);
+
+    function goname(){
+        // নতুন সাইনআপ শুরু করছি
+        localStorage.removeItem("userId");
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("fname");
+        localStorage.removeItem("lname");
+        localStorage.removeItem("dob");
+        localStorage.removeItem("coun");
+        localStorage.removeItem("gender");
+        localStorage.removeItem("phone");
+        localStorage.removeItem("profileImage");
+        
+        window.location.href="name.html";
+    }
 </script>
 </body>
 </html>
