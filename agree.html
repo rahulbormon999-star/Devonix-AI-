@@ -282,7 +282,25 @@ p {
     .then(function(snapshot){
 
         alert("Step 3: Image Uploaded");
+      // step 3 tast open
+      imageRef.put(profileImageFile)
+.then(function(snapshot){
 
+    alert("Step 3: Image Uploaded");
+
+})
+.catch(function(error){
+
+    alert(
+      "Storage Error:\n\n" +
+      error.code +
+      "\n\n" +
+      error.message
+    );
+
+    console.log(error);
+});
+      // step 3 tast finish
         return snapshot.ref.getDownloadURL();
     })
 
