@@ -271,19 +271,8 @@ p {
     const userId = "user_" + Date.now();
 
     alert("Step 2: Upload Starting");
-
-    const storageRef = storage.ref();
-    const imageRef = storageRef.child(
-      "profile_images/" + userId + "/" + profileImageFile.name
-    );
-
+    // function 3 open
     imageRef.put(profileImageFile)
-
-    .then(function(snapshot){
-
-        alert("Step 3: Image Uploaded");
-      // step 3 tast open
-      imageRef.put(profileImageFile)
 .then(function(snapshot){
 
     alert("Step 3: Image Uploaded");
@@ -300,8 +289,19 @@ p {
 
     console.log(error);
 });
-      // step 3 tast finish
-        return snapshot.ref.getDownloadURL();
+    // function 3 finish 
+    const storageRef = storage.ref();
+    const imageRef = storageRef.child(
+      "profile_images/" + userId + "/" + profileImageFile.name
+    );
+
+    imageRef.put(profileImageFile)
+
+    .then(function(snapshot){
+
+        alert("Step 3: Image Uploaded");
+      
+      return snapshot.ref.getDownloadURL();
     })
 
     .then(function(downloadURL){
