@@ -256,11 +256,12 @@ p {
 
   // ফর্ম সাবমিট লজিক
   window.finishSignup = function(event){
+
     event.preventDefault();
 
     alert("Step 1: Function Started");
 
-    if (!profileImageFile) {
+    if(!profileImageFile){
         alert("কোন ছবি সিলেক্ট করা হয়নি");
         return;
     }
@@ -270,38 +271,21 @@ p {
 
     const userId = "user_" + Date.now();
 
-    alert("Step 2: Upload Starting");
-    // function 3 open
-    imageRef.put(profileImageFile)
-.then(function(snapshot){
-
-    alert("Step 3: Image Uploaded");
-
-})
-.catch(function(error){
-
-    alert(
-      "Storage Error:\n\n" +
-      error.code +
-      "\n\n" +
-      error.message
-    );
-
-    console.log(error);
-});
-    // function 3 finish 
     const storageRef = storage.ref();
+
     const imageRef = storageRef.child(
-      "profile_images/" + userId + "/" + profileImageFile.name
+        "profile_images/" + userId + "/" + profileImageFile.name
     );
+
+    alert("Step 2: Upload Starting");
 
     imageRef.put(profileImageFile)
 
     .then(function(snapshot){
 
         alert("Step 3: Image Uploaded");
-      
-      return snapshot.ref.getDownloadURL();
+
+        return snapshot.ref.getDownloadURL();
     })
 
     .then(function(downloadURL){
@@ -328,7 +312,7 @@ p {
 
         document.getElementById("loading").style.display = "none";
 
-        localStorage.setItem("isLoggedIn","true");
+        localStorage.setItem("isLoggedIn", "true");
 
         alert("Step 6: Redirecting");
 
@@ -341,15 +325,16 @@ p {
         document.getElementById("agreeBtn").disabled = false;
 
         alert(
-          "ERROR:\n\n" +
-          error.code +
-          "\n\n" +
-          error.message
+            "ERROR\n\n" +
+            "Code: " + error.code +
+            "\n\n" +
+            "Message: " + error.message
         );
 
-        console.log(error);
+        console.error(error);
     });
-          }
+
+};
 
   function showError(message) {
     const errorMsg = document.getElementById("errorMsg");
