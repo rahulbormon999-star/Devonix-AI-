@@ -279,8 +279,12 @@ p {
 
     alert("Step 2: Upload Starting");
 
-    imageRef.put(profileImageFile)
+alert("Storage Object Ready");
+alert("Bucket: " + firebase.app().options.storageBucket);
+alert("File Name: " + profileImageFile.name);
 
+imageRef.put(profileImageFile)
+  
     .then(function(snapshot){
 
         alert("Step 3: Image Uploaded");
