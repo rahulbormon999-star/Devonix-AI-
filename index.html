@@ -390,10 +390,13 @@ input:focus, select:focus {
 
 // ================= SUPABASE CONFIGURATION =================
 // নিচের খালি ঘরগুলোতে আপনার নিজস্ব Supabase URL এবং Key বসিয়ে দিন।
-const SUPABASE_URL = "https://iymsrgiunfsgpkogojaj.supabase.co/rest/v1/"; 
-const SUPABASE_ANON_KEY = "sb_publishable_nG1r9BvJ1DNX2PmA82nS0A_yE0MGqJO"; 
+const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_nG1r9BvJ1DNX2PmA82nS0A_yE0MGqJO";
 
-const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
 
 let currentPageId = "loginPage";
 
