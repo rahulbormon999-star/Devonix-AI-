@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dev-Onix AI</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { 
+    margin: 0; 
+    padding: 0; 
+    background: #f4f6f9; 
+    font-family: 'Georgia', serif; 
+    min-height: 100vh; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    transition: background 0.3s; 
+  }
+
+  /* Overlay (মেনু খুললে পেছনের কালো আস্তরণ) - অপরিবর্তিত */
+  #overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5); opacity: 0; visibility: hidden;
+    transition: 0.3s; z-index: 5;
+  }
+  #overlay.active { opacity: 1; visibility: visible; }
+
+  /* মেনু বাটন - অপরিবর্তিত */
+  .menu-btn {
+    position: fixed; top: 4%; left: 7%; cursor: pointer;
+    width: 9vw; height: 5vh; border: 2px solid #000;
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 6vw; transition: 0.3s; z-index: 15; background: #fff;
+  }
+  .menu-btn:active { transform: scale(0.9); }
+
+  /* সাইড মেনু - অপরিবর্তিত */
+  .menu {
+    position: fixed; top: 0; left: -100%; width: 60%; height: 100%;
+    background: #fff; border-right: 1px solid #ddd;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 20% 8%; z-index: 20;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  }
+  .menu.active { left: 0; }
+
+  .menu a {
+    display: block; color: #333; text-decoration: none;
+    font-size: 4vw; margin-bottom: 6%; padding: 3%;
+    border-radius: 10px; transition: 0.3s; border-bottom: 1px solid #f0f0f0;
+  }
+  .menu a:hover { background: #f9f9f9; }
+  .menu a:active { transform: scale(0.98); background: #eee; }
+
+  /* ক্লোজ বাটন - অপরিবর্তিত */
+  .close-btn { position: absolute; top: 3%; right: 5%; font-size: 7vw; cursor: pointer; }
+
+  h2 { font-size: 6vw; margin-top: 20%; color: #000; font-style: Georgia, serif; }
+
+  /* ডেক্সটপ স্ক্রিনের জন্য মেনু বাটনের মিডিয়া কোয়েরি - অপরিবর্তিত */
+  @media (min-width: 768px) {
+    .menu-btn { top: 30px; left: 30px; width: 50px; height: 50px; }
+  }
+
+  .apps {
+     text-align:center;
+     display:flex;
+     align-items:center;
+     justify-content:flex-start;
+     gap:10px;
+     line-height:1;
+  }
+
+  .apps-logo {
+     width:24px;
+     height:24px;
+     object-fit:contain;
+     position:relative;
+     top:3px;
+  }
+
+  .icon-wrapper {
+     width: 64px;
+     height: 64px;
+     display:flex;
+     align-items:center;
+     justify-content:center;
+  }
+
+  .app-icon {
+     width: 90%;
+     height: 90%;
+     object-fit: contain;
+     position: relative;
+     top:0;
+  }
+
+  /* ছোট মোবাইল - অপরিবর্তিত */
+  @media (max-width:480px) {
+      .apps-logo {
+          width:20px;
+          height:20px;
+      }
+  }
+
+  /* বড় মোবাইল - অপরিবর্তিত */
+  @media (min-width:481px) {
+      .apps-logo {
+          width:26px;
+          height:26px;
+      }
+  }
+
+
+  /* ====================================================
+     প্রোফাইল কার্ড এবং তথ্য প্রদর্শন অংশ
+     ==================================================== */
+  
+  .profile-card {
+    position: relative;
+    z-index: 2;
+    background: #ffffff;
+    width: 90%;
+    max-width: 430px;
+    margin-top: 130px;
+    margin-bottom: 40px;
+    border-radius: 24px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.02);
+    padding: 35px 22px;
+    text-align: center;
+    border: 1px solid #eef2f6;
+  }
+
+  /* প্রোফাইল ইমেজ রিং */
+  .profile-img-wrapper {
+    position: relative;
+    width: 135px;
+    height: 135px;
+    margin: -100px auto 15px;
+    border-radius: 50%;
+    background: #ffffff;
+    padding: 5px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    border: 1px solid #e2e8f0;
+  }
+
+  .profile-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #f1f5f9;
+    display: block;
+  }
+
+  .profile-name { 
+    font-size: 24px; 
+    font-weight: 700; 
+    color: #1e293b; 
+    margin-top: 10px;
+    margin-bottom: 4px;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  .profile-bio { 
+    font-size: 14px; 
+    color: #64748b; 
+    margin-bottom: 25px; 
+    font-family: system-ui, -apple-system, sans-serif;
+    font-weight: 500;
+  }
+
+  /* ইনফরমেশন লিস্ট */
+  .info-list {
+    text-align: left;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* তথ্য বক্স */
+  .info-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.01);
+    transition: all 0.25s ease;
+  }
+  
+  .info-item:hover { 
+    background: #f8fafc; 
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  }
+
+  /* আইকন বক্স */
+  .info-icon {
+    width: 42px; 
+    height: 42px; 
+    border-radius: 12px;
+    background: #f1f5f9; 
+    color: #334155;
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    font-size: 18px; 
+    margin-right: 15px;
+    flex-shrink: 0;
+  }
+
+  /* আইকনগুলোর ব্যাকগ্রাউন্ড রঙ */
+  .info-item:nth-of-type(1) .info-icon { background: #e0f2fe; color: #0284c7; } /* Phone */
+  .info-item:nth-of-type(2) .info-icon { background: #e0f2fe; color: #0369a1; } /* Email */
+  .info-item:nth-of-type(3) .info-icon { background: #fef3c7; color: #d97706; } /* Country */
+  .info-item:nth-of-type(4) .info-icon { background: #fce7f3; color: #db2777; } /* Gender */
+  .info-item:nth-of-type(5) .info-icon { background: #dcfce7; color: #16a34a; } /* DOB */
+  .info-item:nth-of-type(6) .info-icon { background: #ede9fe; color: #7c3aed; } /* Age */
+
+  .info-text { 
+    flex-grow: 1; 
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  
+  .info-text small { 
+    display: block; 
+    font-size: 11px; 
+    color: #64748b; 
+    font-weight: 600; 
+    text-transform: uppercase; 
+    letter-spacing: 0.5px; 
+  }
+  
+  .info-text strong { 
+    display: block; 
+    font-size: 15px; 
+    color: #1e293b; 
+    margin-top: 3px; 
+    font-weight: 600;
+  }
+
+  @media (min-width: 768px) {
+    .profile-card { 
+      padding: 40px 30px; 
+      margin-top: 140px; 
+    }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Overlay for closing menu -->
+  <div id="overlay" onclick="toggleMenu()"></div>
+
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+  <div class="menu" id="menu">
+    <div class="close-btn" onclick="toggleMenu()">✖</div>
+    <a href="#" onclick="gohome()">🏠 Home</a>
+    <a href="#">👤 Profile</a>
+    <a href="#" onclick="gosetting()">⚙️ Setting</a>
+    <a href="#" onclick="goabout()">❗ About</a>
+    <a href="#" onclick="goapps()" class="apps">
+      <img src="1780474142335.png" class="apps-logo">
+      <span>Apps</span>
+    </a>
+    <h2><i>Dev-Onix AI</i></h2>
+  </div>
+   
+  <!-- Profile Card -->
+  <div class="profile-card">
+    <div class="profile-img-wrapper">
+      <img id="profilePic" class="profile-img" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Picture">
+    </div>
+    
+    <h2 class="profile-name" id="name">User Name</h2>
+    <p class="profile-bio">My Profile Information</p>
+
+    <div class="info-list">
+      
+      <!-- Phone -->
+      <div class="info-item">
+        <div class="info-icon">📞</div>
+        <div class="info-text">
+          <small>Phone Number</small>
+          <strong id="phone">Not set</strong>
+        </div>
+      </div>
+
+      <!-- Email (নতুন সংযোজন) -->
+      <div class="info-item">
+        <div class="info-icon">✉️</div>
+        <div class="info-text">
+          <small>Email Address</small>
+          <strong id="email">Not set</strong>
+        </div>
+      </div>
+
+      <!-- Country -->
+      <div class="info-item">
+        <div class="info-icon">🌍</div>
+        <div class="info-text">
+          <small>Country</small>
+          <strong id="country">Not set</strong>
+        </div>
+      </div>
+
+      <!-- Gender -->
+      <div class="info-item">
+        <div class="info-icon">👤</div>
+        <div class="info-text">
+          <small>Gender</small>
+          <strong id="gender">Not set</strong>
+        </div>
+      </div>
+
+      <!-- Date of Birth -->
+      <div class="info-item">
+        <div class="info-icon">📅</div>
+        <div class="info-text">
+          <small>Date of Birth</small>
+          <strong id="showDob">Not set</strong>
+        </div>
+      </div>
+
+      <!-- Age -->
+      <div class="info-item" id="ageContainer">
+        <div class="info-icon">⏳</div>
+        <div class="info-text">
+          <small>Current Age</small>
+          <strong id="showAge">Not available</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function toggleMenu(){
+      let m = document.getElementById("menu");
+      let o = document.getElementById("overlay");
+      
+      m.classList.toggle("active");
+      o.classList.toggle("active");
+    }
+
+    function gohome(){ window.location.href="open.html"; }
+    function gosetting(){ window.location.href="setting.html"; }
+    function goabout(){ window.location.href="about.html"; }
+    function logout(){
+        localStorage.setItem("isLoggedIn", "false");
+        window.location.href = "log-sin.html";
+    }
+    function goapps(){
+      window.location.href="apps.html";
+    }
+
+    // Load Data from Local Storage
+    document.addEventListener("DOMContentLoaded", function() {
+        const userDataString = localStorage.getItem("registeredUser");
+
+        if (userDataString) {
+            try {
+                const user = JSON.parse(userDataString);
+
+                // প্রোফাইল ছবি প্রদর্শন
+                if (user.profilePicture) {
+                    document.getElementById("profilePic").src = user.profilePicture;
+                }
+
+                // নাম প্রদর্শন (First Name + Last Name)
+                const firstName = user.firstName || "";
+                const lastName = user.lastName || "";
+                if (firstName || lastName) {
+                    document.getElementById("name").innerText = firstName + " " + lastName;
+                }
+
+                // অন্যান্য সাধারণ তথ্যসমূহ প্রদর্শন
+                document.getElementById("country").innerText = user.country || "Not set";
+                document.getElementById("gender").innerText = user.gender || "Not set";
+                document.getElementById("phone").innerText = user.phone || "Not set";
+                
+                // ইমেইল প্রদর্শন লজিক (নতুন সংযোজন)
+                document.getElementById("email").innerText = user.email || "Not set";
+
+                // জন্মতারিখ ও বয়স গণনা
+                const dob = user.dob;
+                if (dob) {
+                    document.getElementById("showDob").innerText = dob;
+
+                    const birth = new Date(dob);
+                    const today = new Date();
+
+                    let years = today.getFullYear() - birth.getFullYear();
+                    let months = today.getMonth() - birth.getMonth();
+                    let days = today.getDate() - birth.getDate();
+
+                    if (days < 0) {
+                        months--;
+                        let prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+                        days += prevMonth.getDate();
+                    }
+
+                    if (months < 0) {
+                        years--;
+                        months += 12;
+                    }
+                
+                    document.getElementById("showAge").innerHTML = years + " years, " + months + " months, " + days + " days";
+                } else {
+                    document.getElementById("ageContainer").style.display = "none";
+                }
+
+            } catch (error) {
+                console.error("Error parsing user data from LocalStorage:", error);
+            }
+        } else {
+            document.getElementById("ageContainer").style.display = "none";
+        }
+    });
+  </script>
+</body>
+</html>
