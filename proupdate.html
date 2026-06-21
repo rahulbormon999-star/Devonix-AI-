@@ -406,7 +406,7 @@
     <!-- ================= ১. প্রধান সেটিংস মেনু ================= -->
     <div id="mainMenuScreen" class="screen active">
       <div class="header" style="padding-left:0; padding-right:0;">
-        <button class="back-btn" onclick="goBackToProfile()">
+        <button class="back-btn" onclick="history.back()">
           <!-- বোল্ড এবং বড় ব্যাক অ্যারো আইকন -->
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
             <line x1="19" y1="12" x2="5" y2="12"></line>
@@ -823,10 +823,6 @@
         // এরর টেক্সট রিসেট
         document.querySelectorAll('.error-text').forEach(err => err.style.display = 'none');
         document.querySelectorAll('.form-control').forEach(el => el.style.borderColor = '');
-    }
-
-    function goBackToProfile() {
-        window.location.href = "open.html"; 
     }
 
     function showToast(message) {
