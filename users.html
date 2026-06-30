@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Users — Dev-Onix Admin</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: Georgia, serif; }
+body { background: #f4f6f9; min-height: 100vh; }
+
+#login-screen {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 20px;
+}
+.login-box {
+    background: #fff; border-radius: 16px; padding: 36px 28px;
+    width: 100%; max-width: 360px; text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+.login-box .icon { font-size: 44px; margin-bottom: 14px; }
+.login-box h2 { font-size: 19px; margin-bottom: 6px; color: #1c1e21; }
+.login-box p { font-size: 13px; color: #65676b; margin-bottom: 24px; }
+.login-input {
+    width: 100%; padding: 12px 14px; border: 1px solid #ccd0d5;
+    border-radius: 8px; font-size: 15px; outline: none; margin-bottom: 14px;
+    font-family: Georgia, serif;
+}
+.login-input:focus { border-color: #1877f2; }
+.login-btn {
+    width: 100%; padding: 12px; background: #1877f2; color: #fff;
+    border: none; border-radius: 8px; font-size: 15px; font-weight: bold;
+    cursor: pointer; font-family: Georgia, serif;
+}
+.login-btn:active { background: #166fe5; }
+.login-err { color: #e02424; font-size: 13px; margin-top: 10px; min-height: 18px; }
+
+#app { display: none; max-width: 480px; margin: 0 auto; min-height: 100vh; background: #fff; }
+.header {
+    padding: 18px 20px; background: #fff; border-bottom: 1px solid #f0f2f5;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 10;
+}
+.header h1 { font-size: 18px; color: #1c1e21; }
+.header .count { font-size: 13px; color: #65676b; margin-top: 2px; }
+.refresh-btn {
+    background: #e7f3ff; color: #1877f2; border: none; border-radius: 8px;
+    padding: 8px 14px; font-size: 13px; font-weight: bold; cursor: pointer;
+}
+
+.search-bar { padding: 14px 20px; border-bottom: 1px solid #f0f2f5; }
+.search-input {
+    width: 100%; padding: 10px 14px; border: 1px solid #ccd0d5;
+    border-radius: 20px; font-size: 14px; outline: none; background: #f5f6f7;
+    font-family: Georgia, serif;
+}
+.search-input:focus { border-color: #1877f2; background: #fff; }
+
+.user-list { padding: 8px 0; }
+.user-row {
+    display: flex; align-items: center; padding: 12px 20px; cursor: pointer;
+    border-bottom: 1px solid #f4f6f9; transition: background 0.15s;
+}
+.user-row:active { background: #f8fafc; }
+.user-avatar {
+    width: 46px; height: 46px; border-radius: 50%; object-fit: cover;
+    background: #e4e6eb; margin-right: 14px; flex-shrink: 0;
+    border: 2px solid #e2e8f0;
+}
+.user-info { flex-grow: 1; min-width: 0; }
+.user-name { font-size: 15px; font-weight: bold; color: #1c1e21; }
+.user-sub { font-size: 13px; color: #65676b; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.user-chevron { color: #bcc0c4; font-size: 14px; }
+
+.empty-state { text-align: center; padding: 60px 20px; color: #65676b; }
+.empty-state .ic { font-size: 44px; margin-bottom: 12px; }
+
+.detail-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+    z-index: 99; align-items: flex-end; justify-content: center;
+}
+.detail-overlay.show { display: flex; }
+.detail-box {
+    background: #fff; width: 100%; max-width: 480px;
+    border-top-left-radius: 18px; border-top-right-radius: 18px;
+    padding: 24px 20px 30px; max-height: 85vh; overflow-y: auto;
+    animation: slideUp 0.25s ease-out;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+.detail-header { text-align: center; margin-bottom: 20px; }
+.detail-avatar {
+    width: 90px; height: 90px; border-radius: 50%; object-fit: cover;
+    border: 3px solid #1877f2; margin: 0 auto 10px; display: block;
+    background: #e4e6eb;
+}
+.detail-name { font-size: 18px; font-weight: bold; color: #1c1e21; }
+.detail-since { font-size: 12px; color: #65676b; margin-top: 4px; }
+
+.detail-field {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 4px; border-bottom: 1px solid #f0f2f5; gap: 12px;
+}
+.detail-field .fl { font-size: 12px; color: #65676b; font-weight: bold; text-transform: uppercase; flex-shrink: 0; }
+.detail-field .fv { font-size: 14px; color: #1c1e21; font-weight: 600; text-align: right; word-break: break-word; }
+
+.detail-close {
+    width: 100%; margin-top: 18px; padding: 12px; background: #e4e6eb;
+    border: none; border-radius: 8px; font-size: 14px; font-weight: bold;
+    cursor: pointer; color: #1c1e21; font-family: Georgia, serif;
+}
+
+#loading {
+    display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.85);
+    z-index: 999; align-items: center; justify-content: center; flex-direction: column; gap: 12px;
+}
+#loading.show { display: flex; }
+.spinner {
+    width: 36px; height: 36px; border: 4px solid #e4e6eb;
+    border-top-color: #1877f2; border-radius: 50%; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div id="loading"><div class="spinner"></div><div style="color:#65676b;font-size:13px">Loading...</div></div>
+
+<div id="login-screen">
+    <div class="login-box">
+        <div class="icon">👥</div>
+        <h2>Users Admin Panel</h2>
+        <p>Dev-Onix — সব ইউজারের তথ্য দেখুন</p>
+        <input type="password" class="login-input" id="key-input" placeholder="Secret Key দিন..." onkeypress="if(event.key==='Enter')login()">
+        <button class="login-btn" onclick="login()">🔐 প্রবেশ করুন</button>
+        <div class="login-err" id="login-err"></div>
+    </div>
+</div>
+
+<div id="app">
+    <div class="header">
+        <div>
+            <h1>👥 All Users</h1>
+            <div class="count" id="user-count">0 users</div>
+        </div>
+        <button class="refresh-btn" onclick="loadUsers()">🔄 Refresh</button>
+    </div>
+    <div class="search-bar">
+        <input type="text" class="search-input" id="search" placeholder="🔍 Search by name or phone..." oninput="filterUsers()">
+    </div>
+    <div class="user-list" id="user-list"></div>
+</div>
+
+<div class="detail-overlay" id="detail-overlay" onclick="closeDetail(event)">
+    <div class="detail-box" onclick="event.stopPropagation()">
+        <div class="detail-header">
+            <img class="detail-avatar" id="d-avatar" src="">
+            <div class="detail-name" id="d-name"></div>
+            <div class="detail-since" id="d-since"></div>
+        </div>
+        <div id="d-fields"></div>
+        <button class="detail-close" onclick="closeDetail()">Close</button>
+    </div>
+</div>
+
+<script>
+let adminKey = '';
+let allUsers = [];
+
+function login() {
+    const key = document.getElementById('key-input').value.trim();
+    if (!key) { showErr('Secret Key দিন'); return; }
+    adminKey = key;
+    loadUsers();
+}
+
+function showErr(msg) {
+    document.getElementById('login-err').textContent = msg;
+    setTimeout(() => document.getElementById('login-err').textContent = '', 3000);
+}
+
+async function loadUsers() {
+    document.getElementById('loading').classList.add('show');
+    try {
+        const r = await fetch('/api/users', { headers: { 'x-admin-key': adminKey } });
+        if (r.status === 401) {
+            document.getElementById('loading').classList.remove('show');
+            showErr('Secret Key ভুল!');
+            return;
+        }
+        if (!r.ok) throw new Error('Server error');
+
+        const data = await r.json();
+        allUsers = data.users || [];
+
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        document.getElementById('user-count').textContent = `${data.count} জন ইউজার`;
+
+        renderList(allUsers);
+
+    } catch (e) {
+        showErr('Data লোড করতে সমস্যা হয়েছে।');
+    }
+    document.getElementById('loading').classList.remove('show');
+}
+
+function renderList(users) {
+    const list = document.getElementById('user-list');
+    if (users.length === 0) {
+        list.innerHTML = `<div class="empty-state"><div class="ic">📭</div>কোনো ইউজার পাওয়া যায়নি</div>`;
+        return;
+    }
+    list.innerHTML = users.map((u, i) => {
+        const name = ((u.firstName||'') + ' ' + (u.lastName||'')).trim() || 'No Name';
+        const img = u.profilePicture || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+        return `
+        <div class="user-row" onclick="showDetail(${i})">
+            <img class="user-avatar" src="${img}">
+            <div class="user-info">
+                <div class="user-name">${esc(name)}</div>
+                <div class="user-sub">${esc(u.phone||'')} ${u.email ? '· ' + esc(u.email) : ''}</div>
+            </div>
+            <div class="user-chevron">❯</div>
+        </div>`;
+    }).join('');
+}
+
+function filterUsers() {
+    const q = document.getElementById('search').value.toLowerCase().trim();
+    if (!q) { renderList(allUsers); return; }
+    const filtered = allUsers.filter(u => {
+        const name = ((u.firstName||'') + ' ' + (u.lastName||'')).toLowerCase();
+        return name.includes(q) || (u.phone||'').includes(q) || (u.email||'').toLowerCase().includes(q);
+    });
+    renderList(filtered);
+}
+
+function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+}
+
+function showDetail(idx) {
+    const u = allUsers[idx];
+    if (!u) return;
+
+    const name = ((u.firstName||'') + ' ' + (u.lastName||'')).trim() || 'No Name';
+    document.getElementById('d-avatar').src = u.profilePicture || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+    document.getElementById('d-name').textContent = name;
+
+    const since = u.createdAt ? new Date(u.createdAt).toLocaleString('en-GB') : '—';
+    document.getElementById('d-since').textContent = `Joined: ${since}`;
+
+    const fields = [
+        ['Phone', u.phone],
+        ['Email', u.email],
+        ['Country', u.country],
+        ['Gender', u.gender],
+        ['Date of Birth', u.dob],
+        ['Last Updated', u.updatedAt ? new Date(u.updatedAt).toLocaleString('en-GB') : '—'],
+    ];
+
+    document.getElementById('d-fields').innerHTML = fields.map(([label, val]) => `
+        <div class="detail-field">
+            <span class="fl">${label}</span>
+            <span class="fv">${esc(val || 'Not set')}</span>
+        </div>
+    `).join('');
+
+    document.getElementById('detail-overlay').classList.add('show');
+}
+
+function closeDetail(e) {
+    if (e && e.target !== e.currentTarget) return;
+    document.getElementById('detail-overlay').classList.remove('show');
+}
+</script>
+</body>
+</html>
