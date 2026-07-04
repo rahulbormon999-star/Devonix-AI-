@@ -132,7 +132,7 @@
     <h2><i>Dev-Onix</i></h2>
   </div>
 
-  <script>
+  <script type="module">
     function toggleMenu(){
       let m = document.getElementById("menu");
       let o = document.getElementById("overlay");
@@ -150,6 +150,38 @@
     }
    function goapps(){
       window.location.href="apps.html";
+
+
+    // একাউন্ট এর বিষয় 
+    <div id="authCheckOverlay" style="position:fixed;inset:0;background:#f4f6f9;display:flex;align-items:center;justify-content:center;z-index:999;">
+  <div style="width:32px;height:32px;border:3px solid #dbe3ee;border-top-color:#1877f2;border-radius:50%;animation:spin .8s linear infinite;"></div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+  const firebaseConfig = {
+  apiKey: "AIzaSyDyGAQ1iAex025MFtrn98ey3EiyfKwe3ok",
+  authDomain: "continue-f585d.firebaseapp.com",
+  projectId: "continue-f585d",
+  storageBucket: "continue-f585d.firebasestorage.app",
+  messagingSenderId: "993009966057",
+  appId: "1:993009966057:web:0dee42c8f386af9a3fc978",
+  measurementId: "G-K3PE77LV13"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  onAuthStateChanged(auth, (user) => {
+      document.getElementById("authCheckOverlay").style.display = "none";
+      if (!user) {
+          // লগইন করা নেই -> সরাসরি রেজিস্ট্রেশন/লগইন পেজে
+          window.location.replace("index.html");
+      }
+      // user থাকলে কিছুই করার দরকার নেই, পেজেই থেকে যাবে
+  });
    }
   </script>
 </body>
