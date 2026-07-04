@@ -133,35 +133,11 @@
   </div>
 
   <script type="module">
-    function toggleMenu(){
-      let m = document.getElementById("menu");
-      let o = document.getElementById("overlay");
-      
-      m.classList.toggle("active");
-      o.classList.toggle("active");
-    }
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-    function goprofile(){ window.location.href="profile.html"; }
-    function gosetting(){ window.location.href="setting.html"; }
-    function goabout(){ window.location.href="about.html"; }
-    function logout(){
-        localStorage.setItem("isLoggedIn", "false");
-        window.location.href = "log-sin.html";
-    }
-   function goapps(){
-      window.location.href="apps.html";
-
-   }
-    // একাউন্ট এর বিষয় 
-    <div id="authCheckOverlay" style="position:fixed;inset:0;background:#f4f6f9;display:flex;align-items:center;justify-content:center;z-index:999;">
-  <div style="width:32px;height:32px;border:3px solid #dbe3ee;border-top-color:#1877f2;border-radius:50%;animation:spin .8s linear infinite;"></div>
-</div>
-<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
-
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-  const firebaseConfig = {
+// Firebase Config
+const firebaseConfig = {
   apiKey: "AIzaSyDyGAQ1iAex025MFtrn98ey3EiyfKwe3ok",
   authDomain: "continue-f585d.firebaseapp.com",
   projectId: "continue-f585d",
@@ -171,18 +147,47 @@
   measurementId: "G-K3PE77LV13"
 };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+// Firebase Initialize
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-  onAuthStateChanged(auth, (user) => {
-      document.getElementById("authCheckOverlay").style.display = "none";
-      if (!user) {
-          // লগইন করা নেই -> সরাসরি রেজিস্ট্রেশন/লগইন পেজে
-          window.location.replace("index.html");
-      }
-      // user থাকলে কিছুই করার দরকার নেই, পেজেই থেকে যাবে
-  });
-   
+// Authentication Check
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.replace("index.html");
+  }
+});
+
+// Menu Toggle
+window.toggleMenu = function () {
+  const menu = document.getElementById("menu");
+  const overlay = document.getElementById("overlay");
+
+  menu.classList.toggle("active");
+  overlay.classList.toggle("active");
+};
+
+// Navigation Functions
+window.goprofile = function () {
+  window.location.href = "profile.html";
+};
+
+window.gosetting = function () {
+  window.location.href = "setting.html";
+};
+
+window.goabout = function () {
+  window.location.href = "about.html";
+};
+
+window.goapps = function () {
+  window.location.href = "apps.html";
+};
+
+window.logout = function () {
+  localStorage.setItem("isLoggedIn", "false");
+  window.location.href = "log-sin.html";
+};
   </script>
 </body>
 </html>
