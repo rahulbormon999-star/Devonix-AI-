@@ -128,8 +128,8 @@
     flex-shrink: 0;
   }
   .user-info { flex-grow: 1; min-width: 0; }
-  .user-info .name { font-weight: 700; font-size: 16px; color: #1e293b; }
-  .user-info .detail { font-size: 13px; color: #64748b; margin-top: 2px; word-break: break-word; }
+  .user-info .name { font-weight: 700; font-size: 20px; color: #1e293b; }
+  .user-info .detail { font-size: 15px; color: #64748b; margin-top: 2px; word-break: break-word; }
   .delete-btn {
     background: #fee2e2;
     color: #dc2626;
@@ -165,10 +165,10 @@
 <!-- ড্যাশবোর্ড -->
 <div id="dashboard">
   <div class="stats-grid" id="statsGrid">
-    <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">মোট ইউজার</div></div>
-    <div class="stat-card"><div class="num" id="statMale">0</div><div class="label">ছেলে</div></div>
-    <div class="stat-card"><div class="num" id="statFemale">0</div><div class="label">মেয়ে</div></div>
-    <div class="stat-card"><div class="num" id="statOther">0</div><div class="label">তৃতীয় লিঙ্গ</div></div>
+    <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">All User</div></div>
+    <div class="stat-card"><div class="num" id="statMale">0</div><div class="label">Male</div></div>
+    <div class="stat-card"><div class="num" id="statFemale">0</div><div class="label">Female</div></div>
+    <div class="stat-card"><div class="num" id="statOther">0</div><div class="label">Other</div></div>
   </div>
 
   <input type="text" class="search-box" id="searchBox" placeholder="🔍 নাম বা ফোন নম্বর দিয়ে সার্চ করুন" oninput="filterUsers()">
