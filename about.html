@@ -211,7 +211,7 @@ p{
     <img src="1780474142335.png" class="apps-logo">
     <span>Apps</span>
    </a>
-  <!--  <a href="#" onclick="logout()">𓉱 Logout</a> -->
+   <a href="#" onclick="logout()">🚪 Logou</a>
     <h2><i>Dev-Onix</i></h2>
   </div>
   
@@ -221,7 +221,7 @@ p{
 
   I am interested in working with technology and Artificial Intelligence (AI). My goal is to create new things and find simple, intelligent solutions to problems. <br><br>
 
-  I aim to build digital systems that make people's lives easier, faster, and more efficient. <br><br>
+  I am to build digital systems that make people's lives easier, faster, and more efficient. <br><br>
 
   In the future, I plan to work with advanced AI technologies and create innovative solutions. <br><br>
 
@@ -243,11 +243,14 @@ p{
     }
 
     function goprofile(){ window.location.href="profile.html"; }
+   
     function gosetting(){ window.location.href="setting.html"; }
+   
   function gohome(){ window.location.href="open.html"; }
-    function logout(){
-        localStorage.setItem("isLoggedIn", "false");
-        window.location.href = "log-sin.html";
+   
+    async function logout(){
+        try { await fetch('/api/logout', { method: 'POST' }); } catch(e) {}
+        window.location.href = "index.html";
     }
    function goapps(){
       window.location.href="apps.html";
