@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dev-Onix Admin</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; font-family: Georgia, serif; }
+  body { background: #f0f2f5; min-height: 100vh; padding: 16px; }
+
+  .title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 20px 0 24px;
+    background: linear-gradient(90deg, #1877f2, #00c6ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Password gate */
+  .gate {
+    max-width: 380px;
+    margin: 80px auto;
+    background: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .gate input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ccd0d5;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 12px;
+    outline: none;
+  }
+  .gate button, .refresh-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #1877f2;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .gate button:active, .refresh-btn:active { background: #166fe5; }
+  .gate-error { color: #e02424; font-size: 13px; margin-top: 8px; text-align: center; }
+
+  /* Dashboard */
+  #dashboard { display: none; max-width: 900px; margin: 0 auto; }
+
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .toolbar .count { color: #5f6368; font-size: 14px; font-family: system-ui, sans-serif; }
+  .refresh-btn { width: auto; padding: 10px 18px; font-size: 14px; }
+
+  /* স্ট্যাটস কার্ড */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px 8px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    font-family: system-ui, sans-serif;
+  }
+  .stat-card .num { font-size: 22px; font-weight: 800; color: #1877f2; }
+  .stat-card .label { font-size: 11px; color: #64748b; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+  @media (max-width: 480px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* সার্চ বক্স */
+  .search-box {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ccd0d5;
+    border-radius: 10px;
+    font-size: 15px;
+    margin-bottom: 16px;
+    outline: none;
+    font-family: system-ui, sans-serif;
+  }
+  .search-box:focus { border-color: #1877f2; }
+  .user-id-tag {
+    display: inline-block;
+    background: #eef2ff;
+    color: #4338ca;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-left: 6px;
+  }
+
+  .user-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    font-family: system-ui, sans-serif;
+  }
+  .user-card img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #f0f2f5;
+    flex-shrink: 0;
+  }
+  .user-info { flex-grow: 1; min-width: 0; }
+  .user-info .name { font-weight: 700; font-size: 16px; color: #1e293b; }
+  .user-info .detail { font-size: 13px; color: #64748b; margin-top: 2px; word-break: break-word; }
+  .delete-btn {
+    background: #fee2e2;
+    color: #dc2626;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 13px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .delete-btn:active { background: #fecaca; }
+
+  .empty-state {
+    text-align: center;
+    color: #64748b;
+    font-family: system-ui, sans-serif;
+    padding: 40px 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="title"><i>Dev-Onix Admin</i></div>
+
+<!-- পাসওয়ার্ড গেট -->
+<div class="gate" id="gate">
+  <input type="password" id="adminPassword" placeholder="Admin Password">
+  <button onclick="unlock()">Login</button>
+  <div class="gate-error" id="gateError"></div>
+</div>
+
+<!-- ড্যাশবোর্ড -->
+<div id="dashboard">
+  <div class="stats-grid" id="statsGrid">
+    <div class="stat-card"><div class="num" id="statTotal">0</div><div class="label">মোট ইউজার</div></div>
+    <div class="stat-card"><div class="num" id="statMale">0</div><div class="label">ছেলে</div></div>
+    <div class="stat-card"><div class="num" id="statFemale">0</div><div class="label">মেয়ে</div></div>
+    <div class="stat-card"><div class="num" id="statOther">0</div><div class="label">তৃতীয় লিঙ্গ</div></div>
+  </div>
+
+  <input type="text" class="search-box" id="searchBox" placeholder="🔍 নাম বা ফোন নম্বর দিয়ে সার্চ করুন" oninput="filterUsers()">
+
+  <div class="toolbar">
+    <span class="count" id="userCount">Loading...</span>
+    <div style="display:flex; gap:8px;">
+      <button class="refresh-btn" onclick="loadUsers()">Refresh</button>
+      <button class="refresh-btn" style="background:#e4e6eb; color:#1c1e21;" onclick="adminLogout()">Logout</button>
+    </div>
+  </div>
+  <div id="userList"></div>
+</div>
+
+<script>
+  let allUsers = [];
+
+  async function unlock() {
+    const pw = document.getElementById("adminPassword").value.trim();
+    if (!pw) return;
+
+    const gateError = document.getElementById("gateError");
+    gateError.innerText = "";
+
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      });
+
+      if (!res.ok) {
+        gateError.innerText = "ভুল পাসওয়ার্ড";
+        return;
+      }
+
+      document.getElementById("adminPassword").value = "";
+      loadUsers();
+    } catch (e) {
+      gateError.innerText = "নেটওয়ার্ক সমস্যা, আবার চেষ্টা করুন";
+    }
+  }
+
+  async function loadUsers() {
+    const gateError = document.getElementById("gateError");
+    gateError.innerText = "";
+
+    try {
+      const res = await fetch('/api/admin/users');
+
+      if (res.status === 401) {
+        gateError.innerText = "সেশনের মেয়াদ শেষ, আবার লগইন করুন";
+        document.getElementById("gate").style.display = "block";
+        document.getElementById("dashboard").style.display = "none";
+        return;
+      }
+
+      const data = await res.json();
+      document.getElementById("gate").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+
+      allUsers = data.users;
+      renderStats(allUsers);
+      document.getElementById("searchBox").value = "";
+      renderUsers(allUsers);
+    } catch (e) {
+      gateError.innerText = "নেটওয়ার্ক সমস্যা, আবার চেষ্টা করুন";
+    }
+  }
+
+  function renderStats(users) {
+    const total = users.length;
+    const male = users.filter(u => (u.gender || '').toLowerCase() === 'male').length;
+    const female = users.filter(u => (u.gender || '').toLowerCase() === 'female').length;
+    const other = total - male - female;
+
+    document.getElementById("statTotal").innerText = total;
+    document.getElementById("statMale").innerText = male;
+    document.getElementById("statFemale").innerText = female;
+    document.getElementById("statOther").innerText = other;
+  }
+
+  function filterUsers() {
+    const q = document.getElementById("searchBox").value.trim().toLowerCase();
+
+    if (!q) {
+      renderUsers(allUsers);
+      return;
+    }
+
+    const filtered = allUsers.filter(u => {
+      const name = ((u.first_name || '') + ' ' + (u.last_name || '')).toLowerCase();
+      const phone = (u.phone || '').toLowerCase();
+      return name.includes(q) || phone.includes(q);
+    });
+
+    renderUsers(filtered);
+  }
+
+  function renderUsers(users) {
+    const list = document.getElementById("userList");
+    document.getElementById("userCount").innerText = `দেখানো হচ্ছে: ${users.length} জন`;
+
+    if (users.length === 0) {
+      list.innerHTML = `<div class="empty-state">কোনো ইউজার পাওয়া যায়নি</div>`;
+      return;
+    }
+
+    list.innerHTML = users.map(u => `
+      <div class="user-card">
+        <img src="${u.profile_picture || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}" alt="">
+        <div class="user-info">
+          <div class="name">${(u.first_name || '') + ' ' + (u.last_name || '')}<span class="user-id-tag">ID: ${u.id}</span></div>
+          <div class="detail">📞 ${u.phone || 'N/A'} &nbsp; ✉️ ${u.email || 'N/A'}</div>
+          <div class="detail">🌍 ${u.country || 'N/A'} &nbsp; 👤 ${u.gender || 'N/A'}</div>
+          <div class="detail">📅 ${u.dob ? new Date(u.dob).toISOString().split('T')[0] : 'N/A'}</div>
+        </div>
+        <button class="delete-btn" onclick="deleteUser(${u.id})">Delete</button>
+      </div>
+    `).join('');
+  }
+
+  async function deleteUser(id) {
+    if (!confirm("এই ইউজারকে ডিলিট করলে সে আর হোম পেজে ঢুকতে পারবে না। আপনি কি নিশ্চিত?")) return;
+
+    try {
+      const res = await fetch('/api/admin/delete-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+
+      if (res.ok) {
+        loadUsers();
+      } else {
+        alert("ডিলিট করা যায়নি");
+      }
+    } catch (e) {
+      alert("নেটওয়ার্ক সমস্যা");
+    }
+  }
+
+  // পেজ লোড হওয়ার সময় আগে থেকে ভ্যালিড admin session থাকলে সরাসরি ড্যাশবোর্ড দেখাবে
+  (async function checkExistingAdminSession(){
+    try {
+      const res = await fetch('/api/admin/users');
+      if (res.ok) {
+        const data = await res.json();
+        document.getElementById("gate").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        allUsers = data.users;
+        renderStats(allUsers);
+        renderUsers(allUsers);
+      }
+    } catch (e) {}
+  })();
+
+  async function adminLogout() {
+    try { await fetch('/api/admin/logout', { method: 'POST' }); } catch(e) {}
+    location.reload();
+  }
+
+  // Enter চাপলেও লগইন হবে
+  document.getElementById("adminPassword").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") unlock();
+  });
+</script>
+</body>
+    </html>
