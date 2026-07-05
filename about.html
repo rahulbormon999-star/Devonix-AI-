@@ -46,7 +46,11 @@
   .close-btn { position: absolute; top: 3%; right: 5%; font-size: 7vw; cursor: pointer; }
 
   /* কন্টেন্ট */
-  .title { margin-top: 30%; text-align: center; font-size: 9vw; animation: dropDown 1s ease forwards; }
+  .title { margin-top: 30%; text-align: center; font-size: 9vw; animation: dropDown 1s ease forwards;
+         background: linear-gradient(to right, #0066ff, #00ccff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+         }
 
   @keyframes dropDown {
     0% { transform: translateY(-50px); opacity: 0; }
