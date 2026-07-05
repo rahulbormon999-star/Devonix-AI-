@@ -1,4 +1,4 @@
-    import { sql } from '../lib/db.js';
+import { sql } from '../lib/db.js';
 import { getUserIdFromRequest } from '../lib/auth.js';
 import { isImageSizeOk } from '../lib/security.js';
 
