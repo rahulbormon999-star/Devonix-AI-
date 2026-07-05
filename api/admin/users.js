@@ -1,9 +1,9 @@
 import { sql } from '../../lib/db.js';
-import { isAdminAuthorized } from '../../lib/auth.js';
+import { isAdminSessionValid } from '../../lib/auth.js';
 
 export default async function handler(req, res) {
-  if (!isAdminAuthorized(req)) {
-    return res.status(401).json({ error: 'Wrong admin password' });
+  if (!isAdminSessionValid(req)) {
+    return res.status(401).json({ error: 'Admin session invalid, please login again' });
   }
 
   try {
