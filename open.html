@@ -132,32 +132,8 @@
     <h2><i>Dev-Onix</i></h2>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-// Firebase Config
-const firebaseConfig = {
-  apiKey: "AIzaSyDyGAQ1iAex025MFtrn98ey3EiyfKwe3ok",
-  authDomain: "continue-f585d.firebaseapp.com",
-  projectId: "continue-f585d",
-  storageBucket: "continue-f585d.firebasestorage.app",
-  messagingSenderId: "993009966057",
-  appId: "1:993009966057:web:0dee42c8f386af9a3fc978",
-  measurementId: "G-K3PE77LV13"
-};
-
-// Firebase Initialize
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-// Authentication Check
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    window.location.replace("index.html");
-  }
-});
-
+  <script>
+    
 // Menu Toggle
 window.toggleMenu = function () {
   const menu = document.getElementById("menu");
