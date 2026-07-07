@@ -216,5 +216,17 @@ window.logout = async function () {
   window.location.href = "index.html";
 };
   </script>
+
+ <script>
+(async function checkAuth(){
+    try {
+        const res = await fetch('/api/me');
+        if (!res.ok) {
+            // সেশন নেই বা অ্যাডমিন ডিলিট করে দিয়েছে -> লগইন পেজে পাঠানো হবে
+            window.location.replace("index.html");
+        }
+    } catch (e) {}
+})();
+ </script>
 </body>
 </html>
