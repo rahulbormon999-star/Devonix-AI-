@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dev-Onix AI</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; padding: 0; background: #fff; font-family: 'Georgia', serif; height: 100vh; display: flex; flex-direction: column; align-items: center; transition: background 0.3s; }
+
+  /* Overlay (মেনু খুললে পেছনের কালো আস্তরণ) */
+  #overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5); opacity: 0; visibility: hidden;
+    transition: 0.3s; z-index: 5;
+  }
+  #overlay.active { opacity: 1; visibility: visible; }
+
+  /* মেনু বাটন */
+  .menu-btn {
+    position: fixed; top: 4%; left: 7%; cursor: pointer;
+    width: 9vw; height: 5vh; border: 2px solid #000;
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 6vw; transition: 0.3s; z-index: 15; background: #fff;
+  }
+  .menu-btn:active { transform: scale(0.9); }
+
+  /* সাইড মেনু */
+  .menu {
+    position: fixed; top: 0; left: -100%; width: 60%; height: 100%;
+    background: #fff; border-right: 1px solid #ddd;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 20% 8%; z-index: 20;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  }
+  .menu.active { left: 0; }
+
+  .menu a {
+    display: block; color: #333; text-decoration: none;
+    font-size: 4vw; margin-bottom: 6%; padding: 3%;
+    border-radius: 10px; transition: 0.3s; border-bottom: 1px solid #f0f0f0;
+  }
+  .menu a:hover { background: #f9f9f9; }
+  .menu a:active { transform: scale(0.98); background: #eee; }
+
+  /* ক্লোজ বাটন */
+  .close-btn { position: absolute; top: 3%; right: 5%; font-size: 7vw; cursor: pointer; }
+
+  /* কন্টেন্ট */
+  .title { margin-top: 30%; text-align: center; font-size: 9vw; animation: dropDown 1s ease forwards; }
+
+  @keyframes dropDown {
+    0% { transform: translateY(-50px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  h2 { font-size: 6vw; margin-top: 20%; color: #000; font-style: Georgia, serif; }
+  h1{
+    margin-top:-10%;
+    font-size:100px;
+  }
+        /* Setting buttons box */
+.setbtn{
+  width:20%;
+  margin-top:5%;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:0 4%;
+}
+
+/* Setting buttons */
+.setbtn button{
+  width:100%;
+  min-height:50%;
+
+  padding:63% 5%;
+  font-size:18vw;   /* 🔥 ছোট ও সুন্দর font */
+  font-weight:500;
+  border:none;
+  border-radius:14px;
+  background:#fafafa;
+  color:#111;
+  text-align:left;
+  font-family:Georgia, serif;
+  box-shadow:0 2px 8px rgba(0,0,0,0.7);
+  cursor:pointer;
+  transition:
+  transform 0.15s ease,
+  background 0.2s ease,
+  box-shadow 0.2s ease;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+/* Hover */
+.setbtn button:hover{
+  background:#f3f3f3;
+}
+
+/* Click effect */
+.setbtn button:active{
+  transform:scale(0.98);
+  background:#ececec;
+  box-shadow:0 1px 4px rgba(0,0,0,0.08);
+}
+
+/* Arrow */
+.setbtn button::after{
+  content:"›";
+  font-size:22px;
+  font-weight:bold;
+  color:#555;
+}
+
+/* Small phones */
+@media (max-width:400px){
+
+  .setbtn{
+    width:94%;
+    gap:8%;
+  }
+
+  .setbtn button{
+    min-height:30%;
+    padding:5% 5%;
+    font-size:4.5vw;
+    border-radius:12px;
+  }
+
+  .setbtn button::after{
+    font-size:2vw;
+  }
+}
+ .apps {
+     text-align:center;
+ }
+ /* apps button and img control */
+ .apps{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:10px;
+    line-height:1;
+}
+
+.apps-logo{
+    width:24px;
+    height:24px;
+    object-fit:contain;
+    position:relative;
+    top:3px;
+}
+
+.icon-wrapper{
+    width: 64px;
+    height: 64px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.app-icon{
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+    position: relative;
+    top:0;
+}
+
+/* ছোট মোবাইল */
+@media (max-width:480px){
+    .apps-logo{
+        width:20px;
+        height:20px;
+    }
+}
+
+/* বড় মোবাইল */
+@media (min-width:481px){
+    .apps-logo{
+        width:26px;
+        height:26px;
+    }
+}
+</style>
+</head>
+<body>
+<h1 class="title"><i> Setting</i></h1>
+  <!-- Overlay for closing menu -->
+  <div id="overlay" onclick="toggleMenu()"></div>
+
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+  <div class="menu" id="menu">
+    <div class="close-btn" onclick="toggleMenu()">✖</div>
+    <a href="#" onclick="gohome()">🏠 Home</a>
+    <a href="#" onclick="goprofile()">👤 Profile</a>
+    <a href="#">⚙️ Setting</a>
+    <a href="#" onclick="goabout()">❗ About</a>
+   <a href="#" onclick="window.location.href='feedback.html'">💬 Feedback</a>
+   <a href="#" onclick="goapps()" class="apps">
+    <img src="1780474142335.png" class="apps-logo">
+    <span>Apps</span>
+   </a>
+    <a href="#" onclick="logout()">🚪 Logout</a>
+    <h2><i>Dev-Onix</i></h2>
+  </div>
+    
+ <div class="setbtn">
+  <button onclick="goproseting()">
+    👤 Profile Setting
+  </button>
+  <!-- <button onclick="password()">
+    🔒 Password
+  </button> -->
+</div>
+  <script>
+    // ================= AUTH GUARD =================
+    // সেশন না থাকলে বা ইউজার এডমিন কর্তৃক ডিলিট হয়ে থাকলে index.html এ পাঠানো হবে
+    (async function checkAuth(){
+        try {
+            const res = await fetch('/api/me');
+            if (!res.ok) {
+                window.location.replace("index.html");
+            }
+        } catch (e) {
+            // নেটওয়ার্ক সমস্যা হলে পেইজেই থাকবে
+        }
+    })();
+
+    function toggleMenu(){
+      let m = document.getElementById("menu");
+      let o = document.getElementById("overlay");
+      
+      m.classList.toggle("active");
+      o.classList.toggle("active");
+    }
+
+    function goprofile(){ window.location.href="profile.html"; }
+    function gohome(){ window.location.href="open.html"; }
+    function goabout(){ window.location.href="about.html"; }
+    async function logout(){
+        try { await fetch('/api/logout', { method: 'POST' }); } catch(e) {}
+        window.location.href = "index.html";
+    }
+    function goapps(){
+      window.location.href="apps.html";
+    }
+    function goproseting(){
+    window.location.href="proupdate.html";
+  }
+    function password(){
+    window.location.href="pass-update.html";
+    }
+   
+  </script>
+</body>
+</html>
