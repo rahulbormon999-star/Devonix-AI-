@@ -9,12 +9,16 @@ export default async function handler(req, res) {
     // ইউজার ডাটাবেজে খোঁজা হচ্ছে। এডমিন যদি ডিলিট করে থাকে, rows.length হবে 0
     // -> এভাবেই ডিলিট হওয়া ইউজার স্বয়ংক্রিয়ভাবে লগ-আউট হয়ে যাবে
     const rows = await sql`
-      SELECT id, first_name, last_name, gender, dob, country, phone, email, profile_picture
+      SELECT id, first_name, last_name, gender, dob, country, phone, email, profile_picture, banned
       FROM users WHERE id = ${userId}
     `;
 
     if (rows.length === 0) {
       return res.status(401).json({ error: 'অ্যাকাউন্ট আর নেই' });
+    }
+
+    if (rows[0].banned) {
+      return res.status(403).json({ error: 'আপনার একাউন্ট ব্যান করা হয়েছে' });
     }
 
     return res.status(200).json({ user: rows[0] });
