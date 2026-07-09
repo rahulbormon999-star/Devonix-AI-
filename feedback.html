@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feedback - Dev-Onix AI</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+  body {
+    background: #f4f6f9;
+    font-family: 'Georgia', serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    width: 100%;
+    max-width: 430px;
+    box-sizing: border-box;
+  }
+  .back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .back-btn:active { background: #e4e6eb; }
+  .back-btn svg { width: 24px; height: 24px; stroke: #111; stroke-width: 3; }
+  .header-title { font-size: 19px; font-weight: bold; color: #1c1e21; margin-left: 8px; }
+
+  .card {
+    background: #fff;
+    width: 90%;
+    max-width: 430px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+    padding: 24px;
+    margin-top: 10px;
+    border: 1px solid #eef2f6;
+  }
+
+  .card p.intro {
+    font-family: system-ui, sans-serif;
+    font-size: 13px;
+    color: #65676b;
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 14px;
+    border: 1px solid #ccd0d5;
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: 'Georgia', serif;
+    resize: vertical;
+    outline: none;
+  }
+  textarea:focus {
+    border-color: #1877f2;
+    box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.15);
+  }
+
+  .char-count {
+    text-align: right;
+    font-size: 12px;
+    color: #8a8d91;
+    font-family: system-ui, sans-serif;
+    margin-top: 6px;
+  }
+
+  .send-btn {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: #1877f2;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 16px;
+  }
+  .send-btn:active { background: #166fe5; }
+  .send-btn:disabled { background: #ccd0d5; cursor: not-allowed; }
+
+  .status-msg {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 14px;
+    font-family: system-ui, sans-serif;
+  }
+
+  #authCheckOverlay {
+    position: fixed;
+    inset: 0;
+    background: #f4f6f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  #authCheckOverlay .spin {
+    width: 34px; height: 34px;
+    border: 3px solid #dbe3ee;
+    border-top-color: #1877f2;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+  <div id="authCheckOverlay"><div class="spin"></div></div>
+
+  <div class="header">
+    <button class="back-btn" onclick="window.location.href='open.html'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+    </button>
+    <span class="header-title">Feedback</span>
+  </div>
+
+  <div class="card">
+    <p class="intro">আপনার মতামত, পরামর্শ বা অভিযোগ আমাদের জানান। দিনে সর্বোচ্চ ১টি মন্তব্য পাঠানো যাবে।</p>
+    <textarea id="feedbackInput" maxlength="1000" placeholder="আপনার মন্তব্য এখানে লিখুন..."></textarea>
+    <div class="char-count"><span id="charCount">0</span>/1000</div>
+    <button class="send-btn" id="sendBtn" onclick="submitFeedback()">Send Feedback</button>
+    <div class="status-msg" id="statusMsg"></div>
+  </div>
+
+  <script>
+    // ================= AUTH GUARD =================
+    (async function checkAuth(){
+        const overlay = document.getElementById("authCheckOverlay");
+        try {
+            const res = await fetch('/api/me');
+            if (!res.ok) {
+                window.location.replace("index.html");
+                return;
+            }
+        } catch (e) {}
+        finally {
+            overlay.style.display = "none";
+        }
+    })();
+
+    const textarea = document.getElementById("feedbackInput");
+    textarea.addEventListener("input", () => {
+        document.getElementById("charCount").innerText = textarea.value.length;
+    });
+
+    async function submitFeedback() {
+        const message = textarea.value.trim();
+        const statusMsg = document.getElementById("statusMsg");
+        const sendBtn = document.getElementById("sendBtn");
+
+        if (!message) {
+            statusMsg.style.color = "red";
+            statusMsg.innerText = "মন্তব্য খালি রাখা যাবে না";
+            return;
+        }
+
+        sendBtn.disabled = true;
+        sendBtn.innerText = "Sending...";
+        statusMsg.innerText = "";
+
+        try {
+            const res = await fetch('/api/feedback-submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                statusMsg.style.color = "green";
+                statusMsg.innerText = "✅ ধন্যবাদ! আপনার মন্তব্য পাঠানো হয়েছে";
+                textarea.value = "";
+                document.getElementById("charCount").innerText = "0";
+                textarea.disabled = true;
+                sendBtn.innerText = "Sent";
+            } else {
+                statusMsg.style.color = "red";
+                statusMsg.innerText = data.error || "মন্তব্য পাঠানো যায়নি";
+                sendBtn.disabled = false;
+                sendBtn.innerText = "Send Feedback";
+            }
+        } catch (err) {
+            statusMsg.style.color = "red";
+            statusMsg.innerText = "নেটওয়ার্ক সমস্যা, আবার চেষ্টা করুন";
+            sendBtn.disabled = false;
+            sendBtn.innerText = "Send Feedback";
+        }
+    }
+  </script>
+</body>
+</html>
