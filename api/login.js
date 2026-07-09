@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     }
 
     const rows = await sql`
-      SELECT id, password_hash, failed_login_attempts, locked_until, first_name, last_name, phone, profile_picture
+      SELECT id, password_hash, failed_login_attempts, locked_until, first_name, last_name, phone, profile_picture, banned, ban_reason
       FROM users WHERE phone = ${phone}
     `;
     if (rows.length === 0) {
@@ -23,6 +23,10 @@ export default async function handler(req, res) {
     }
 
     const user = rows[0];
+
+    if (user.banned) {
+      return res.status(403).json({ error: 'আপনার একাউন্ট ব্যান করা হয়েছে' + (user.ban_reason ? `: ${user.ban_reason}` : '') });
+    }
 
     // ================= Account Lockout চেক =================
     if (user.locked_until && new Date(user.locked_until) > new Date()) {
@@ -65,4 +69,4 @@ export default async function handler(req, res) {
     console.error(err);
     return res.status(500).json({ error: 'সার্ভার এরর, পরে আবার চেষ্টা করুন' });
   }
-  }
+}
