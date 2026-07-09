@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
   try {
     const rows = await sql`
-      SELECT id, first_name, last_name, gender, dob, country, phone, email, profile_picture, created_at
+      SELECT id, first_name, last_name, gender, dob, country, phone, email, profile_picture, created_at, banned, ban_reason, banned_at
       FROM users ORDER BY created_at DESC
     `;
     return res.status(200).json({ users: rows });
