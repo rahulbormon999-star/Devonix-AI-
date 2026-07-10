@@ -67,7 +67,6 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     console.error(err);
-    // ================= সাময়িক ডিবাগিং (সমস্যা ধরার পর এই লাইনটা বদলে ফেলবেন) =================
-    return res.status(500).json({ error: 'সার্ভার এরর: ' + (err.message || 'Unknown error') });
+    return res.status(500).json({ error: 'সার্ভার এরর, পরে আবার চেষ্টা করুন' });
   }
 }
