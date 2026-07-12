@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dev-Onix AI</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; padding: 0; background: #fff; font-family: 'Georgia', serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; transition: background 0.3s; }
+
+  /* Overlay (মেনু খুললে পেছনের কালো আস্তরণ) */
+  #overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5); opacity: 0; visibility: hidden;
+    transition: 0.3s; z-index: 5;
+  }
+  #overlay.active { opacity: 1; visibility: visible; }
+
+  /* মেনু বাটন */
+  .menu-btn {
+    position: fixed; top: 4%; left: 7%; cursor: pointer;
+    width: 9vw; height: 5vh; border: 2px solid #000;
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 6vw; transition: 0.3s; z-index: 15; background: #fff;
+  }
+  .menu-btn:active { transform: scale(0.9); }
+
+  /* সাইড মেনু */
+  .menu {
+    position: fixed; top: 0; left: -100%; width: 60%; height: 100%;
+    background: #fff; border-right: 1px solid #ddd;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 20% 8% 6%; z-index: 20;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  .menu.active { left: 0; }
+
+  .menu a {
+    display: block; color: #333; text-decoration: none;
+    font-size: 4vw; margin-bottom: 6%; padding: 3%;
+    border-radius: 10px; transition: 0.3s; border-bottom: 1px solid #f0f0f0;
+  }
+  .menu a:hover { background: #f9f9f9; }
+  .menu a:active { transform: scale(0.98); background: #eee; }
+
+  /* ক্লোজ বাটন */
+  .close-btn { position: absolute; top: 3%; right: 5%; font-size: 7vw; cursor: pointer; }
+
+  /* মেনুর নিচে প্রোফাইল ছবি + Logout */
+  .menu-footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 12px;
+    border-top: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .menu-footer:active { background: #f5f5f5; }
+  .menu-footer-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #eee;
+    flex-shrink: 0;
+    border: 1px solid #e2e8f0;
+  }
+  .menu-footer-text {
+    font-weight: 700;
+    color: #e02424;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+  }
+
+  /* কন্টেন্ট */
+  .title { margin-top: 30%; text-align: center; font-size: 9vw; animation: dropDown 1s ease forwards;
+         background: linear-gradient(to right, #0066ff, #00ccff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+         }
+
+  @keyframes dropDown {
+    0% { transform: translateY(-50px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  h2 { font-size: 6vw; margin-top: 20%; color: #000; font-style: Georgia, serif;
+     background: linear-gradient(to right, #0066ff, #00ccff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+     }
+  h1{
+    margin-top:10%;
+  }
+  
+  /* Responsive paragraph */
+p{
+  width:90%;
+  font-size:4.2vw;
+  line-height:1.7;
+  color:#222;
+
+  margin:12px auto;
+
+  word-wrap:break-word;
+  overflow-wrap:break-word;
+
+  text-align:left;
+}
+
+/* Responsive image */
+ .about-img{
+  width:100%;
+  max-width:320px;
+  height:auto;
+  display:block;
+  margin:auto;
+  border:2px solid #111;
+ }
+
+/* Circle profile image */
+.profile-img{
+  width:38vw;
+  height:38vw;
+
+  max-width:170px;
+  max-height:170px;
+
+  min-width:120px;
+  min-height:120px;
+
+  border-radius:50%;
+  border:2px solid #000;
+
+  object-fit:cover;
+
+  display:block;
+
+  margin:auto;
+}
+
+/* Small phone support */
+@media (max-width:400px){
+
+  p{
+    font-size:15px;
+    line-height:1.6;
+  }
+
+  .profile-img{
+    width:42vw;
+    height:42vw;
+  }
+}
+
+/* Large phone support */
+@media (min-width:700px){
+
+  p{
+    font-size:18px;
+    max-width:600px;
+  }
+
+  .profile-img{
+    width:180px;
+    height:180px;
+  }
+}
+ .apps {
+     text-align:center;
+ }
+
+ /* apps button and img control */
+.apps{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:10px;
+    line-height:1;
+}
+
+.apps-logo{
+    width:24px;
+    height:24px;
+    object-fit:contain;
+    position:relative;
+    top:3px;
+}
+
+.icon-wrapper{
+    width: 64px;
+    height: 64px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.app-icon{
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+    position: relative;
+    top:0;
+}
+
+/* ছোট মোবাইল */
+@media (max-width:480px){
+    .apps-logo{
+        width:20px;
+        height:20px;
+    }
+}
+
+/* বড় মোবাইল */
+@media (min-width:481px){
+    .apps-logo{
+        width:26px;
+        height:26px;
+    }
+ }
+
+/* auth চেক করার সময় দেখানো স্পিনার */
+#authCheckOverlay {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+#authCheckOverlay .spin {
+    width: 34px; height: 34px;
+    border: 3px solid #e0e0e0;
+    border-top-color: #1877f2;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ================= ফিডব্যাক সেকশন (পেজের একদম নিচে) ================= */
+.feedback-section {
+  width: 90%;
+  max-width: 430px;
+  margin: 40px auto 50px;
+  background: #f8fafc;
+  border-radius: 20px;
+  padding: 22px;
+  border: 1px solid #eef2f6;
+  box-sizing: border-box;
+}
+.feedback-section h3 {
+  font-size: 22px;
+  margin-bottom: 6px;
+  color: #1c1e21;
+}
+.feedback-section .fb-intro {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  color: #65676b;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.feedback-section textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 14px;
+  border: 1px solid #ccd0d5;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: 'Georgia', serif;
+  resize: vertical;
+  outline: none;
+  box-sizing: border-box;
+}
+.feedback-section textarea:focus {
+  border-color: #1877f2;
+  box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.15);
+}
+.fb-char-count {
+  text-align: right;
+  font-size: 12px;
+  color: #8a8d91;
+  font-family: system-ui, sans-serif;
+  margin-top: 6px;
+}
+.fb-send-btn {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  background: #1877f2;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 14px;
+  font-family: 'Georgia', serif;
+}
+.fb-send-btn:active { background: #166fe5; }
+.fb-send-btn:disabled { background: #ccd0d5; cursor: not-allowed; }
+.fb-status-msg {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  margin-top: 12px;
+  font-family: system-ui, sans-serif;
+}
+</style>
+</head>
+<body>
+
+  <div id="authCheckOverlay"><div class="spin"></div></div>
+
+  <!-- Overlay for closing menu -->
+  <div id="overlay" onclick="toggleMenu()"></div>
+
+  <h1 class="title"><i>Dev-Onix</i></h1>
+
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+  <div class="menu" id="menu">
+    <div class="close-btn" onclick="toggleMenu()">✖</div>
+    <a href="#" onclick="gohome()">🏠 Home</a>
+    <a href="#" onclick="goprofile()">👤 Profile</a>
+    <a href="#" onclick="gosetting()">⚙️ Setting</a>
+    <a href="#">❗ About</a> 
+   <a href="#" onclick="goapps()" class="apps">
+    <img src="1780474142335.png" class="apps-logo">
+    <span>Apps</span>
+   </a>
+    <h2><i>Dev-Onix</i></h2>
+
+    <div class="menu-footer" onclick="logout()">
+      <img class="menu-footer-avatar" id="menuFooterAvatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="">
+      <span class="menu-footer-text">🚪 Logout</span>
+    </div>
+  </div>
+  
+   <div class="about">
+  <p>
+  My name is <b><u>Rahul Dev</u></b>. <br><br>
+
+  I am interested in working with technology and Artificial Intelligence (AI). My goal is to create new things and find simple, intelligent solutions to problems. <br><br>
+
+  I am to build digital systems that make people's lives easier, faster, and more efficient. <br><br>
+
+  In the future, I plan to work with advanced AI technologies and create innovative solutions. <br><br>
+
+  — <b><u>Rahul Dev</u></b>
+  </p>
+</div>
+ <div>
+<img src="1775399648468.jpg" class="about-img">
+<img src="1775400116850.jpg" class="about-img">
+<img src="1775399867468.jpg" class="about-img">
+ </div>
+
+  <!-- ================= ফিডব্যাক সেকশন (পেজের একদম নিচে) ================= -->
+  <div class="feedback-section">
+    <h3>💬 আপনার মতামত জানান</h3>
+    <p class="fb-intro">আপনার মতামত, পরামর্শ বা অভিযোগ সরাসরি এখানে লিখুন। দিনে সর্বোচ্চ ১টি মন্তব্য পাঠানো যাবে।</p>
+    <textarea id="feedbackInput" maxlength="1000" placeholder="আপনার মন্তব্য এখানে লিখুন..."></textarea>
+    <div class="fb-char-count"><span id="charCount">0</span>/1000</div>
+    <button class="fb-send-btn" id="sendBtn" onclick="submitFeedback()">Send Feedback</button>
+    <div class="fb-status-msg" id="statusMsg"></div>
+  </div>
+
+  <script>
+    function toggleMenu(){
+      let m = document.getElementById("menu");
+      let o = document.getElementById("overlay");
+      
+      m.classList.toggle("active");
+      o.classList.toggle("active");
+    }
+
+    function goprofile(){ window.location.href="profile.html"; }
+   
+    function gosetting(){ window.location.href="setting.html"; }
+   
+  function gohome(){ window.location.href="open.html"; }
+   
+    async function logout(){
+        try { await fetch('/api/logout', { method: 'POST' }); } catch(e) {}
+        window.location.href = "index.html";
+    }
+   function goapps(){
+      window.location.href="apps.html";
+   }
+
+    // ================= AUTH GUARD =================
+    (async function checkAuth(){
+        const overlay = document.getElementById("authCheckOverlay");
+        try {
+            const res = await fetch('/api/me');
+            if (!res.ok) {
+                window.location.replace("index.html");
+                return;
+            }
+            const { user } = await res.json();
+            if (user.profile_picture) {
+                document.getElementById("menuFooterAvatar").src = user.profile_picture;
+            }
+        } catch (e) {
+            // নেটওয়ার্ক সমস্যা হলে পেইজেই থাকতে দেওয়া হচ্ছে
+        } finally {
+            overlay.style.display = "none";
+        }
+    })();
+
+    // ================= ফিডব্যাক পাঠানো =================
+    const feedbackTextarea = document.getElementById("feedbackInput");
+    feedbackTextarea.addEventListener("input", () => {
+        document.getElementById("charCount").innerText = feedbackTextarea.value.length;
+    });
+
+    async function submitFeedback() {
+        const message = feedbackTextarea.value.trim();
+        const statusMsg = document.getElementById("statusMsg");
+        const sendBtn = document.getElementById("sendBtn");
+
+        if (!message) {
+            statusMsg.style.color = "red";
+            statusMsg.innerText = "মন্তব্য খালি রাখা যাবে না";
+            return;
+        }
+
+        sendBtn.disabled = true;
+        sendBtn.innerText = "Sending...";
+        statusMsg.innerText = "";
+
+        try {
+            const res = await fetch('/api/feedback-submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message })
+            });
+            const data = await res.json();
+
+            if (res.ok) {
+                statusMsg.style.color = "green";
+                statusMsg.innerText = "✅ ধন্যবাদ! আপনার মন্তব্য পাঠানো হয়েছে";
+                feedbackTextarea.value = "";
+                document.getElementById("charCount").innerText = "0";
+                feedbackTextarea.disabled = true;
+                sendBtn.innerText = "Sent";
+            } else {
+                statusMsg.style.color = "red";
+                statusMsg.innerText = data.error || "মন্তব্য পাঠানো যায়নি";
+                sendBtn.disabled = false;
+                sendBtn.innerText = "Send Feedback";
+            }
+        } catch (err) {
+            statusMsg.style.color = "red";
+            statusMsg.innerText = "নেটওয়ার্ক সমস্যা, আবার চেষ্টা করুন";
+            sendBtn.disabled = false;
+            sendBtn.innerText = "Send Feedback";
+        }
+    }
+  </script>
+</body>
+</html>
