@@ -22,9 +22,9 @@ async function handleRequest(req, res) {
 
     const rows = await sql`SELECT email, banned FROM users WHERE phone = ${phone}`;
 
-    // ইউজার enumeration ঠেকাতে - একাউন্ট না থাকলেও একই সফল বার্তা দেখানো হয়
+    // ================= সাময়িক ডিবাগিং: anti-enumeration মাস্কিং বন্ধ করা হয়েছে =================
     if (rows.length === 0) {
-      return res.status(200).json({ success: true, maskedEmail: null });
+      return res.status(404).json({ error: 'এই ফোন নম্বরে কোনো একাউন্ট পাওয়া যায়নি' });
     }
 
     const user = rows[0];
@@ -60,7 +60,8 @@ async function handleRequest(req, res) {
     return res.status(200).json({ success: true, maskedEmail: maskEmail(user.email) });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: 'কোড পাঠানো যায়নি, পরে আবার চেষ্টা করুন' });
+    // ================= সাময়িক ডিবাগিং (সমস্যা ধরার পর এই লাইনটা বদলে ফেলবেন) =================
+    return res.status(500).json({ error: 'কোড পাঠানো যায়নি: ' + (err.message || 'Unknown error') });
   }
 }
 
@@ -123,4 +124,4 @@ function maskEmail(email) {
   if (!name || !domain) return email;
   if (name.length <= 2) return name[0] + '***@' + domain;
   return name.slice(0, 2) + '***@' + domain;
-  }
+}
