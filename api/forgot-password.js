@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { generateOtp, hashOtp, verifyOtpHash } from '../lib/otp.js';
 import { sendOtpEmail } from '../lib/email.js';
 import { getClientIp, isPasswordStrong } from '../lib/security.js';
+import { setSessionCookie } from '../lib/auth.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
@@ -22,9 +23,9 @@ async function handleRequest(req, res) {
 
     const rows = await sql`SELECT email, banned FROM users WHERE phone = ${phone}`;
 
-    // ================= সাময়িক ডিবাগিং: anti-enumeration মাস্কিং বন্ধ করা হয়েছে =================
+    // ইউজার enumeration ঠেকাতে - একাউন্ট না থাকলেও একই সফল বার্তা দেখানো হয়
     if (rows.length === 0) {
-      return res.status(404).json({ error: 'এই ফোন নম্বরে কোনো একাউন্ট পাওয়া যায়নি' });
+      return res.status(200).json({ success: true, maskedEmail: null });
     }
 
     const user = rows[0];
@@ -60,8 +61,7 @@ async function handleRequest(req, res) {
     return res.status(200).json({ success: true, maskedEmail: maskEmail(user.email) });
   } catch (err) {
     console.error(err);
-    // ================= সাময়িক ডিবাগিং (সমস্যা ধরার পর এই লাইনটা বদলে ফেলবেন) =================
-    return res.status(500).json({ error: 'কোড পাঠানো যায়নি: ' + (err.message || 'Unknown error') });
+    return res.status(500).json({ error: 'কোড পাঠানো যায়নি, পরে আবার চেষ্টা করুন' });
   }
 }
 
@@ -112,6 +112,9 @@ async function handleReset(req, res) {
     `;
     await sql`DELETE FROM email_otps WHERE email = ${user.email}`;
 
+    // পাসওয়ার্ড রিসেট সফল হলে সরাসরি লগইন করিয়ে দেওয়া হচ্ছে
+    setSessionCookie(res, user.id);
+
     return res.status(200).json({ success: true });
   } catch (err) {
     console.error(err);
@@ -124,4 +127,4 @@ function maskEmail(email) {
   if (!name || !domain) return email;
   if (name.length <= 2) return name[0] + '***@' + domain;
   return name.slice(0, 2) + '***@' + domain;
-}
+        }
