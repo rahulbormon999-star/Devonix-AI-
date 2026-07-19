@@ -9,17 +9,37 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Admin session invalid, please login again' });
   }
 
-  // ================= GET: সব মন্তব্য তালিকা =================
+  // ================= GET: পেজ-ভিত্তিক মন্তব্য তালিকা (status ফিল্টার সহ) =================
   if (req.method === 'GET') {
     try {
+      const page = Math.max(1, parseInt(req.query.page) || 1);
+      const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 20));
+      const offset = (page - 1) * limit;
+      const status = (req.query.status || 'all').toLowerCase();
+
+      const countRows = await sql`
+        SELECT COUNT(*) FROM user_feedback
+        WHERE ${status} = 'all' OR status = ${status}
+      `;
+      const total = Number(countRows[0].count);
+
       const rows = await sql`
         SELECT f.id, f.message, f.status, f.created_at, f.admin_reply, f.replied_at,
                u.id AS user_id, u.first_name, u.last_name, u.phone, u.profile_picture
         FROM user_feedback f
         JOIN users u ON u.id = f.user_id
+        WHERE ${status} = 'all' OR f.status = ${status}
         ORDER BY f.created_at DESC
+        LIMIT ${limit} OFFSET ${offset}
       `;
-      return res.status(200).json({ feedback: rows });
+
+      return res.status(200).json({
+        feedback: rows,
+        total,
+        page,
+        limit,
+        totalPages: Math.max(1, Math.ceil(total / limit))
+      });
     } catch (err) {
       console.error(err);
       return res.status(500).json({ error: 'সার্ভার এরর' });
