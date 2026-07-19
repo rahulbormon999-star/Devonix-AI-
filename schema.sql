@@ -73,3 +73,9 @@ CREATE INDEX IF NOT EXISTS idx_user_feedback_created ON user_feedback(created_at
 -- আগে থেকে টেবিল থাকলে এই দুইটা কলাম আলাদাভাবে যোগ করুন
 ALTER TABLE user_feedback ADD COLUMN IF NOT EXISTS admin_reply TEXT;
 ALTER TABLE user_feedback ADD COLUMN IF NOT EXISTS replied_at TIMESTAMPTZ;
+
+-- ================= স্কেলিং/পারফরম্যান্স ইনডেক্স (বেশি ইউজার হলে দ্রুত কাজ করার জন্য) =================
+CREATE INDEX IF NOT EXISTS idx_users_created_at ON users(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_users_gender ON users(gender);
+CREATE INDEX IF NOT EXISTS idx_users_banned ON users(banned);
+CREATE INDEX IF NOT EXISTS idx_user_feedback_status ON user_feedback(status);
