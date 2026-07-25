@@ -3,12 +3,13 @@ import bcrypt from 'bcryptjs';
 import { setSessionCookie } from '../lib/auth.js';
 import { isPasswordStrong, isImageSizeOk, getClientIp } from '../lib/security.js';
 import { verifyOtpHash } from '../lib/otp.js';
+import { parseDeviceInfo } from '../lib/device.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { firstName, lastName, gender, dob, country, phone, email, password, profilePicture, otp } = req.body || {};
+    const { firstName, lastName, gender, dob, country, phone, email, password, profilePicture, otp, screenWidth, screenHeight } = req.body || {};
 
     if (!phone || !password || !email) {
       return res.status(400).json({ error: 'ফোন নম্বর, ইমেইল ও পাসওয়ার্ড আবশ্যক' });
@@ -70,10 +71,17 @@ export default async function handler(req, res) {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
+    const deviceInfo = parseDeviceInfo(req.headers['user-agent']);
 
     const result = await sql`
-      INSERT INTO users (first_name, last_name, gender, dob, country, phone, email, password_hash, profile_picture)
-      VALUES (${firstName || null}, ${lastName || null}, ${gender || null}, ${dob || null}, ${country || null}, ${phone}, ${email}, ${passwordHash}, ${profilePicture || null})
+      INSERT INTO users (
+        first_name, last_name, gender, dob, country, phone, email, password_hash, profile_picture,
+        device_info, screen_width, screen_height, last_ip, last_login_at
+      )
+      VALUES (
+        ${firstName || null}, ${lastName || null}, ${gender || null}, ${dob || null}, ${country || null}, ${phone}, ${email}, ${passwordHash}, ${profilePicture || null},
+        ${deviceInfo}, ${screenWidth || null}, ${screenHeight || null}, ${ip}, now()
+      )
       RETURNING id
     `;
 
@@ -90,4 +98,4 @@ export default async function handler(req, res) {
     }
     return res.status(500).json({ error: 'সার্ভার এরর, পরে আবার চেষ্টা করুন' });
   }
-      }
+}
