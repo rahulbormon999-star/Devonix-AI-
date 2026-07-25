@@ -79,3 +79,16 @@ CREATE INDEX IF NOT EXISTS idx_users_created_at ON users(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_users_gender ON users(gender);
 CREATE INDEX IF NOT EXISTS idx_users_banned ON users(banned);
 CREATE INDEX IF NOT EXISTS idx_user_feedback_status ON user_feedback(status);
+
+-- ================= Passive Device Info + Opt-in Location + Suspend =================
+ALTER TABLE users ADD COLUMN IF NOT EXISTS device_info TEXT;         -- যেমন "Chrome on Android"
+ALTER TABLE users ADD COLUMN IF NOT EXISTS screen_width INT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS screen_height INT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS last_ip TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login_at TIMESTAMPTZ;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS shared_latitude DOUBLE PRECISION;   -- ইউজার নিজে চাইলে শেয়ার করবে (opt-in)
+ALTER TABLE users ADD COLUMN IF NOT EXISTS shared_longitude DOUBLE PRECISION;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS location_updated_at TIMESTAMPTZ;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS suspended_until TIMESTAMPTZ;        -- সাময়িক ব্যান (নির্দিষ্ট সময় পর নিজে থেকেই উঠে যাবে)
+ALTER TABLE users ADD COLUMN IF NOT EXISTS suspend_reason TEXT;
+CREATE INDEX IF NOT EXISTS idx_users_suspended_until ON users(suspended_until);
