@@ -19,34 +19,11 @@ export default async function handler(req, res) {
       if (req.query.id) {
         const rows = await sql`
           SELECT id, first_name, last_name, gender, dob, country, phone, email, profile_picture,
-                 created_at, banned, ban_reason, banned_at, suspended_until, suspend_reason,
-                 device_info, screen_width, screen_height, last_ip, last_login_at,
-                 shared_latitude, shared_longitude, location_updated_at
+                 created_at, banned, ban_reason, banned_at, suspended_until, suspend_reason
           FROM users WHERE id = ${req.query.id}
         `;
         if (rows.length === 0) return res.status(404).json({ error: 'ইউজার পাওয়া যায়নি' });
         return res.status(200).json({ user: rows[0] });
-      }
-
-      // ================= Audit Log ভিউ =================
-      if (req.query.mode === 'auditlog') {
-        const page = Math.max(1, parseInt(req.query.page) || 1);
-        const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 25));
-        const offset = (page - 1) * limit;
-
-        const countRows = await sql`SELECT COUNT(*) FROM audit_log`;
-        const total = Number(countRows[0].count);
-
-        const rows = await sql`
-          SELECT a.id, a.action, a.target_user_id, a.ip, a.created_at,
-                 u.first_name, u.last_name, u.phone
-          FROM audit_log a
-          LEFT JOIN users u ON u.id = a.target_user_id
-          ORDER BY a.created_at DESC
-          LIMIT ${limit} OFFSET ${offset}
-        `;
-
-        return res.status(200).json({ logs: rows, total, page, limit, totalPages: Math.max(1, Math.ceil(total / limit)) });
       }
 
       // ================= Analytics =================
@@ -266,4 +243,4 @@ export default async function handler(req, res) {
   }
 
   return res.status(405).json({ error: 'Method not allowed' });
-}
+      }
