@@ -1,8 +1,6 @@
 import { sql } from '../lib/db.js';
 import bcrypt from 'bcryptjs';
 import { setSessionCookie } from '../lib/auth.js';
-import { parseDeviceInfo } from '../lib/device.js';
-import { getClientIp } from '../lib/security.js';
 
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCK_MINUTES = 15;
@@ -11,7 +9,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { phone, password, screenWidth, screenHeight } = req.body || {};
+    const { phone, password } = req.body || {};
     if (!phone || !password) {
       return res.status(400).json({ error: 'ফোন নম্বর ও পাসওয়ার্ড আবশ্যক' });
     }
@@ -59,16 +57,8 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // সফল লগইন হলে failed attempt কাউন্টার রিসেট + ডিভাইস তথ্য আপডেট
-    const deviceInfo = parseDeviceInfo(req.headers['user-agent']);
-    const ip = getClientIp(req);
-    await sql`
-      UPDATE users SET
-        failed_login_attempts = 0, locked_until = NULL,
-        device_info = ${deviceInfo}, screen_width = ${screenWidth || null}, screen_height = ${screenHeight || null},
-        last_ip = ${ip}, last_login_at = now()
-      WHERE id = ${user.id}
-    `;
+    // সফল লগইন হলে failed attempt কাউন্টার রিসেট
+    await sql`UPDATE users SET failed_login_attempts = 0, locked_until = NULL WHERE id = ${user.id}`;
 
     setSessionCookie(res, user.id);
     return res.status(200).json({
