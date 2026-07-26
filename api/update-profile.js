@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   if (!userId) return res.status(401).json({ error: 'Not logged in' });
 
   try {
-    const { firstName, lastName, gender, dob, country, email, profilePicture, phone, latitude, longitude } = req.body || {};
+    const { firstName, lastName, gender, dob, country, email, profilePicture, phone } = req.body || {};
 
     if (!isImageSizeOk(profilePicture)) {
       return res.status(400).json({ error: 'ছবির সাইজ অনেক বড়, ছোট একটি ছবি দিন' });
@@ -40,10 +40,7 @@ export default async function handler(req, res) {
         country = COALESCE(${country}, country),
         email = COALESCE(${email}, email),
         profile_picture = COALESCE(${profilePicture}, profile_picture),
-        phone = COALESCE(${phone}, phone),
-        shared_latitude = COALESCE(${latitude ?? null}, shared_latitude),
-        shared_longitude = COALESCE(${longitude ?? null}, shared_longitude),
-        location_updated_at = CASE WHEN ${latitude ?? null} IS NOT NULL THEN now() ELSE location_updated_at END
+        phone = COALESCE(${phone}, phone)
       WHERE id = ${userId}
     `;
 
