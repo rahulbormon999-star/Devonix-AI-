@@ -11,7 +11,9 @@ export default async function handler(req, res) {
       .split(',').map(s => s.trim()).filter(Boolean);
 
     if (!redirectUri || !allowedOrigins.some(origin => redirectUri.startsWith(origin))) {
-      return res.status(400).json({ error: 'অনুমোদিত না এমন redirect_uri' });
+      return res.status(400).json({
+        error: `অনুমোদিত না এমন redirect_uri: "${redirectUri}" — এটা SSO_ALLOWED_REDIRECT_ORIGINS এর সাথে মিলছে না`
+      });
     }
 
     if (!userId) {
