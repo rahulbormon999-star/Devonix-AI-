@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dev-Onix AI</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; padding: 0; background: #fff; font-family: 'Georgia', serif; height: 100vh; display: flex; flex-direction: column; align-items: center; transition: background 0.3s; }
+
+  #bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+
+  #overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); opacity: 0; visibility: hidden; transition: 0.3s; z-index: 5; }
+  #overlay.active { opacity: 1; visibility: visible; }
+  .menu-btn { position: fixed; top: 4%; left: 7%; cursor: pointer; width: 9vw; height: 5vh; border: 2px solid #000; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 6vw; transition: 0.3s; z-index: 15; background: #fff; }
+  .menu-btn:active { transform: scale(0.9); }
+  .menu { position: fixed; top: 0; left: -100%; width: 60%; height: 100%; background: #fff; border-right: 1px solid #ddd; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 20% 8% 6%; z-index: 20; box-shadow: 2px 0 10px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+  .menu.active { left: 0; }
+  .menu a { display: block; color: #333; text-decoration: none; font-size: 4vw; margin-bottom: 6%; padding: 3%; border-radius: 10px; transition: 0.3s; border-bottom: 1px solid #f0f0f0; }
+  .menu a:hover { background: #f9f9f9; }
+  .menu a:active { transform: scale(0.98); background: #eee; }
+  .close-btn { position: absolute; top: 3%; right: 5%; font-size: 7vw; cursor: pointer; }
+  .menu-footer { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 12px; border-top: 1px solid #f0f0f0; cursor: pointer; transition: background 0.2s; }
+  .menu-footer:active { background: #f5f5f5; }
+  .menu-footer-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; background: #eee; flex-shrink: 0; border: 1px solid #e2e8f0; }
+  .menu-footer-text { font-weight: 700; color: #e02424; font-family: system-ui, -apple-system, sans-serif; font-size: 15px; }
+
+  .title { margin-top: 30%; text-align: center; font-size: 9vw; animation: dropDown 1s ease forwards; background: linear-gradient(to right, #0066ff, #00ccff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  @keyframes dropDown { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+  h2 { font-size: 6vw; margin-top: 20%; color: #000; font-style: Georgia, serif; background: linear-gradient(to right, #0066ff, #00ccff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  h1 { margin-top: 10%; }
+  .apps { display: flex; align-items: center; justify-content: flex-start; gap: 10px; line-height: 1; }
+  .apps-logo { width: 24px; height: 24px; object-fit: contain; position: relative; top: 3px; }
+  @media (max-width:480px) { .apps-logo { width: 20px; height: 20px; } }
+  @media (min-width:481px) { .apps-logo { width: 26px; height: 26px; } }
+
+  #authCheckOverlay { position: fixed; inset: 0; background: #fff; display: flex; align-items: center; justify-content: center; z-index: 999; }
+  #authCheckOverlay .spin { width: 34px; height: 34px; border: 3px solid #e0e0e0; border-top-color: #1877f2; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+  <!-- 2.5D PRO ফুটবল এনিমেশনের জন্য ক্যানভাস -->
+  <canvas id="bg-canvas"></canvas>
+
+  <div id="authCheckOverlay"><div class="spin"></div></div>
+  <div id="overlay" onclick="toggleMenu()"></div>
+
+  <h1 class="title"><i>Welcome to <br>Dev-Onix</i></h1>
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+  <div class="menu" id="menu">
+    <div class="close-btn" onclick="toggleMenu()">✖</div>
+    <a href="#">🏠 Home</a>
+    <a href="#" onclick="goprofile()">👤 Profile</a>
+    <a href="#" onclick="gosetting()">⚙️ Setting</a>
+    <a href="#" onclick="goabout()">❗ About</a>
+    <a href="#" onclick="goapps()" class="apps">
+        <img src="1780474142335.png" class="apps-logo">
+        <span>Apps</span>
+    </a>
+    <h2><i>Dev-Onix</i></h2>
+    <div class="menu-footer" onclick="logout()">
+      <img class="menu-footer-avatar" id="menuFooterAvatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="">
+      <span class="menu-footer-text">🚪 Logout</span>
+    </div>
+  </div>
+
+  <script>
+// ================= HYPER REALISTIC FOOTBALL SIMULATION & VAR =================
+const canvas = document.getElementById("bg-canvas");
+const ctx = canvas.getContext("2d");
+let width, height;
+
+// Game State Management
+let game = {
+    state: 'PLAYING', // PLAYING, STOPPED, VAR
+    message: '',
+    stopTimer: 0,
+    kickingTeam: 0,
+    kickerPlayer: null,
+    outType: 'NONE', // THROW_IN, GOAL_KICK, CORNER, FOUL
+    lastTouchTeam: -1,
+    varFrame: 0,
+    varDecision: ''
+};
+
+// VAR History Store
+let historyFrames = [];
+
+let players = [];
+let referee;
+let ball;
+
+function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ================= Classes =================
+
+class Ball {
+    constructor() {
+        this.x = width / 2; this.y = height / 2;
+        this.vx = 0; this.vy = 0; this.radius = 4;
+    }
+    update() {
+        // ফ্রিকশন বাড়ানো হয়েছে (যাতে বল সহজে আউট না হয়)
+        this.vx *= (game.state === 'PLAYING') ? 0.93 : 0.5;
+        this.vy *= (game.state === 'PLAYING') ? 0.93 : 0.5;
+        this.x += this.vx; this.y += this.vy;
+
+        if (game.state === 'PLAYING') {
+            // Left/Right Out (Throw-in)
+            if (this.x < 0 || this.x > width) {
+                this.x = Math.max(0, Math.min(width, this.x));
+                triggerStop("THROW IN", "THROW_IN", 1 - game.lastTouchTeam);
+            }
+            // Top/Bottom Out (Goal Kick / Corner)
+            else if (this.y < 0 || this.y > height) {
+                this.y = Math.max(0, Math.min(height, this.y));
+                let attackingTeam = (this.y < height/2) ? 1 : 0;
+                if (game.lastTouchTeam === attackingTeam) {
+                    triggerStop("GOAL KICK", "GOAL_KICK", 1 - attackingTeam);
+                } else {
+                    triggerStop("CORNER", "CORNER", attackingTeam);
+                }
+            }
+        }
+    }
+    draw(context = ctx, x = this.x, y = this.y) {
+        context.fillStyle = "rgba(0, 0, 0, 0.1)";
+        context.beginPath(); context.ellipse(x, y + 4, 4, 2, 0, 0, Math.PI*2); context.fill();
+        context.beginPath(); context.arc(x, y, this.radius, 0, Math.PI * 2);
+        context.fillStyle = "rgba(40, 40, 40, 0.6)"; context.fill();
+        context.fillStyle = "rgba(255, 255, 255, 0.5)";
+        context.beginPath(); context.arc(x - 1, y - 1, 1.5, 0, Math.PI * 2); context.fill();
+    }
+}
+
+class Player {
+    constructor(team, role, bx, by) {
+        this.team = team; this.role = role; 
+        this.baseX = bx; this.baseY = by; 
+        this.x = width * bx; this.y = height * by;
+        this.vx = 0; this.vy = 0;
+        this.speed = (Math.random() * 0.4) + 1.1; // স্লো রানিং স্পিড
+        
+        this.color = (team === 0) ? "rgba(231, 76, 60, 0.6)" : "rgba(52, 152, 219, 0.6)"; 
+        if (role === 'goalie') this.color = "rgba(46, 204, 113, 0.6)"; 
+        this.skin = "rgba(255, 204, 170, 0.8)";
+        this.shoe = "rgba(30, 30, 30, 0.6)";
+    }
+    
+    update(isClosest) {
+        let targetX = this.x, targetY = this.y;
+
+        if (game.state === 'PLAYING') {
+            if (this.role === 'goalie') {
+                targetX = Math.max(width/2 - 40, Math.min(width/2 + 40, ball.x));
+                targetY = (this.team === 0) ? 25 : height - 25;
+                let dist = Math.sqrt((ball.x-this.x)**2 + (ball.y-this.y)**2);
+                if (dist < 12) this.shoot(8);
+            } else {
+                if (isClosest) {
+                    targetX = ball.x; targetY = ball.y;
+                    let dist = Math.sqrt((ball.x-this.x)**2 + (ball.y-this.y)**2);
+                    if (dist < 12) {
+                        // পাসিং লজিক (নিজেদের প্লেয়ারকে পাস দেওয়া)
+                        let teammate = getOpenTeammate(this.team, this);
+                        if (teammate && Math.random() > 0.3) {
+                            let angle = Math.atan2(teammate.y - ball.y, teammate.x - ball.x);
+                            ball.vx = Math.cos(angle) * 5; ball.vy = Math.sin(angle) * 5;
+                        } else {
+                            this.shoot(5); // গোলপোস্টের দিকে বা সোজা মারবে
+                        }
+                        game.lastTouchTeam = this.team;
+
+                        // VAR ফাউল ট্রিগার
+                        if(Math.random() < 0.01) triggerVAR();
+                    }
+                } else {
+                    targetX = (width * this.baseX) + (ball.x - width/2) * 0.15;
+                    targetY = (height * this.baseY) + (ball.y - height/2) * 0.15;
+                }
+            }
+        } else if (game.state === 'STOPPED') {
+            if (this === game.kickerPlayer) {
+                targetX = ball.x; 
+                if (game.outType === 'THROW_IN') {
+                    // থ্রো-ইন হলে প্লেয়ার লাইনের বাইরে দাঁড়াবে
+                    targetX = (ball.x < width/2) ? -5 : width + 5; 
+                    targetY = ball.y;
+                } else {
+                    targetY = ball.y - (this.team === 0 ? -12 : 12);
+                }
+            } else {
+                targetX = width * this.baseX; targetY = height * this.baseY;
+                let dist = Math.sqrt((targetX-ball.x)**2 + (targetY-ball.y)**2);
+                if (dist < 50) { // Set-piece clearance
+                    targetX = ball.x + ((targetX-ball.x)/dist)*50;
+                    targetY = ball.y + ((targetY-ball.y)/dist)*50;
+                }
+            }
+        }
+
+        let dx = targetX - this.x, dy = targetY - this.y;
+        let dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist > 1) {
+            this.vx = (dx / dist) * this.speed; this.vy = (dy / dist) * this.speed;
+        } else {
+            this.vx *= 0.5; this.vy *= 0.5;
+        }
+        this.x += this.vx; this.y += this.vy;
+    }
+
+    shoot(power) {
+        let kickDirY = (this.team === 0) ? 1 : -1;
+        ball.vx += (Math.random() - 0.5) * 4;
+        ball.vy += kickDirY * (power + Math.random() * 2);
+    }
+
+    draw(context = ctx, x = this.x, y = this.y, vx = this.vx, vy = this.vy) {
+        context.save();
+        context.translate(x, y);
+        
+        let angle = Math.atan2(vy, vx);
+        if(Math.abs(vx) < 0.1 && Math.abs(vy) < 0.1) angle = (this.team === 0) ? Math.PI/2 : -Math.PI/2;
+        
+        // Throw-in Pose (হাত উপরে)
+        let isThrowing = (game.state === 'STOPPED' && this === game.kickerPlayer && game.outType === 'THROW_IN');
+        if (isThrowing) angle = Math.atan2(ball.y - y, ball.x - x);
+        
+        context.rotate(angle);
+        
+        let movingSpeed = Math.sqrt(vx*vx + vy*vy);
+        let swing = (movingSpeed > 0.2) ? Math.sin(Date.now() * 0.015 * movingSpeed) * 4 : 0;
+
+        context.fillStyle = "rgba(0, 0, 0, 0.08)";
+        context.beginPath(); context.ellipse(0, 8, 6, 2.5, 0, 0, Math.PI*2); context.fill();
+
+        context.fillStyle = this.shoe;
+        context.beginPath(); context.arc(-3, 6 - swing, 2.5, 0, Math.PI*2); context.fill(); 
+        context.beginPath(); context.arc(3, 6 + swing, 2.5, 0, Math.PI*2); context.fill();  
+
+        // Hands (Throw in হলে দুই হাত মাথার সামনে থাকবে)
+        context.fillStyle = this.skin;
+        if (isThrowing) {
+            context.beginPath(); context.arc(-3, 6, 2.5, 0, Math.PI*2); context.fill(); // Hand over head
+            context.beginPath(); context.arc(3, 6, 2.5, 0, Math.PI*2); context.fill();
+        } else {
+            context.beginPath(); context.arc(-6, 1 + swing, 2.2, 0, Math.PI*2); context.fill(); 
+            context.beginPath(); context.arc(6, 1 - swing, 2.2, 0, Math.PI*2); context.fill(); 
+        }
+
+        context.fillStyle = this.color;
+        context.beginPath(); context.ellipse(0, 0, 5.5, 7, 0, 0, Math.PI*2); context.fill();
+
+        context.fillStyle = this.skin;
+        context.beginPath(); context.arc(0, -8, 4, 0, Math.PI*2); context.fill();
+        context.fillStyle = "rgba(20, 20, 20, 0.5)";
+        context.beginPath(); context.arc(0, -8.5, 4, Math.PI, 0, false); context.fill();
+
+        context.restore();
+    }
+}
+
+class Referee {
+    constructor() { this.x = width / 2; this.y = height / 2; this.vx = 0; this.vy = 0; }
+    update() {
+        let targetX = ball.x + 60, targetY = ball.y + 60; 
+        if (game.state !== 'PLAYING') { targetX = ball.x + 35; targetY = ball.y - 35; }
+        
+        let dx = targetX - this.x, dy = targetY - this.y;
+        if (Math.sqrt(dx*dx + dy*dy) > 5) {
+            this.vx = (dx / Math.sqrt(dx*dx + dy*dy)) * 1.5; this.vy = (dy / Math.sqrt(dx*dx + dy*dy)) * 1.5;
+        } else { this.vx *= 0.5; this.vy *= 0.5; }
+        this.x += this.vx; this.y += this.vy;
+    }
+    draw(context = ctx) {
+        context.save(); context.translate(this.x, this.y);
+        context.rotate(Math.atan2(ball.y - this.y, ball.x - this.x));
+        let movingSpeed = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
+        let swing = (movingSpeed > 0.2) ? Math.sin(Date.now() * 0.015 * movingSpeed) * 4 : 0;
+
+        context.fillStyle = "rgba(30, 30, 30, 0.6)"; 
+        context.beginPath(); context.arc(-3, 6 - swing, 2.5, 0, Math.PI*2); context.fill(); 
+        context.beginPath(); context.arc(3, 6 + swing, 2.5, 0, Math.PI*2); context.fill();  
+
+        context.fillStyle = "rgba(255, 204, 170, 0.8)";
+        context.beginPath(); context.arc(-5.5, 1 + swing, 2, 0, Math.PI*2); context.fill(); 
+        context.beginPath(); context.arc(5.5, 1 - swing, 2, 0, Math.PI*2); context.fill(); 
+
+        context.fillStyle = "rgba(241, 196, 15, 0.6)"; 
+        context.beginPath(); context.ellipse(0, 0, 5, 7, 0, 0, Math.PI*2); context.fill();
+
+        context.fillStyle = "rgba(255, 204, 170, 0.8)";
+        context.beginPath(); context.arc(0, -8, 4, 0, Math.PI*2); context.fill();
+        context.restore();
+    }
+}
+
+function triggerStop(message, outType, team) {
+    if (game.state !== 'PLAYING') return;
+    game.state = 'STOPPED';
+    game.message = message;
+    game.outType = outType;
+    game.stopTimer = 180; 
+    game.kickingTeam = team;
+    game.kickerPlayer = null; 
+    
+    if (outType === 'GOAL_KICK') {
+        // গোলকি বক্সে বল আনবে
+        ball.x = width / 2; ball.y = (team === 0) ? 40 : height - 40;
+    }
+    if (outType === 'CORNER') {
+        ball.x = (ball.x < width/2) ? 10 : width - 10;
+        ball.y = (team === 0) ? 10 : height - 10;
+    }
+}
+
+function triggerVAR() {
+    if (game.state !== 'PLAYING') return;
+    game.state = 'VAR';
+    game.varFrame = 0;
+    game.varDecision = Math.random() > 0.5 ? "FOUL GIVEN" : "PLAY ON";
+    game.kickingTeam = 1 - game.lastTouchTeam;
+}
+
+function getOpenTeammate(team, passer) {
+    let best = null, minDist = Infinity;
+    for (let p of players) {
+        if (p.team === team && p !== passer && p.role !== 'goalie') {
+            let dist = Math.sqrt((p.x-passer.x)**2 + (p.y-passer.y)**2);
+            if (dist > 30 && dist < minDist) { minDist = dist; best = p; }
+        }
+    }
+    return best;
+}
+
+function drawPitch(context = ctx, w = width, h = height) {
+    context.strokeStyle = "rgba(0, 0, 0, 0.04)"; 
+    context.lineWidth = 2;
+    context.beginPath(); context.moveTo(0, h / 2); context.lineTo(w, h / 2); context.stroke();
+    context.beginPath(); context.arc(w / 2, h / 2, 60, 0, Math.PI * 2); context.stroke();
+    context.beginPath(); context.rect(w / 2 - 70, 0, 140, 50); context.stroke();
+    context.beginPath(); context.rect(w / 2 - 70, h - 50, 140, 50); context.stroke();
+}
+
+function initGame() {
+    ball = new Ball(); referee = new Referee(); players = [];
+    players.push(new Player(0, 'goalie', 0.5, 0.05));
+    players.push(new Player(0, 'field', 0.2, 0.2)); players.push(new Player(0, 'field', 0.5, 0.2)); players.push(new Player(0, 'field', 0.8, 0.2));
+    players.push(new Player(0, 'field', 0.35, 0.4)); players.push(new Player(0, 'field', 0.65, 0.4)); players.push(new Player(0, 'field', 0.5, 0.55)); 
+    players.push(new Player(1, 'goalie', 0.5, 0.95));
+    players.push(new Player(1, 'field', 0.2, 0.8)); players.push(new Player(1, 'field', 0.5, 0.8)); players.push(new Player(1, 'field', 0.8, 0.8));
+    players.push(new Player(1, 'field', 0.35, 0.6)); players.push(new Player(1, 'field', 0.65, 0.6)); players.push(new Player(1, 'field', 0.5, 0.45));
+}
+
+function saveHistory() {
+    let frame = {
+        bx: ball.x, by: ball.y,
+        ps: players.map(p => ({x: p.x, y: p.y, vx: p.vx, vy: p.vy, obj: p})),
+        rx: referee.x, ry: referee.y
+    };
+    historyFrames.push(frame);
+    if(historyFrames.length > 90) historyFrames.shift(); // 1.5 Sec History
+}
+
+function getKicker() {
+    if (game.outType === 'GOAL_KICK') return players.find(p => p.team === game.kickingTeam && p.role === 'goalie');
+    let closest = null, minDist = Infinity;
+    for (let p of players) {
+        if (p.team === game.kickingTeam && p.role !== 'goalie') {
+            let d = Math.sqrt((p.x - ball.x)**2 + (p.y - ball.y)**2);
+            if (d < minDist) { minDist = d; closest = p; }
+        }
+    }
+    return closest;
+}
+
+function drawVAR() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+    ctx.fillRect(0, 0, width, height); // Darken screen
+
+    // Draw VAR Box
+    let boxW = Math.min(300, width - 40), boxH = Math.min(400, height - 100);
+    let boxX = width/2 - boxW/2, boxY = height/2 - boxH/2;
+    
+    ctx.fillStyle = "#111"; ctx.fillRect(boxX, boxY, boxW, boxH);
+    ctx.strokeStyle = (game.varFrame % 20 < 10) ? "#ff3333" : "#555"; // Blinking border
+    ctx.lineWidth = 4; ctx.strokeRect(boxX, boxY, boxW, boxH);
+
+    ctx.fillStyle = "#fff"; ctx.font = "bold 20px Arial"; ctx.textAlign = "center";
+    ctx.fillText("VAR REVIEW...", width/2, boxY + 30);
+
+    // Render Slow-mo frame
+    if (historyFrames.length > 0) {
+        let fIdx = Math.floor(game.varFrame / 2); // Slow motion factor 2x
+        if (fIdx >= historyFrames.length) fIdx = historyFrames.length - 1;
+        let f = historyFrames[fIdx];
+        
+        ctx.save();
+        ctx.beginPath(); ctx.rect(boxX, boxY + 40, boxW, boxH - 80); ctx.clip();
+        
+        // Zoom into action area
+        let scale = 1.5;
+        ctx.translate(boxX + boxW/2 - f.bx*scale, boxY + boxH/2 - f.by*scale);
+        ctx.scale(scale, scale);
+        
+        drawPitch(ctx);
+        for(let p of f.ps) p.obj.draw(ctx, p.x, p.y, p.vx, p.vy);
+        ball.draw(ctx, f.bx, f.by);
+        
+        ctx.restore();
+    }
+
+    if (game.varFrame > historyFrames.length * 2 + 30) {
+        ctx.fillStyle = "#0f0"; ctx.fillText("DECISION: " + game.varDecision, width/2, boxY + boxH - 20);
+    }
+    
+    game.varFrame++;
+    if (game.varFrame > historyFrames.length * 2 + 100) {
+        triggerStop(game.varDecision, "FOUL", game.kickingTeam);
+    }
+}
+
+function animate() {
+    ctx.clearRect(0, 0, width, height);
+    
+    if (game.state === 'VAR') {
+        drawPitch();
+        drawVAR();
+        requestAnimationFrame(animate);
+        return;
+    }
+    
+    drawPitch();
+
+    if (game.state === 'PLAYING') saveHistory();
+    
+    if (game.state === 'STOPPED') {
+        if (!game.kickerPlayer) game.kickerPlayer = getKicker();
+        game.stopTimer--;
+        ctx.fillStyle = "rgba(0, 0, 0, 0.15)";
+        ctx.font = "bold 30px Arial"; ctx.textAlign = "center";
+        ctx.fillText(game.message, width / 2, height / 2 + 15);
+
+        if (game.stopTimer <= 0 && game.kickerPlayer) {
+            game.state = 'PLAYING';
+            let angle = (game.kickerPlayer.team === 0) ? Math.PI/2 : -Math.PI/2;
+            if (game.outType === 'THROW_IN') angle = (ball.x < width/2) ? 0 : Math.PI;
+            
+            ball.vx = Math.cos(angle) * 5; ball.vy = Math.sin(angle) * 5; 
+            game.outType = 'NONE';
+            game.kickerPlayer = null;
+        }
+    }
+
+    ball.update(); referee.update();
+    let closestT0 = getClosestPlayer(0), closestT1 = getClosestPlayer(1);
+    for (let p of players) p.update(p === closestT0 || p === closestT1);
+    
+    let renderList = [ball, referee, ...players];
+    renderList.sort((a, b) => a.y - b.y);
+    for(let obj of renderList) obj.draw();
+    
+    requestAnimationFrame(animate);
+}
+initGame(); animate();
+
+// ================= AUTH GUARD =================
+(async function checkAuth(){
+    const overlay = document.getElementById("authCheckOverlay");
+    try {
+        const res = await fetch('/api/me');
+        if (!res.ok) { window.location.replace("index.html"); return; }
+        const { user } = await res.json();
+        if (user.profile_picture) document.getElementById("menuFooterAvatar").src = user.profile_picture;
+    } catch (e) {} finally { overlay.style.display = "none"; }
+})();
+
+window.toggleMenu = function () {
+  document.getElementById("menu").classList.toggle("active");
+  document.getElementById("overlay").classList.toggle("active");
+};
+window.goprofile = function () { window.location.href = "profile.html"; };
+window.gosetting = function () { window.location.href = "setting.html"; };
+window.goabout = function () { window.location.href = "about.html"; };
+window.goapps = function () { window.location.href = "apps.html"; };
+window.logout = async function () { try { await fetch('/api/logout', { method: 'POST' }); } catch(e) {} window.location.href = "index.html"; };
+  </script>
+</body>
+  </html>
