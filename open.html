@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dev-Onix AI</title>
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; }
+  body {
+    background: #05070f;
+    font-family: 'Georgia', serif;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* ================= মহাবিশ্ব ক্যানভাস (ব্যাকগ্রাউন্ড) ================= */
+  #universe {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    display: block;
+  }
+
+  /* Overlay (মেনু খুললে পেছনের কালো আস্তরণ) */
+  #overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5); opacity: 0; visibility: hidden;
+    transition: 0.3s; z-index: 5;
+  }
+  #overlay.active { opacity: 1; visibility: visible; }
+
+  /* মেনু বাটন */
+  .menu-btn {
+    position: fixed; top: 4%; left: 7%; cursor: pointer;
+    width: 9vw; height: 5vh; border: 2px solid #000;
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 6vw; transition: 0.3s; z-index: 15; background: #fff;
+  }
+  .menu-btn:active { transform: scale(0.9); }
+
+  /* সাইড মেনু */
+  .menu {
+    position: fixed; top: 0; left: -100%; width: 60%; height: 100%;
+    background: #fff; border-right: 1px solid #ddd;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 20% 8% 6%; z-index: 20;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  .menu.active { left: 0; }
+
+  .menu a {
+    display: block; color: #333; text-decoration: none;
+    font-size: 4vw; margin-bottom: 6%; padding: 3%;
+    border-radius: 10px; transition: 0.3s; border-bottom: 1px solid #f0f0f0;
+  }
+  .menu a:hover { background: #f9f9f9; }
+  .menu a:active { transform: scale(0.98); background: #eee; }
+
+  /* ক্লোজ বাটন */
+  .close-btn { position: absolute; top: 3%; right: 5%; font-size: 7vw; cursor: pointer; }
+
+  /* মেনুর নিচে প্রোফাইল ছবি + Logout */
+  .menu-footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 12px;
+    border-top: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .menu-footer:active { background: #f5f5f5; }
+  .menu-footer-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #eee;
+    flex-shrink: 0;
+    border: 1px solid #e2e8f0;
+  }
+  .menu-footer-text {
+    font-weight: 700;
+    color: #e02424;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+  }
+
+  /* কন্টেন্ট */
+  .title {
+    position: relative;
+    z-index: 2;
+    margin-top: 30%;
+    text-align: center;
+    font-size: 9vw;
+    animation: dropDown 1s ease forwards;
+
+    background: linear-gradient(to right, #7ec8ff, #ffffff, #7ec8ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 14px rgba(120, 190, 255, 0.55));
+  }
+  @keyframes dropDown {
+    0% { transform: translateY(-50px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  h2 {
+    font-size: 6vw; margin-top: 20%; color: #000; font-style: Georgia, serif;
+    background: linear-gradient(to right, #7ec8ff, #ffffff, #7ec8ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  h1{
+    margin-top:10%;
+  }
+ .apps {
+     text-align:center;
+ }
+ /* apps button image */
+.apps{
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+    gap:10px;
+    line-height:1;
+}
+
+.apps-logo{
+    width:24px;
+    height:24px;
+    object-fit:contain;
+    position:relative;
+    top:3px;
+}
+
+.icon-wrapper{
+    width: 64px;
+    height: 64px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.app-icon{
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
+    position: relative;
+    top:0;
+}
+
+/* ছোট মোবাইল */
+@media (max-width:480px){
+    .apps-logo{
+        width:20px;
+        height:20px;
+    }
+}
+
+/* বড় মোবাইল */
+@media (min-width:481px){
+    .apps-logo{
+        width:26px;
+        height:26px;
+    }
+}
+
+/* auth চেক করার সময় দেখানো স্পিনার */
+#authCheckOverlay {
+    position: fixed;
+    inset: 0;
+    background: #05070f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+#authCheckOverlay .spin {
+    width: 34px; height: 34px;
+    border: 3px solid #1c2540;
+    border-top-color: #7ec8ff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* নিচে ছোট্ট ক্যাপশন (দিন/রাত নির্দেশক) */
+#skyCaption{
+  position: fixed;
+  bottom: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  color: rgba(255,255,255,0.75);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 3vw;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 8px rgba(0,0,0,0.6);
+  pointer-events: none;
+  transition: color 0.6s;
+}
+</style>
+</head>
+<body>
+
+  <div id="authCheckOverlay"><div class="spin"></div></div>
+
+  <!-- মহাবিশ্ব ব্যাকগ্রাউন্ড ক্যানভাস: সূর্য, গ্রহ, চাঁদ, তারা - সব এখানে আঁকা হবে -->
+  <canvas id="universe"></canvas>
+
+  <!-- Overlay for closing menu -->
+  <div id="overlay" onclick="toggleMenu()"></div>
+
+  <h1 class="title"><i>Wellcome to <br>Dev-Onix</i></h1>
+
+  <div id="skyCaption">☀ দিন</div>
+
+  <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+  <div class="menu" id="menu">
+    <div class="close-btn" onclick="toggleMenu()">✖</div>
+    <a href="#">🏠 Home</a>
+    <a href="#" onclick="goprofile()">👤 Profile</a>
+    <a href="#" onclick="gosetting()">⚙️ Setting</a>
+    <a href="#" onclick="goabout()">❗ About</a>
+<a href="#" onclick="goapps()" class="apps">
+    <img src="1780474142335.png" class="apps-logo">
+    <span>Apps</span>
+</a>
+    <h2><i>Dev-Onix</i></h2>
+
+    <div class="menu-footer" onclick="logout()">
+      <img class="menu-footer-avatar" id="menuFooterAvatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="">
+      <span class="menu-footer-text">🚪 Logout</span>
+    </div>
+  </div>
+
+  <script>
+
+// ================= AUTH GUARD (Neon ব্যাকেন্ড দিয়ে) =================
+// সেশন না থাকলে বা এডমিন থেকে ইউজার ডিলিট হয়ে থাকলে index.html এ পাঠানো হবে
+(async function checkAuth(){
+    const overlay = document.getElementById("authCheckOverlay");
+    try {
+        const res = await fetch('/api/me');
+        if (!res.ok) {
+            window.location.replace("index.html");
+            return;
+        }
+        const { user } = await res.json();
+        if (user.profile_picture) {
+            document.getElementById("menuFooterAvatar").src = user.profile_picture;
+        }
+    } catch (e) {
+        // নেটওয়ার্ক সমস্যা হলে পেইজেই থাকতে দেওয়া হচ্ছে
+    } finally {
+        overlay.style.display = "none";
+    }
+})();
+
+// Menu Toggle
+window.toggleMenu = function () {
+  const menu = document.getElementById("menu");
+  const overlay = document.getElementById("overlay");
+
+  menu.classList.toggle("active");
+  overlay.classList.toggle("active");
+};
+
+// Navigation Functions
+window.goprofile = function () {
+  window.location.href = "profile.html";
+};
+
+window.gosetting = function () {
+  window.location.href = "setting.html";
+};
+
+window.goabout = function () {
+  window.location.href = "about.html";
+};
+
+window.goapps = function () {
+  window.location.href = "apps.html";
+};
+
+window.logout = async function () {
+  try { await fetch('/api/logout', { method: 'POST' }); } catch(e) {}
+  window.location.href = "index.html";
+};
+
+// ================================================================
+// =====================  জীবন্ত মহাবিশ্ব  ========================
+// সূর্যকে কেন্দ্র করে গ্রহ ঘোরে, দিন-রাত পরিবর্তন হয়,
+// রাতে তারা দেখা যায়, চাঁদ সূর্যের আলোয় ধাপে ধাপে আলোকিত হয়
+// ================================================================
+(function universe(){
+  const canvas = document.getElementById('universe');
+  const ctx = canvas.getContext('2d');
+  let W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+  function resize(){
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W * DPR;
+    canvas.height = H * DPR;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    buildStars();
+  }
+
+  // ---------- তারা (stars) ----------
+  let stars = [];
+  function buildStars(){
+    const count = Math.floor((W * H) / 5500);
+    stars = [];
+    for (let i = 0; i < count; i++){
+      stars.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.3 + 0.3,
+        phase: Math.random() * Math.PI * 2,
+        speed: 0.6 + Math.random() * 1.4
+      });
+    }
+  }
+
+  // ---------- গ্রহ তালিকা (সূর্য থেকে দূরত্ব, গতি, রং, আকার) ----------
+  // orbit: কক্ষপথের ব্যাসার্ধের অনুপাত (বেস মানের সাথে গুণ হবে)
+  const planets = [
+    { name: 'বুধ',   orbit: 0.16, speed: 1.15, size: 3.0, color: '#b9b0a6', glow: 'rgba(185,176,166,0.25)' },
+    { name: 'শুক্র',  orbit: 0.24, speed: 0.85, size: 4.6, color: '#e8caa0', glow: 'rgba(232,202,160,0.3)' },
+    { name: 'পৃথিবী', orbit: 0.34, speed: 0.62, size: 5.0, color: '#4ea3ff', glow: 'rgba(78,163,255,0.35)', hasMoon: true },
+    { name: 'মঙ্গল',  orbit: 0.43, speed: 0.48, size: 3.8, color: '#e07a55', glow: 'rgba(224,122,85,0.3)' },
+    { name: 'বৃহস্পতি', orbit: 0.55, speed: 0.28, size: 8.4, color: '#dcb98d', glow: 'rgba(220,185,141,0.3)' },
+    { name: 'শনি', orbit: 0.66, speed: 0.20, size: 7.2, color: '#e6d3a3', glow: 'rgba(230,211,163,0.3)', ring: true }
+  ];
+
+  const DAY_CYCLE = 26;      // সেকেন্ড - একটি সম্পূর্ণ দিন-রাত চক্র
+  const ORBIT_SPEED = 0.28;  // সামগ্রিক কক্ষপথ গতি
+  const startTime = performance.now();
+  const captionEl = document.getElementById('skyCaption');
+
+  function lerpColor(c1, c2, t){
+    const a = c1.match(/\w\w/g).map(x => parseInt(x, 16));
+    const b = c2.match(/\w\w/g).map(x => parseInt(x, 16));
+    const r = Math.round(a[0] + (b[0]-a[0])*t);
+    const g = Math.round(a[1] + (b[1]-a[1])*t);
+    const bl = Math.round(a[2] + (b[2]-a[2])*t);
+    return `rgb(${r},${g},${bl})`;
+  }
+
+  function drawSky(bright){
+    // রাত -> দিন -> রাত গ্রেডিয়েন্ট
+    const nightTop = '1a2450', nightBot = '05070f';
+    const dayTop = '2f7fd6', dayBot = 'bfe4ff';
+    const topColor = lerpColor('#' + nightTop, '#' + dayTop, bright);
+    const botColor = lerpColor('#' + nightBot, '#' + dayBot, bright);
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, topColor);
+    g.addColorStop(1, botColor);
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  function drawStars(nightAmt, t){
+    if (nightAmt <= 0.02) return;
+    ctx.save();
+    for (const s of stars){
+      const tw = (Math.sin(t * s.speed + s.phase) + 1) / 2; // 0..1 জ্বলা-নেভা
+      const alpha = nightAmt * (0.35 + tw * 0.65);
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawSunGlow(cx, cy, r, t){
+    // চারপাশে ছড়ানো সূর্যালোক
+    const pulse = 1 + Math.sin(t * 1.4) * 0.05;
+    const glowR = r * 7 * pulse;
+    const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, glowR);
+    g.addColorStop(0, 'rgba(255, 226, 150, 0.55)');
+    g.addColorStop(0.25, 'rgba(255, 200, 110, 0.22)');
+    g.addColorStop(1, 'rgba(255, 200, 110, 0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(cx, cy, glowR, 0, Math.PI * 2);
+    ctx.fill();
+
+    // সূর্যরশ্মি (কিরণ)
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(t * 0.1);
+    ctx.globalAlpha = 0.18;
+    ctx.strokeStyle = '#ffe3a3';
+    ctx.lineWidth = 1;
+    const rays = 14;
+    for (let i = 0; i < rays; i++){
+      const ang = (Math.PI * 2 / rays) * i;
+      const len = r * (3 + Math.sin(t * 2 + i) * 0.7);
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(ang) * r * 1.3, Math.sin(ang) * r * 1.3);
+      ctx.lineTo(Math.cos(ang) * len, Math.sin(ang) * len);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // সূর্যের গোলক
+    const core = ctx.createRadialGradient(cx - r*0.25, cy - r*0.25, r*0.1, cx, cy, r);
+    core.addColorStop(0, '#fff6da');
+    core.addColorStop(0.6, '#ffd06b');
+    core.addColorStop(1, '#ff9d3d');
+    ctx.fillStyle = core;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // চাঁদ - সূর্যের কোণ অনুযায়ী কলা (phase) বদলায়
+  function drawMoon(mx, my, r, phaseAngle){
+    // illumination: 0 = অমাবস্যা, 1 = পূর্ণিমা
+    const illum = (1 - Math.cos(phaseAngle)) / 2;
+    const side = Math.sin(phaseAngle) >= 0 ? 1 : -1;
+    const offset = side * (illum * 2 * r - r); // dark বৃত্তের সরণ
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(mx, my, r, 0, Math.PI * 2);
+    ctx.clip();
+
+    // পুরো চাঁদ আলোকিত রঙে
+    ctx.fillStyle = '#eef2f8';
+    ctx.beginPath();
+    ctx.arc(mx, my, r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // অন্ধকার অংশ (ছায়া বৃত্ত)
+    ctx.fillStyle = '#141a2e';
+    ctx.beginPath();
+    ctx.arc(mx + offset, my, r * 1.02, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+
+    // চাঁদের হালকা আভা
+    ctx.save();
+    ctx.globalAlpha = 0.35;
+    const g = ctx.createRadialGradient(mx, my, 0, mx, my, r * 2.2);
+    g.addColorStop(0, 'rgba(238,242,248,0.4)');
+    g.addColorStop(1, 'rgba(238,242,248,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(mx, my, r * 2.2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function frame(now){
+    requestAnimationFrame(frame);
+    const t = (now - startTime) / 1000;
+
+    const cyclePos = (t % DAY_CYCLE) / DAY_CYCLE;
+    const bright = (Math.sin(cyclePos * Math.PI * 2 - Math.PI / 2) + 1) / 2; // 0=রাত, 1=দিন
+    const nightAmt = 1 - bright;
+
+    drawSky(bright);
+    drawStars(nightAmt, t);
+
+    const cx = W / 2;
+    const cy = H * 0.60;
+    const base = Math.min(W, H) * 0.62;
+
+    // কক্ষপথ রেখা
+    ctx.save();
+    ctx.strokeStyle = `rgba(255,255,255,${0.10 + nightAmt * 0.08})`;
+    ctx.lineWidth = 1;
+    for (const p of planets){
+      ctx.beginPath();
+      ctx.arc(cx, cy, base * p.orbit, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // সূর্য
+    const sunR = Math.max(10, base * 0.045);
+    drawSunGlow(cx, cy, sunR, t);
+
+    // গ্রহসমূহ
+    for (const p of planets){
+      const ang = t * ORBIT_SPEED * p.speed;
+      const r = base * p.orbit;
+      const px = cx + Math.cos(ang) * r;
+      const py = cy + Math.sin(ang) * r * 0.55; // সামান্য উপবৃত্তাকার (perspective)
+
+      // গ্রহের গ্লো
+      const g = ctx.createRadialGradient(px, py, 0, px, py, p.size * 3);
+      g.addColorStop(0, p.glow);
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(px, py, p.size * 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // শনির বলয়
+      if (p.ring){
+        ctx.save();
+        ctx.translate(px, py);
+        ctx.rotate(0.5);
+        ctx.strokeStyle = 'rgba(230,211,163,0.7)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, p.size * 2.1, p.size * 0.7, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      // গ্রহের গোলক
+      const body = ctx.createRadialGradient(px - p.size*0.3, py - p.size*0.3, p.size*0.1, px, py, p.size);
+      body.addColorStop(0, '#ffffff');
+      body.addColorStop(0.35, p.color);
+      body.addColorStop(1, '#000000');
+      ctx.fillStyle = body;
+      ctx.beginPath();
+      ctx.arc(px, py, p.size, 0, Math.PI * 2);
+      ctx.fill();
+
+      // পৃথিবীর চাঁদ
+      if (p.hasMoon){
+        const moonOrbitR = p.size * 3.2;
+        const moonAng = t * ORBIT_SPEED * p.speed * 6.2; // চাঁদ পৃথিবীর চেয়ে দ্রুত ঘোরে
+        const mx = px + Math.cos(moonAng) * moonOrbitR;
+        const my = py + Math.sin(moonAng) * moonOrbitR * 0.55;
+        const phaseAngle = moonAng - ang; // সূর্য-পৃথিবী-চাঁদ কোণ (আলোকসজ্জার জন্য)
+        drawMoon(mx, my, Math.max(1.6, p.size * 0.34), phaseAngle);
+      }
+    }
+
+    // দিন/রাত ক্যাপশন হালকাভাবে আপডেট
+    if (captionEl){
+      if (bright > 0.55) captionEl.textContent = '☀ দিন';
+      else if (bright < 0.45) captionEl.textContent = '🌙 রাত';
+      else captionEl.textContent = bright > 0.5 ? '🌅 ভোর' : '🌇 সন্ধ্যা';
+    }
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(frame);
+})();
+  </script>
+</body>
+  </html>
