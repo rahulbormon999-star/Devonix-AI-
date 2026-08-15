@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    {
+      "source": "/download-apk",
+      "destination": "https://bucket.appilix.com/app-apk-eee78f0bf1ff48efbc7f80fd4f58674b-1786462707.apk"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
