@@ -23,9 +23,8 @@ async function handleRequest(req, res) {
 
     const rows = await sql`SELECT email, banned FROM users WHERE phone = ${phone}`;
 
-    // ইউজার enumeration ঠেকাতে - একাউন্ট না থাকলেও একই সফল বার্তা দেখানো হয়
     if (rows.length === 0) {
-      return res.status(200).json({ success: true, maskedEmail: null });
+      return res.status(404).json({ error: 'No account found with this phone number' });
     }
 
     const user = rows[0];
@@ -127,4 +126,4 @@ function maskEmail(email) {
   if (!name || !domain) return email;
   if (name.length <= 2) return name[0] + '***@' + domain;
   return name.slice(0, 2) + '***@' + domain;
-        }
+}
