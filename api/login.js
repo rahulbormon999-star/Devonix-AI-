@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   try {
     const { phone, password } = req.body || {};
     if (!phone || !password) {
-      return res.status(400).json({ error: 'ফোন নম্বর ও পাসওয়ার্ড আবশ্যক' });
+      return res.status(400).json({ error: 'Phone number and password are required' });
     }
 
     const rows = await sql`
@@ -25,18 +25,18 @@ export default async function handler(req, res) {
     const user = rows[0];
 
     if (user.banned) {
-      return res.status(403).json({ error: 'আপনার একাউন্ট ব্যান করা হয়েছে' + (user.ban_reason ? `: ${user.ban_reason}` : '') });
+      return res.status(403).json({ error: 'Your account has been banned' + (user.ban_reason ? `: ${user.ban_reason}` : '') });
     }
 
     if (user.suspended_until && new Date(user.suspended_until) > new Date()) {
       const until = new Date(user.suspended_until).toLocaleString();
-      return res.status(403).json({ error: `আপনার একাউন্ট সাময়িকভাবে স্থগিত করা হয়েছে (${until} পর্যন্ত)` + (user.suspend_reason ? `: ${user.suspend_reason}` : '') });
+      return res.status(403).json({ error: `Your account has been temporarily suspended (until ${until})` + (user.suspend_reason ? `: ${user.suspend_reason}` : '') });
     }
 
-    // ================= Account Lockout চেক =================
+    // ================= Account Lockout Check =================
     if (user.locked_until && new Date(user.locked_until) > new Date()) {
       const minutesLeft = Math.ceil((new Date(user.locked_until) - new Date()) / 60000);
-      return res.status(423).json({ error: `অনেকবার ভুল পাসওয়ার্ড দেওয়া হয়েছে, ${minutesLeft} মিনিট পর আবার চেষ্টা করুন` });
+      return res.status(423).json({ error: `Too many incorrect password attempts. Please try again in ${minutesLeft} minutes` });
     }
 
     const match = await bcrypt.compare(password, user.password_hash);
@@ -50,14 +50,14 @@ export default async function handler(req, res) {
           locked_until = now() + interval '15 minutes'
           WHERE id = ${user.id}
         `;
-        return res.status(423).json({ error: `অনেকবার ভুল পাসওয়ার্ড দেওয়া হয়েছে, ${LOCK_MINUTES} মিনিট পর আবার চেষ্টা করুন` });
+        return res.status(423).json({ error: `Too many incorrect password attempts. Please try again in ${LOCK_MINUTES} minutes` });
       }
 
       await sql`UPDATE users SET failed_login_attempts = ${attempts} WHERE id = ${user.id}`;
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // সফল লগইন হলে failed attempt কাউন্টার রিসেট
+    // Reset failed attempt counter on successful login
     await sql`UPDATE users SET failed_login_attempts = 0, locked_until = NULL WHERE id = ${user.id}`;
 
     setSessionCookie(res, user.id);
@@ -72,6 +72,6 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: 'সার্ভার এরর, পরে আবার চেষ্টা করুন' });
+    return res.status(500).json({ error: 'Server error. Please try again later' });
   }
-}
+          }
