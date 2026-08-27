@@ -13,20 +13,20 @@ export default async function handler(req, res) {
     const { message } = req.body || {};
 
     if (!message || !message.trim()) {
-      return res.status(400).json({ error: 'মন্তব্য খালি রাখা যাবে না' });
+      return res.status(400).json({ error: 'Message cannot be empty' });
     }
 
     if (message.length > MAX_MESSAGE_LENGTH) {
-      return res.status(400).json({ error: `মন্তব্য সর্বোচ্চ ${MAX_MESSAGE_LENGTH} ক্যারেক্টার হতে পারে` });
+      return res.status(400).json({ error: `Message must be at most ${MAX_MESSAGE_LENGTH} characters` });
     }
 
-    // দিনে একবারই মন্তব্য পাঠানো যাবে (গত ২৪ ঘণ্টায় ইতিমধ্যে পাঠিয়ে থাকলে আটকানো হবে)
+    // মন্তব্য দিনে একবারই পাঠানো যাবে (গত ২৪ ঘণ্টায় ইতিমধ্যে পাঠিয়ে থাকলে আটকানো হবে)
     const recent = await sql`
       SELECT id FROM user_feedback
       WHERE user_id = ${userId} AND created_at > now() - interval '24 hours'
     `;
     if (recent.length > 0) {
-      return res.status(429).json({ error: 'আপনি আজ ইতিমধ্যে মন্তব্য পাঠিয়েছেন, আগামীকাল আবার চেষ্টা করুন' });
+      return res.status(429).json({ error: 'You have already sent a message today, please try again tomorrow' });
     }
 
     await sql`INSERT INTO user_feedback (user_id, message) VALUES (${userId}, ${message.trim()})`;
@@ -34,6 +34,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: 'মন্তব্য পাঠানো যায়নি, পরে আবার চেষ্টা করুন' });
+    return res.status(500).json({ error: 'Could not send message, please try again later' });
   }
 }
