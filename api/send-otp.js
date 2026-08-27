@@ -13,38 +13,38 @@ export default async function handler(req, res) {
   try {
     const { email } = req.body || {};
     if (!email || !isValidEmail(email)) {
-      return res.status(400).json({ error: 'সঠিক ইমেইল দিন' });
+      return res.status(400).json({ error: 'Please provide a valid email address' });
     }
 
-    // এই ইমেইল দিয়ে আগে থেকেই একাউন্ট থাকলে OTP পাঠানোর দরকার নেই
+    // Check if an account already exists with this email
     const existing = await sql`SELECT id FROM users WHERE email = ${email}`;
     if (existing.length > 0) {
-      return res.status(409).json({ error: 'এই ইমেইল দিয়ে আগে থেকেই একাউন্ট আছে' });
+      return res.status(409).json({ error: 'An account already exists with this email' });
     }
 
-    // Rate limit: একই ইমেইলে ১৫ মিনিটে সর্বোচ্চ ৩ বার
+    // Rate limit: Max 3 OTPs per email in 15 minutes
     const recentForEmail = await sql`
       SELECT COUNT(*) FROM email_otps
       WHERE email = ${email} AND created_at > now() - interval '15 minutes'
     `;
     if (Number(recentForEmail[0].count) >= 3) {
-      return res.status(429).json({ error: 'অনেকবার কোড পাঠানো হয়েছে, ১৫ মিনিট পর আবার চেষ্টা করুন' });
+      return res.status(429).json({ error: 'Too many codes sent. Please try again in 15 minutes' });
     }
 
-    // Rate limit: একই IP থেকে ১ ঘণ্টায় সর্বোচ্চ ১০ বার
+    // Rate limit: Max 10 OTP requests per IP in 1 hour
     const ip = getClientIp(req);
     const recentForIp = await sql`
       SELECT COUNT(*) FROM email_otps
       WHERE ip = ${ip} AND created_at > now() - interval '1 hour'
     `;
     if (Number(recentForIp[0].count) >= 10) {
-      return res.status(429).json({ error: 'অনেকবার চেষ্টা হয়েছে, কিছুক্ষণ পর আবার চেষ্টা করুন' });
+      return res.status(429).json({ error: 'Too many attempts. Please try again later' });
     }
 
     const otp = generateOtp();
     const otpHash = hashOtp(otp);
 
-    // এই ইমেইলের পুরনো OTP মুছে নতুনটা বসানো হচ্ছে
+    // Delete existing OTPs for this email before inserting a new one
     await sql`DELETE FROM email_otps WHERE email = ${email}`;
     await sql`
       INSERT INTO email_otps (email, otp_hash, ip, expires_at)
@@ -56,6 +56,6 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ error: 'কোড পাঠানো যায়নি, পরে আবার চেষ্টা করুন' });
+    return res.status(500).json({ error: 'Could not send code. Please try again later' });
   }
-                            }
+}
