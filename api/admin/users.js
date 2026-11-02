@@ -26,6 +26,28 @@ export default async function handler(req, res) {
         return res.status(200).json({ user: rows[0] });
       }
 
+
+      // ================= এলার্ট হিস্টোরি =================
+      if (req.query.mode === 'alerts') {
+        const page = Math.max(1, parseInt(req.query.page) || 1);
+        const limit = Math.min(100, Math.max(1, parseInt(req.query.limit) || 20));
+        const offset = (page - 1) * limit;
+
+        const countRows = await sql`SELECT COUNT(*) FROM alerts`;
+        const total = Number(countRows[0].count);
+
+        const rows = await sql`
+          SELECT a.id, a.message, a.target_type, a.created_at,
+                 (SELECT COUNT(*) FROM alert_reads r WHERE r.alert_id = a.id) AS read_count,
+                 (SELECT COUNT(*) FROM alert_targets t WHERE t.alert_id = a.id) AS target_count
+          FROM alerts a
+          ORDER BY a.created_at DESC
+          LIMIT ${limit} OFFSET ${offset}
+        `;
+
+        return res.status(200).json({ alerts: rows, total, page, limit, totalPages: Math.max(1, Math.ceil(total / limit)) });
+      }
+
       // ================= Analytics =================
       if (req.query.mode === 'analytics') {
         const totals = await sql`
@@ -175,12 +197,43 @@ export default async function handler(req, res) {
     try {
       const { id, ids, action, reason, days, fields } = req.body || {};
       const targetIds = Array.isArray(ids) && ids.length > 0 ? ids : (id ? [id] : []);
+      const VALID_ACTIONS = ['delete', 'ban', 'unban', 'suspend', 'unsuspend', 'update', 'send_alert'];
 
-      if (targetIds.length === 0 || !['delete', 'ban', 'unban', 'suspend', 'unsuspend', 'update'].includes(action)) {
-        return res.status(400).json({ error: 'সঠিক id/ids ও action প্রয়োজন' });
+      if (!VALID_ACTIONS.includes(action)) {
+        return res.status(400).json({ error: 'সঠিক action প্রয়োজন' });
+      }
+      // send_alert এর জন্য id/ids বাধ্যতামূলক না (target_type='all' হতে পারে)
+      if (action !== 'send_alert' && targetIds.length === 0) {
+        return res.status(400).json({ error: 'সঠিক id/ids প্রয়োজন' });
       }
 
       const ip = getClientIp(req);
+
+      // ================= নতুন এলার্ট পাঠানো =================
+      if (action === 'send_alert') {
+        const { message, targetType, userIds } = req.body || {};
+        if (!message || !message.trim()) {
+          return res.status(400).json({ error: 'বার্তা লিখুন' });
+        }
+        const type = targetType === 'specific' ? 'specific' : 'all';
+        if (type === 'specific' && (!Array.isArray(userIds) || userIds.length === 0)) {
+          return res.status(400).json({ error: 'নির্দিষ্ট ইউজার নির্বাচন করুন' });
+        }
+
+        const inserted = await sql`
+          INSERT INTO alerts (message, target_type) VALUES (${message.trim()}, ${type}) RETURNING id
+        `;
+        const alertId = inserted[0].id;
+
+        if (type === 'specific') {
+          for (const uid of userIds) {
+            await sql`INSERT INTO alert_targets (alert_id, user_id) VALUES (${alertId}, ${uid}) ON CONFLICT DO NOTHING`;
+          }
+        }
+
+        await sql`INSERT INTO audit_log (action, target_user_id, ip) VALUES ('send_alert', NULL, ${getClientIp(req)})`;
+        return res.status(200).json({ success: true, alertId });
+      }
 
       // ================= 'update' শুধু একজন ইউজারের জন্য (bulk প্রযোজ্য না) =================
       if (action === 'update') {
@@ -243,4 +296,4 @@ export default async function handler(req, res) {
   }
 
   return res.status(405).json({ error: 'Method not allowed' });
-      }
+}
