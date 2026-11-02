@@ -102,3 +102,27 @@ ALTER TABLE users DROP COLUMN IF EXISTS last_login_at;
 ALTER TABLE users DROP COLUMN IF EXISTS shared_latitude;
 ALTER TABLE users DROP COLUMN IF EXISTS shared_longitude;
 ALTER TABLE users DROP COLUMN IF EXISTS location_updated_at;
+
+-- ================= অ্যাডমিন এলার্ট/ঘোষণা সিস্টেম =================
+CREATE TABLE IF NOT EXISTS alerts (
+  id SERIAL PRIMARY KEY,
+  message TEXT NOT NULL,
+  target_type TEXT NOT NULL DEFAULT 'all', -- 'all' | 'specific'
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS alert_targets (
+  alert_id INT REFERENCES alerts(id) ON DELETE CASCADE,
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  PRIMARY KEY (alert_id, user_id)
+);
+
+CREATE TABLE IF NOT EXISTS alert_reads (
+  alert_id INT REFERENCES alerts(id) ON DELETE CASCADE,
+  user_id INT REFERENCES users(id) ON DELETE CASCADE,
+  read_at TIMESTAMPTZ DEFAULT now(),
+  PRIMARY KEY (alert_id, user_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_alert_targets_user ON alert_targets(user_id);
+CREATE INDEX IF NOT EXISTS idx_alert_reads_user ON alert_reads(user_id);
